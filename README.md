@@ -7,3 +7,5 @@ Mateusz Król
 Maciej Makowski 
 
 Gałąź main modyfikowana tylko przez pull request
+
+[Diagram UML](<../../../../UML class.pdf>)
