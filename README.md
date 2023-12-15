@@ -8,4 +8,4 @@ Maciej Makowski
 
 Gałąź main modyfikowana tylko przez pull request
 
-[Diagram UML](<../../../../UML class.pdf>)
+[Diagram UML](UML_diagram.pdf)
