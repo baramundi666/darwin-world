@@ -26,14 +26,6 @@ public class Vector2d {
         return "("+ x +", "+ y +")";
     }
 
-    public boolean precedes(Vector2d other) {
-        return other.x >= this.x && other.y >= this.y;
-    }
-
-    public boolean follows(Vector2d other) {
-        return other.x <= this.x && other.y <= this.y;
-    }
-
     public Vector2d add(Vector2d other) {
         return new Vector2d(this.x + other.x, this.y + other.y);
     }
@@ -42,16 +34,10 @@ public class Vector2d {
         return new Vector2d(this.x - other.x, this.y - other.y);
     }
 
-    public Vector2d upperRight(Vector2d other) {
-        return new Vector2d(Math.max(this.x, other.x),Math.max(this.y, other.y));
-    }
-
-    public Vector2d lowerLeft(Vector2d other) {
-        return new Vector2d(Math.min(this.x, other.x),Math.min(this.y, other.y));
-    }
-
-    public Vector2d opposite() {
-        return new Vector2d(-x, -y);
+    public Vector2d mirror() {
+        // currently assuming world map is symmetrical along the Y axis
+        // to be implemented
+        return new Vector2d(-this.x,this.y);
     }
 
     @Override
