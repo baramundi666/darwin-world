@@ -1,6 +1,6 @@
 package agh.opp.model;
 
-import java.util.Map;
+import java.util.Optional;
 
 public class Animal implements WorldElement{
 
@@ -44,13 +44,16 @@ public class Animal implements WorldElement{
 
     public void reproduce(Animal animal) {
 
-    }
+    }//to implement
 
-    public void move() {
+    public void move(MoveValidator validator) {
         direction = direction.shift(genome.getActiveGene());
+        position = validator.mover(position.add(direction.toVector()))
+                .orElseGet(() -> {
+                    direction = direction.shift(4);
+                    return position;
+                });
         genome.nextGene();
-        // naiwne, bez rozpatrzania wlasciwosci mapy
-        position = position.add(direction.toVector());
         energy--;
     }
 }

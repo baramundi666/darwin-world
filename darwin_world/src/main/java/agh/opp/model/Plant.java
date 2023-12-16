@@ -2,9 +2,8 @@ package agh.opp.model;
 
 public class Plant implements WorldElement{
 
-    private Vector2d position;
-    private int energy;
-
+    private final Vector2d position;
+    private final int energy;
 
     public Plant(Vector2d position, int energy) {
         this.position = position;
