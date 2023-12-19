@@ -1,8 +1,9 @@
-package agh.oop.objects;
+package agh.oop.model.objects;
 
-import agh.oop.map.MapDirection;
-import agh.oop.map.MoveValidator;
-import agh.oop.map.Vector2d;
+import agh.oop.model.map.MapDirection;
+import agh.oop.model.map.MoveOptions;
+import agh.oop.model.map.Vector2d;
+import agh.oop.model.objects.inheritance.Genome;
 
 public class Animal implements WorldElement {
     private Vector2d position;
@@ -11,6 +12,7 @@ public class Animal implements WorldElement {
     private final Genome genome;
     private int lifeLength = 0;
     private int childrenCount = 0;
+
     public Animal(Vector2d position, int initialEnergy, Genome genome, MapDirection direction) {
         this.position = position;
         this.energy = initialEnergy;
@@ -27,12 +29,12 @@ public class Animal implements WorldElement {
         return energy;
     }
     public Genome getGenome() {
-        // to be changed - rn allows to modify genome from outside
-        return genome;
+        return new Genome(genome.getGeneList(), genome.getGenomeLength());
     }
-    public void setLifeLength(int lifeLength) {
-        this.lifeLength = lifeLength;
+    public void incrementLifeLength() {
+        this.lifeLength += 1;
     }
+    public void incrementChildrenCount(){ this.childrenCount += 1;}
     @Override
     public boolean isAt(Vector2d position) {
         return this.position==position;
@@ -41,11 +43,11 @@ public class Animal implements WorldElement {
         energy+=plant.getEnergy();
     }
     public void reproduce(Animal animal) {
-
-    }//to implement
-    public void move(MoveValidator validator) {
+        //to implement
+    }
+    public void move(MoveOptions options) {
         direction = direction.shift(genome.getActiveGene());
-        position = validator.mover(position.add(direction.toVector()))
+        position = options.mover(position.add(direction.toVector()))
                 .orElseGet(() -> {
                     direction = direction.shift(4);
                     return position;
@@ -54,3 +56,4 @@ public class Animal implements WorldElement {
         energy--;
     }
 }
+//divide into animal, animalController???
