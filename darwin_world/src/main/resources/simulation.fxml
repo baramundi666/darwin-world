@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane fx:controller="agh.oop.presenter.SimulationPresenter" xmlns:fx="http://javafx.com/fxml" minHeight="550.0" minWidth="850.0">
+    <center>
+        <GridPane  fx:id="mapGrid" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" minHeight="550.0" minWidth="850.0" gridLinesVisible="true">
+
+        </GridPane>
+    </center>
+
+    <top>
+        <VBox>
+            <TextField fx:id="input" text="Enter move sequence: " />
+            <HBox>
+                <Label fx:id="infoLabel"/>
+            </HBox>
+
+        </VBox>
+    </top>
+
+    <bottom>
+        <Button fx:id="startButton" text="Start" onAction="#onSimulationStartClicked"/>
+    </bottom>
+
+</BorderPane>
+
+
