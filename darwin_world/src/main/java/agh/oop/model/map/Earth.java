@@ -19,11 +19,11 @@ public class Earth implements MoveOptions {
         this.bounds = new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
     }
 
-    public Map<Vector2d, HashSet<Animal>> getAnimals() {
+    public synchronized Map<Vector2d, HashSet<Animal>> getAnimals() {
         return new HashMap<>(animals);
     }
 
-    public Map<Vector2d, Plant> getPlants() {
+    public synchronized Map<Vector2d, Plant> getPlants() {
         return new HashMap<>(plants);
     }
 

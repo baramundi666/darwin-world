@@ -67,7 +67,7 @@ public class Simulation implements Runnable{
         }
         SimulationDay simulationDay = new SimulationDay(earth,animals,notGrownFields, newPlantNumber,plantEnergy, reproduceEnergy);
         simulationDay.spawnPlants();
-        for(int i=0;i<100;i++){
+        for(int i=0;i<1000;i++){
             try {
                 for (ChangeListener listener : listeners) {
                     listener.mapChanged(earth, "Map change! Day " + i);
