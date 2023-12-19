@@ -18,20 +18,20 @@ Maciek:
 Mateusz: 
 -Earth, Vector2d, inheritance, MapDirection
 
-toDo:
--listener
--implementacje pojdynczych funkcji 
--mutacje
--zatrute rosliny 
--rownik//do 8.01
+todo list:
+- listener
+- implementacje pojdynczych funkcji 
+- mutacje
+- zatrute rosliny 
+- rownik (do 8.01)
 
--wyjatki 
+- wyjatki 
 
--warianty
--watki(dla wielu)
+- warianty
+- watki(dla wielu)
 
--statystyki
+- statystyki
 
--ui
+- ui
 
 
