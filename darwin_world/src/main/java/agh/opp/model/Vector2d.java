@@ -39,7 +39,6 @@ public class Vector2d {
         // to be implemented
         return new Vector2d(-this.x,this.y);
     }
-
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -48,7 +47,6 @@ public class Vector2d {
         Vector2d that = (Vector2d) other;
         return that.getX() == this.x && that.getY() == this.y;
     }
-
     @Override
     public final int hashCode() {
         return Objects.hash(x, y);

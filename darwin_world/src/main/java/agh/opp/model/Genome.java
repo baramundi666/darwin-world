@@ -11,7 +11,6 @@ public class Genome {
     private final List<Integer> geneList;
     private final int[] mutationRange;
     private final int genomeLength;
-
     private int activeGene;
 
     public Genome(List<Integer> geneList, int[] mutationRange, int genomeLength) {
