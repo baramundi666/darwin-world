@@ -23,6 +23,7 @@ public class Earth implements MoveOptions {
     public Map<Vector2d, HashSet<Animal>> getAnimals() {
         return new HashMap<>(animals);
     }
+
     public Map<Vector2d, Plant> getPlants() {
         return new HashMap<>(plants);
     }
@@ -38,8 +39,7 @@ public class Earth implements MoveOptions {
     public void deregisterObserver(MapChangeListener observer) {
         observers.remove(observer);
     }
-
-
+    
     public void placeAnimal (Animal animal) {
         Vector2d position = animal.getPosition();
         if (!animals.containsKey(position)) {
@@ -47,7 +47,7 @@ public class Earth implements MoveOptions {
         }
         animals.get(position).add(animal);
     }
-    
+
     public void placePlant (Plant plant) {
         Vector2d position = plant.getPosition();
         plants.put(position, plant);
@@ -68,6 +68,7 @@ public class Earth implements MoveOptions {
         animal.move(this);//normal move or mirror move or change direction
         placeAnimal(animal);
     }
+
     @Override
     public Optional<Vector2d> mover(Vector2d newPosition) {
         int x = newPosition.getX();

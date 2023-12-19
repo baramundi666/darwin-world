@@ -109,7 +109,7 @@ public class SimulationPresenter implements MapChangeListener {
         }
         var map = new Earth(arguments.get("width"), arguments.get("height"));
         map.registerObserver(this);
-        var simulation = new SimulationDemo()
+        //var simulation = new SimulationDemo()
 
     }
 
