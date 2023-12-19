@@ -1,17 +1,22 @@
-package agh.oop.map;
+package agh.oop.model.map;
 
-import agh.oop.objects.Animal;
-import agh.oop.objects.Plant;
-import agh.oop.objects.WorldElement;
-
+import agh.oop.model.objects.Animal;
+import agh.oop.model.objects.Plant;
+import agh.oop.model.objects.WorldElement;
 import java.util.*;
 
-public class Earth implements MoveValidator {
-    final Map<Vector2d, LinkedList<Animal>> animals = new HashMap<>();
-    final Map<Vector2d, Plant> plants = new HashMap<>();
-    final Boundary bounds;
+public class Earth implements MoveOptions {
+    private final Map<Vector2d, LinkedList<Animal>> animals = new HashMap<>();
+    private final Map<Vector2d, Plant> plants = new HashMap<>();
+    private final Boundary bounds;
     public Earth(int width, int height) {
         this.bounds = new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
+    }
+    public Map<Vector2d, LinkedList<Animal>> getAnimals() {
+        return new HashMap<>(animals);
+    }
+    public Map<Vector2d, Plant> getPlants() {
+        return new HashMap<>(plants);
     }
     public void place (WorldElement element) {
         Vector2d position = element.getPosition();
@@ -38,23 +43,10 @@ public class Earth implements MoveValidator {
             plants.remove(position);
         }
     }
-    public void move(Animal animal){//change it, naive approach
-        Vector2d oldPosition = animal.getPosition();
+    public void move(Animal animal){
         remove(animal);
-        animal.move(this);
-        Vector2d newPosition = animal.getPosition();
+        animal.move(this);//normal move or mirror move or change direction
         place(animal);
-        if(!newPosition.equals(oldPosition)){
-            this.remove(animal);
-            this.place(animal);
-        }
-    }
-    public Optional<LinkedList<Animal>> animalsAt(Vector2d position) {
-        if (animals.containsKey(position)) {
-            return Optional.ofNullable(animals.get(position));
-        } else {
-            return Optional.empty();
-        }
     }
     @Override
     public Optional<Vector2d> mover(Vector2d newPosition) {
@@ -67,3 +59,4 @@ public class Earth implements MoveValidator {
         return Optional.of(newPosition);
     }
 }
+//divide into map,mapcontroller?
