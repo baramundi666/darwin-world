@@ -6,6 +6,7 @@ import agh.oop.model.objects.WorldElement;
 import java.util.*;
 
 public class Earth implements MoveOptions {
+
     private final Map<Vector2d, HashSet<Animal>> animals = new HashMap<>();
     private final Map<Vector2d, Plant> plants = new HashMap<>();
     private final Boundary bounds;
@@ -19,6 +20,7 @@ public class Earth implements MoveOptions {
     public Map<Vector2d, Plant> getPlants() {
         return new HashMap<>(plants);
     }
+
 
     public void placeAnimal (Animal animal) {
         Vector2d position = animal.getPosition();
@@ -47,6 +49,7 @@ public class Earth implements MoveOptions {
         removeAnimal(animal);
         animal.move(this);//normal move or mirror move or change direction
         placeAnimal(animal);
+
     }
     @Override
     public Optional<Vector2d> mover(Vector2d newPosition) {

@@ -4,7 +4,6 @@ import agh.oop.model.map.MapDirection;
 import agh.oop.model.map.MoveOptions;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.inheritance.Genome;
-
 import java.util.Objects;
 import java.util.UUID;
 
@@ -31,6 +30,7 @@ public class Animal implements WorldElement {
 
     public UUID getId() {
         return animalId;
+
     }
     public Vector2d getPosition() {
         return new Vector2d(position.getX(), position.getY());
@@ -41,9 +41,11 @@ public class Animal implements WorldElement {
     public int getEnergy() {
         return energy;
     }
+
     public void setEnergy(int energy) {
         this.energy = energy;
     }
+
     public Genome getGenome() {
         return new Genome(genome.getGeneList(), genome.getGenomeLength());
     }
@@ -58,6 +60,7 @@ public class Animal implements WorldElement {
     public void eat(Plant plant) {
         energy+=plant.getEnergy();
     }
+
     public Animal reproduce(Animal other) {
         Genome newGenome = this.getGenome().merge(other.getGenome(), this.energy, other.energy);
         int initialEnergy = 2*copulateEnergy;
@@ -65,7 +68,7 @@ public class Animal implements WorldElement {
         other.setEnergy(other.getEnergy()-copulateEnergy);
         return new Animal(position, initialEnergy, newGenome, copulateEnergy);
     }
-    
+
     public void move(MoveOptions options) {
         direction = direction.shift(genome.getActiveGene());
         position = options.mover(position.add(direction.toVector()))

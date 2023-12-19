@@ -1,5 +1,6 @@
 package agh.oop.model.objects.inheritance;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
