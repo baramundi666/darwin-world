@@ -1,0 +1,7 @@
+**/.idea 
+**/gradle
+**/.gradle 
+**/build 
+darwin_world/.gitignore 
+**/gradlew 
+**/gradlew.bat
