@@ -15,6 +15,7 @@ public enum MapDirection {
             case NW -> new Vector2d(-1,1);
         };
     }
+
     public MapDirection shift(int gene) {
         int currentDirection = switch(this) {
             case N -> 0;
