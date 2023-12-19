@@ -16,7 +16,7 @@ public class StandardMutation extends Mutation {
         var range = new ArrayList<>(IntStream.rangeClosed(0, genomeLength)
                 .boxed().toList());
         Collections.shuffle(range);
-        range = (ArrayList<Integer>) range.subList(0, super.mutationCount);
+        range = (ArrayList<Integer>) range.subList(0, mutationCount);
         for(int i=0; i<genomeLength; i++) {
             if (range.contains(i)) {
                 var randomGene = (int) (Math.random() * 8);

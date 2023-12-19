@@ -5,19 +5,32 @@ import agh.oop.model.map.MoveOptions;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.inheritance.Genome;
 
+import java.util.Objects;
+import java.util.UUID;
+
 public class Animal implements WorldElement {
+
+    private final UUID animalId;
     private Vector2d position;
     private MapDirection direction;
     private int energy;
     private final Genome genome;
+
+    private final int copulateEnergy;
     private int lifeLength = 0;
     private int childrenCount = 0;
 
-    public Animal(Vector2d position, int initialEnergy, Genome genome, MapDirection direction) {
+    public Animal(Vector2d position, int initialEnergy, Genome genome, int copulateEnergy) {
         this.position = position;
         this.energy = initialEnergy;
         this.genome = genome;
-        this.direction = direction;
+        this.animalId = UUID.randomUUID();
+        this.copulateEnergy = copulateEnergy;
+    }
+
+
+    public UUID getId() {
+        return animalId;
     }
     public Vector2d getPosition() {
         return new Vector2d(position.getX(), position.getY());
@@ -27,6 +40,9 @@ public class Animal implements WorldElement {
     }
     public int getEnergy() {
         return energy;
+    }
+    public void setEnergy(int energy) {
+        this.energy = energy;
     }
     public Genome getGenome() {
         return new Genome(genome.getGeneList(), genome.getGenomeLength());
@@ -42,9 +58,14 @@ public class Animal implements WorldElement {
     public void eat(Plant plant) {
         energy+=plant.getEnergy();
     }
-    public void reproduce(Animal animal) {
-        //to implement
+    public Animal reproduce(Animal other) {
+        Genome newGenome = this.getGenome().merge(other.getGenome(), this.energy, other.energy);
+        int initialEnergy = 2*copulateEnergy;
+        this.setEnergy(this.getEnergy()-copulateEnergy);
+        other.setEnergy(other.getEnergy()-copulateEnergy);
+        return new Animal(position, initialEnergy, newGenome, copulateEnergy);
     }
+    
     public void move(MoveOptions options) {
         direction = direction.shift(genome.getActiveGene());
         position = options.mover(position.add(direction.toVector()))
@@ -54,6 +75,19 @@ public class Animal implements WorldElement {
                 });
         genome.nextGene();
         energy--;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (!(other instanceof Animal))
+            return false;
+        Animal that = (Animal) other;
+        return that.getId() == this.getId();
+    }
+    @Override
+    public final int hashCode() {
+        return Objects.hash(animalId);
     }
 }
 //divide into animal, animalController???

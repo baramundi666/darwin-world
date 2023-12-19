@@ -6,14 +6,14 @@ import agh.oop.model.objects.WorldElement;
 import java.util.*;
 
 public class Earth implements MoveOptions {
-    private final Map<Vector2d, LinkedList<Animal>> animals = new HashMap<>();
+    private final Map<Vector2d, HashSet<Animal>> animals = new HashMap<>();
     private final Map<Vector2d, Plant> plants = new HashMap<>();
     private final Boundary bounds;
     public Earth(int width, int height) {
         this.bounds = new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
     }
 
-    public Map<Vector2d, LinkedList<Animal>> getAnimals() {
+    public Map<Vector2d, HashSet<Animal>> getAnimals() {
         return new HashMap<>(animals);
     }
     public Map<Vector2d, Plant> getPlants() {
@@ -23,7 +23,7 @@ public class Earth implements MoveOptions {
     public void placeAnimal (Animal animal) {
         Vector2d position = animal.getPosition();
         if (!animals.containsKey(position)) {
-            animals.put(position, new LinkedList<>());
+            animals.put(position, new HashSet<>());
         }
         animals.get(position).add(animal);
     }
@@ -32,25 +32,21 @@ public class Earth implements MoveOptions {
         Vector2d position = plant.getPosition();
         plants.put(position, plant);
     }
-    
-    public void remove(WorldElement element) {
-        Vector2d position = element.getPosition();
-        if (element instanceof Animal) {
-            for(Animal animal: animals.get(position)){
-                if(animal.equals(element)){
-                    animals.get(position).remove(animal);
-                    if(animals.get(position).isEmpty()) animals.remove(position);
-                    break;
-                }
-            }
-        } else if (element instanceof Plant) {
-            plants.remove(position);
-        }
+
+    public void removeAnimal(Animal animal) {
+        Vector2d position = animal.getPosition();
+        animals.get(position).remove(animal);
     }
+
+    public void removePlant(Plant plant) {
+        Vector2d position = plant.getPosition();
+        plants.remove(position);
+    }
+
     public void move(Animal animal){
-        remove(animal);
+        removeAnimal(animal);
         animal.move(this);//normal move or mirror move or change direction
-        place(animal);
+        placeAnimal(animal);
     }
     @Override
     public Optional<Vector2d> mover(Vector2d newPosition) {
