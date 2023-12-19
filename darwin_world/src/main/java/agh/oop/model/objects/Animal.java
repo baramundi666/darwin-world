@@ -30,7 +30,6 @@ public class Animal implements WorldElement {
 
     public UUID getId() {
         return animalId;
-
     }
     public Vector2d getPosition() {
         return new Vector2d(position.getX(), position.getY());
@@ -84,6 +83,11 @@ public class Animal implements WorldElement {
         genome.nextGene();
         energy--;
         lifeLength++;
+    }
+
+    @Override
+    public String toString() {
+        return "A";
     }
 
     @Override

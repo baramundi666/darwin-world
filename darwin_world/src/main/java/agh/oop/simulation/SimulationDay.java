@@ -4,11 +4,13 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.Plant;
+import agh.oop.presenter.ChangeListener;
+import agh.oop.presenter.SimulationPresenter;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SimulationDay {
+public class SimulationDay{
     private final Earth earth;
     private final HashSet<Animal> animals;
     private final HashSet<Vector2d> notGrownFields;
@@ -25,48 +27,54 @@ public class SimulationDay {
         this.plantEnergy = plantEnergy;
     }
 
-    public void run(){;
-        removeDeadAnimals();
-        moveAnimals();
-        //animalsEat();
-        //reproduceAnimals();
-        spawnPlants();
+    public void run(){
+        synchronized (this) {
+            removeDeadAnimals();
+            moveAnimals();
+            animalsEat();
+            reproduceAnimals();
+            spawnPlants();
+        }
     }
-    void removeDeadAnimals(){
-        for(Animal animal: animals){
-            if(animal.getEnergy()<=0){//remove dead
-                earth.removeAnimal(animal);
-                animals.remove(animal);
+    private void removeDeadAnimals(){
+        var animalMap = earth.getAnimals();
+        for(Vector2d position : animalMap.keySet()){
+            var animalList = animalMap.get(position);
+            for(Animal animal : animalList) {
+                if (animal.getEnergy() <= 0) {//remove dead
+                    earth.removeAnimal(animal);
+                    animals.remove(animal);
+                }
             }
         }
     }
 
-    void moveAnimals(){
+    private void moveAnimals(){
         for(Animal animal: animals){
             earth.move(animal);
         }
     }
 
-    void animalsEat(){
-        for(Vector2d position: earth.getAnimals().keySet()){
-            if(earth.getPlants().containsKey(position)){
-                if(earth.getAnimals().get(position).size()==1){
-                    earth.getAnimals().get(position).iterator().next().eat(earth.getPlants().get(position));
-                    earth.removePlant(earth.getPlants().get(position));
+    private void animalsEat(){
+        var animalMap = earth.getAnimals();
+        var plantMap = earth.getPlants();
+        for(Vector2d position: animalMap.keySet()){
+            if(plantMap.containsKey(position)){
+                if (!animalMap.get(position).isEmpty()) {
+                    List<Animal> strongest = conflict(animalMap.get(position));
+                    strongest.get(0).eat(plantMap.get(position));
+                    earth.removePlant(plantMap.get(position));
                     notGrownFields.add(position);
                 }
-                List<Animal> strongest = conflict(earth.getAnimals().get(position));
-                strongest.get(0).eat(earth.getPlants().get(position));
-                earth.removePlant(earth.getPlants().get(position));
-                notGrownFields.add(position);
             }
         }
     }
 
-    void reproduceAnimals(){
-        for(Vector2d position: earth.getAnimals().keySet()) {//reproduce
-            if (earth.getAnimals().get(position).size() > 1) {
-                List<Animal> strongest = conflict(earth.getAnimals().get(position));
+    private void reproduceAnimals(){
+        var animalMap = earth.getAnimals();
+        for(Vector2d position: animalMap.keySet()) {//reproduce
+            if (animalMap.get(position).size() > 1) {
+                List<Animal> strongest = conflict(animalMap.get(position));
                 Animal dad = strongest.get(0);
                 Animal mom = strongest.get(1);
                 if(mom.getEnergy()>=reproduceEnergy) {//we know that dad.getEnergy()>=reproduceEnergy
@@ -85,8 +93,9 @@ public class SimulationDay {
         for(int i=0; i<newPlantNumber && i<notGrownFieldsList.size(); i++){
             //what to do when there is no space for all plants
             //to do add poison plants
-            Plant newPlant = new Plant(notGrownFieldsList.get(i),plantEnergy,false);
-            notGrownFields.remove(notGrownFieldsList.get(i));
+            Vector2d position = notGrownFieldsList.get(i);
+            Plant newPlant = new Plant(position ,plantEnergy,false);
+            notGrownFields.remove(position);
             earth.placePlant(newPlant);
         }
     }

@@ -4,13 +4,12 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Genome;
+import agh.oop.presenter.ChangeListener;
+import agh.oop.presenter.SimulationPresenter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
-public class Simulation {
+public class Simulation implements Runnable{
     private final Earth earth;
     private final int reproduceEnergy;
     private final int newPlantNumber;
@@ -19,6 +18,8 @@ public class Simulation {
     private final int genomeLength;
     private final int initialEnergy;
     private final HashSet<Animal> animals;
+
+    private final List<ChangeListener> listeners = new LinkedList<>();
 
     public Simulation(Earth earth, int reproduceEnergy, int newPlantNumber, int plantEnergy, int animalNumber, int genomeLength, int initialEnergy){
         //to do better implementation of free fields list
@@ -55,7 +56,8 @@ public class Simulation {
         }
     }
 
-    public void start(){
+    @Override
+    public void run() {
         generateAnimals();
         HashSet<Vector2d> notGrownFields = new HashSet<>();
         for(int i=0; i<=earth.getBounds().upperRight().getX(); i++){
@@ -65,8 +67,20 @@ public class Simulation {
         }
         SimulationDay simulationDay = new SimulationDay(earth,animals,notGrownFields, newPlantNumber,plantEnergy, reproduceEnergy);
         simulationDay.spawnPlants();
-        for(int i=0;i<10;i++){
-            simulationDay.run();
+        for(int i=0;i<100;i++){
+            try {
+                for (ChangeListener listener : listeners) {
+                    listener.mapChanged(earth, "Map change! Day " + i);
+                }
+                simulationDay.run();
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
+    }
+
+    public void registerListener(ChangeListener listener) {
+        listeners.add(listener);
     }
 }

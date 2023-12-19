@@ -2,7 +2,7 @@ package agh.oop.model.map;
 
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.Plant;
-import agh.oop.presenter.MapChangeListener;
+import agh.oop.presenter.ChangeListener;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ public class Earth implements MoveOptions {
     private final Map<Vector2d, Plant> plants = new HashMap<>();
     private final Boundary bounds;
 
-    private final Set<MapChangeListener> observers = new HashSet<>();
+    private final Set<ChangeListener> observers = new HashSet<>();
 
 
     public Earth(int width, int height) {
@@ -31,11 +31,11 @@ public class Earth implements MoveOptions {
         return new Boundary(bounds.lowerLeft(), bounds.upperRight());
     }
 
-    public void registerObserver(MapChangeListener observer){
+    public void registerObserver(ChangeListener observer){
         observers.add(observer);
     }
 
-    public void deregisterObserver(MapChangeListener observer) {
+    public void deregisterObserver(ChangeListener observer) {
         observers.remove(observer);
     }
 
