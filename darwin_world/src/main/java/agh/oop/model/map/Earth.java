@@ -2,7 +2,6 @@ package agh.oop.model.map;
 
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.Plant;
-import agh.oop.model.objects.WorldElement;
 import agh.oop.presenter.MapChangeListener;
 
 import java.util.*;
@@ -39,7 +38,7 @@ public class Earth implements MoveOptions {
     public void deregisterObserver(MapChangeListener observer) {
         observers.remove(observer);
     }
-    
+
     public void placeAnimal (Animal animal) {
         Vector2d position = animal.getPosition();
         if (!animals.containsKey(position)) {
