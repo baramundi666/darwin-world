@@ -1,6 +1,6 @@
-package agh.opp;
+package agh.oop.simulation;
 
-import agh.opp.model.Earth;
+import agh.oop.map.Earth;
 
 public class SimulationDay {
     private final Earth earth;

@@ -1,6 +1,10 @@
-package agh.opp.model;
+package agh.oop.objects;
 
-public class Animal implements WorldElement{
+import agh.oop.map.MapDirection;
+import agh.oop.map.MoveValidator;
+import agh.oop.map.Vector2d;
+
+public class Animal implements WorldElement {
     private Vector2d position;
     private MapDirection direction;
     private int energy;

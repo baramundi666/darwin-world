@@ -1,4 +1,6 @@
-package agh.opp.model;
+package agh.oop.map;
+
+import agh.oop.map.Vector2d;
 
 import java.util.Optional;
 

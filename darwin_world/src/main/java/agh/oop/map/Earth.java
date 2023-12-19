@@ -1,8 +1,12 @@
-package agh.opp.model;
+package agh.oop.map;
+
+import agh.oop.objects.Animal;
+import agh.oop.objects.Plant;
+import agh.oop.objects.WorldElement;
 
 import java.util.*;
 
-public class Earth implements MoveValidator{
+public class Earth implements MoveValidator {
     final Map<Vector2d, LinkedList<Animal>> animals = new HashMap<>();
     final Map<Vector2d, Plant> plants = new HashMap<>();
     final Boundary bounds;

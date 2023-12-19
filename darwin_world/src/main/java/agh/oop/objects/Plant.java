@@ -1,6 +1,8 @@
-package agh.opp.model;
+package agh.oop.objects;
 
-public class Plant implements WorldElement{
+import agh.oop.map.Vector2d;
+
+public class Plant implements WorldElement {
     private final Vector2d position;
     private final int energy;
 

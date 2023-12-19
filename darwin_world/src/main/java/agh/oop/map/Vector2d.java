@@ -1,4 +1,4 @@
-package agh.opp.model;
+package agh.oop.map;
 
 import java.util.Objects;
 

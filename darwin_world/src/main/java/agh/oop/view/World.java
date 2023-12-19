@@ -1,7 +1,4 @@
-package agh.opp.view;
-
-import java.util.LinkedList;
-import java.util.List;
+package agh.oop.view;
 
 public class World {
     public static void main(String[] args) {
