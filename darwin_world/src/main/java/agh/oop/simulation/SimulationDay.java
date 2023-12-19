@@ -25,24 +25,36 @@ public class SimulationDay {
         this.plantEnergy = plantEnergy;
     }
 
-    public void run(){
+    public void run(){;
+        removeDeadAnimals();
+        moveAnimals();
+        //animalsEat();
+        //reproduceAnimals();
+        spawnPlants();
+    }
+    void removeDeadAnimals(){
         for(Animal animal: animals){
             if(animal.getEnergy()<=0){//remove dead
                 earth.removeAnimal(animal);
                 animals.remove(animal);
             }
-            else{
-                earth.move(animal);//move alive
-            }
         }
-        animalsEat();
-        reproduceAnimals();
-        spawnPlants();
+    }
+
+    void moveAnimals(){
+        for(Animal animal: animals){
+            earth.move(animal);
+        }
     }
 
     void animalsEat(){
         for(Vector2d position: earth.getAnimals().keySet()){
             if(earth.getPlants().containsKey(position)){
+                if(earth.getAnimals().get(position).size()==1){
+                    earth.getAnimals().get(position).iterator().next().eat(earth.getPlants().get(position));
+                    earth.removePlant(earth.getPlants().get(position));
+                    notGrownFields.add(position);
+                }
                 List<Animal> strongest = conflict(earth.getAnimals().get(position));
                 strongest.get(0).eat(earth.getPlants().get(position));
                 earth.removePlant(earth.getPlants().get(position));
@@ -55,12 +67,14 @@ public class SimulationDay {
         for(Vector2d position: earth.getAnimals().keySet()) {//reproduce
             if (earth.getAnimals().get(position).size() > 1) {
                 List<Animal> strongest = conflict(earth.getAnimals().get(position));
-                if(strongest.get(1).getEnergy()>reproduceEnergy) {
-                    Animal child = strongest.get(0).reproduce(strongest.get(1));
+                Animal dad = strongest.get(0);
+                Animal mom = strongest.get(1);
+                if(mom.getEnergy()>=reproduceEnergy) {//we know that dad.getEnergy()>=reproduceEnergy
+                    Animal child = dad.reproduce(mom);
                     earth.placeAnimal(child);
                     animals.add(child);
-                    strongest.get(0).incrementChildrenCount();
-                    strongest.get(1).incrementChildrenCount();
+                    dad.incrementChildrenCount();
+                    mom.incrementChildrenCount();
                 }
             }
         }
@@ -68,21 +82,23 @@ public class SimulationDay {
     void spawnPlants(){
         List<Vector2d> notGrownFieldsList = new ArrayList<>(notGrownFields);
         Collections.shuffle(notGrownFieldsList);
-        for(int i=0; i<newPlantNumber && i<notGrownFieldsList.size(); i++){//grow
+        for(int i=0; i<newPlantNumber && i<notGrownFieldsList.size(); i++){
+            //what to do when there is no space for all plants
+            //to do add poison plants
             Plant newPlant = new Plant(notGrownFieldsList.get(i),plantEnergy,false);
             notGrownFields.remove(notGrownFieldsList.get(i));
             earth.placePlant(newPlant);
         }
     }
 
-    private List<Animal> conflict(HashSet<Animal> animals){
-        return animals.stream()
+    private List<Animal> conflict(HashSet<Animal> animals){//to do in one line
+        List<Animal> strongest = animals.stream()
                 .sorted(Comparator
                         .comparingInt(Animal::getEnergy)
                         .thenComparingInt(Animal::getLifeLength)
                         .thenComparingInt(Animal::getChildrenCount))
-                .limit(2)
                 .collect(Collectors.toList());
+        Collections.reverse(strongest);
+        return strongest;
     }
-
 }

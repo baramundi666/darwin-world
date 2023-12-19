@@ -11,7 +11,7 @@ public class Animal implements WorldElement {
 
     private final UUID animalId;
     private Vector2d position;
-    private MapDirection direction;
+    private MapDirection direction= MapDirection.N;
     private int energy;
     private final Genome genome;
 

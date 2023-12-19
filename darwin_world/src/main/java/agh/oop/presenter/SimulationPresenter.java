@@ -4,6 +4,7 @@ package agh.oop.presenter;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
+import agh.oop.simulation.Simulation;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -48,7 +49,7 @@ public class SimulationPresenter implements MapChangeListener {
         int columns = upperX-lowerX+1;
         double width = (double) 300/columns;
         double height = (double) 300/rows;
-        var plants = earth .getPlants();
+        var plants = earth.getPlants();
         var animals = earth.getAnimals();
 
         mapGrid.getColumnConstraints().add(new ColumnConstraints(width));
@@ -70,32 +71,33 @@ public class SimulationPresenter implements MapChangeListener {
             GridPane.setHalignment(label, HPos.CENTER);
         }
 
-        for(Vector2d position: plants.keySet()){
-            var plant = plants.get(position);
-            var label = new Label(plant.toString());
-            mapGrid.add(label,position.getX()-lowerX+1,position.getY()-lowerY+1);
-            GridPane.setHalignment(label, HPos.CENTER);
-        }
+//        for(Vector2d position: plants.keySet()){
+//            var plant = plants.get(position);
+//            var label = new Label("P");
+//            mapGrid.add(label,position.getX()-lowerX+1,position.getY()-lowerY+1);
+//            GridPane.setHalignment(label, HPos.CENTER);
+//        }
 
         for(Vector2d position: animals.keySet()){
-            var animalsSet = animals.get(position);
-            Iterator<Animal> animalIterator = animalsSet.iterator();
-            //roboczo
-            int animalCount = 1;
-            var exampleAnimal =animalIterator.next();
-            while (animalIterator.hasNext()) {
-                animalCount++;
-                animalIterator.next();
+//            var animalsSet = animals.get(position);
+//            Iterator<Animal> animalIterator = animalsSet.iterator();
+//            //roboczo
+//            int animalCount = 1;
+//            var exampleAnimal =animalIterator.next();
+//            while (animalIterator.hasNext()) {
+//                animalCount++;
+//                animalIterator.next();
+//            }
+
+            for(Animal animal: animals.get(position)){
+                var label = new Label("A");
+                mapGrid.add(label,position.getX()-lowerX+1,position.getY()-lowerY+1);
+                GridPane.setHalignment(label, HPos.CENTER);
             }
 
-            var label = new Label(exampleAnimal.toString());
-            label.setText(String.valueOf(animalCount));
-            mapGrid.add(label,position.getX()-lowerX+1,position.getY()-lowerY+1);
-            GridPane.setHalignment(label, HPos.CENTER);
+            //label.setText(String.valueOf(animalCount));
         }
     }
-
-
 
     @FXML
     private void onSimulationStartClicked() {
@@ -109,8 +111,9 @@ public class SimulationPresenter implements MapChangeListener {
         }
         var map = new Earth(arguments.get("width"), arguments.get("height"));
         map.registerObserver(this);
-        //var simulation = new SimulationDemo()
-
+        var simulation = new Simulation(map, 10, 10, 10, 10, 32, 10);
+        simulation.start();
+        drawMap(map);
     }
 
     private void clearGrid() {

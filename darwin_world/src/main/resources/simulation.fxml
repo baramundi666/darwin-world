@@ -16,7 +16,7 @@
 
     <top>
         <VBox>
-            <TextField fx:id="input" text="Enter move sequence: " />
+            <TextField fx:id="input" text="width, height " />
             <HBox>
                 <Label fx:id="infoLabel"/>
             </HBox>

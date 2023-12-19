@@ -19,9 +19,9 @@ public class Simulation {
     private final int genomeLength;
     private final int initialEnergy;
     private final HashSet<Animal> animals;
-    private final HashSet<Vector2d> notGrownFields;
 
     public Simulation(Earth earth, int reproduceEnergy, int newPlantNumber, int plantEnergy, int animalNumber, int genomeLength, int initialEnergy){
+        //to do better implementation of free fields list
         this.earth = earth;
         this.reproduceEnergy = reproduceEnergy;
         this.newPlantNumber = newPlantNumber;
@@ -30,12 +30,6 @@ public class Simulation {
         this.genomeLength = genomeLength;
         this.initialEnergy = initialEnergy;
         this.animals = new HashSet<>();
-        this.notGrownFields = new HashSet<>();
-        for(int i=0; i<=earth.getBounds().upperRight().getX(); i++){
-            for(int j=0; j<=earth.getBounds().upperRight().getY(); j++){
-                notGrownFields.add(new Vector2d(i,j));
-            }
-        }
     }
 
     private Genome generateGenome(){
@@ -55,12 +49,20 @@ public class Simulation {
         }
         Collections.shuffle(freePositions);
         for(int i=0; i<animalNumber; i++){
-            animals.add(new Animal(freePositions.get(i), initialEnergy, generateGenome(), reproduceEnergy));
+            var animal = new Animal(freePositions.get(i), initialEnergy, generateGenome(), reproduceEnergy);
+            animals.add(animal);
+            earth.placeAnimal(animal);
         }
     }
 
     public void start(){
         generateAnimals();
+        HashSet<Vector2d> notGrownFields = new HashSet<>();
+        for(int i=0; i<=earth.getBounds().upperRight().getX(); i++){
+            for(int j=0; j<=earth.getBounds().upperRight().getY(); j++){
+                notGrownFields.add(new Vector2d(i,j));
+            }
+        }
         SimulationDay simulationDay = new SimulationDay(earth,animals,notGrownFields, newPlantNumber,plantEnergy, reproduceEnergy);
         simulationDay.spawnPlants();
         for(int i=0;i<10;i++){
