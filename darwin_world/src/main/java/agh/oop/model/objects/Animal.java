@@ -19,6 +19,7 @@ public class Animal implements WorldElement {
     private int lifeLength = 0;
     private int childrenCount = 0;
 
+
     public Animal(Vector2d position, int initialEnergy, Genome genome, int copulateEnergy) {
         this.position = position;
         this.energy = initialEnergy;
@@ -26,7 +27,6 @@ public class Animal implements WorldElement {
         this.animalId = UUID.randomUUID();
         this.copulateEnergy = copulateEnergy;
     }
-
 
     public UUID getId() {
         return animalId;
@@ -42,15 +42,20 @@ public class Animal implements WorldElement {
         return energy;
     }
 
+    public int getLifeLength() {
+        return lifeLength;
+    }
+
+    public int getChildrenCount() {
+        return childrenCount;
+    }
+
     public void setEnergy(int energy) {
         this.energy = energy;
     }
 
     public Genome getGenome() {
         return new Genome(genome.getGeneList(), genome.getGenomeLength());
-    }
-    public void incrementLifeLength() {
-        this.lifeLength += 1;
     }
     public void incrementChildrenCount(){ this.childrenCount += 1;}
     @Override
@@ -78,6 +83,7 @@ public class Animal implements WorldElement {
                 });
         genome.nextGene();
         energy--;
+        lifeLength++;
     }
 
     @Override

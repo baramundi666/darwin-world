@@ -14,13 +14,17 @@ public class Earth implements MoveOptions {
         this.bounds = new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
     }
 
+    public Boundary getBounds() {
+        return bounds;
+    }
+
     public Map<Vector2d, HashSet<Animal>> getAnimals() {
         return new HashMap<>(animals);
     }
+
     public Map<Vector2d, Plant> getPlants() {
         return new HashMap<>(plants);
     }
-
 
     public void placeAnimal (Animal animal) {
         Vector2d position = animal.getPosition();
@@ -29,7 +33,7 @@ public class Earth implements MoveOptions {
         }
         animals.get(position).add(animal);
     }
-    
+
     public void placePlant (Plant plant) {
         Vector2d position = plant.getPosition();
         plants.put(position, plant);
@@ -49,8 +53,8 @@ public class Earth implements MoveOptions {
         removeAnimal(animal);
         animal.move(this);//normal move or mirror move or change direction
         placeAnimal(animal);
-
     }
+
     @Override
     public Optional<Vector2d> mover(Vector2d newPosition) {
         int x = newPosition.getX();
