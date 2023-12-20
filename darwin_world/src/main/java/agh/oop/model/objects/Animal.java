@@ -30,12 +30,15 @@ public class Animal implements WorldElement {
     public UUID getId() {
         return animalId;
     }
+
     public Vector2d getPosition() {
         return new Vector2d(position.getX(), position.getY());
     }
+
     public MapDirection getDirection() {
         return direction;
     }
+
     public int getEnergy() {
         return energy;
     }
@@ -59,11 +62,14 @@ public class Animal implements WorldElement {
     void setDirectionForTest() {//for tests
         this.direction = MapDirection.N;
     }//idk how to test it in other way
+    
     public void incrementChildrenCount(){ this.childrenCount += 1;}
+
     @Override
     public boolean isAt(Vector2d position) {
         return this.position.equals(position);
     }
+
     public void eat(Plant plant) {
         energy+=plant.getEnergy();
     }

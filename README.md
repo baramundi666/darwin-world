@@ -12,26 +12,20 @@ Gałąź main modyfikowana tylko przez pull request
 
 Podział testów: do 27.12
 
-Maciek:
--Simulation,SimulationDay, Animal, Plant
-
 Mateusz: 
--Earth, Vector2d, inheritance, MapDirection
+-Earth, mutation*
 
-todo list:
-- listener
-- implementacje pojdynczych funkcji 
-- mutacje
-- zatrute rosliny 
-- rownik (do 8.01)
-
-- wyjatki 
+todo list: 
+- mutacje standard 
+- mutacje podmianka
+- zatrute rosliny
+- wyjatki
+- statystyki(do 08.01)
 
 - warianty
 - watki(dla wielu)
 
-- statystyki
-
-- ui
+- zapis do csv
+- ui(ograniczyć parametry)
 
 

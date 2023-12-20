@@ -10,11 +10,13 @@ import java.util.stream.Collectors;
 
 public class SimulationDay{
     private final Earth earth;
-    private final HashSet<Animal> animals;
+    private final HashSet<Animal> animals;//statistics purpose
     private final HashSet<Vector2d> notGrownFields;
     private final int reproduceEnergy;
     private final int newPlantNumber;
     private final int plantEnergy;
+    public int notGrownEquatorFields;
+    public final int[] equatorBorders;
 
     public SimulationDay(Earth earth, HashSet<Animal> animals, HashSet<Vector2d> notGrownFields, int newPlantNumber, int plantEnergy, int reproduceEnergy){
         this.earth = earth;
@@ -23,6 +25,10 @@ public class SimulationDay{
         this.reproduceEnergy = reproduceEnergy;
         this.newPlantNumber = newPlantNumber;
         this.plantEnergy = plantEnergy;
+        int lowerEquatorBorder = (int)(Math.ceil(earth.getBounds().upperRight().getY()/5.0 * 2));
+        int upperEquatorBorder = lowerEquatorBorder + (int)(Math.ceil((earth.getBounds().upperRight().getY()+1)/5.0)-1);
+        this.equatorBorders = new int[]{lowerEquatorBorder, upperEquatorBorder};
+        this.notGrownEquatorFields = (equatorBorders[1]-equatorBorders[0]+1) * (earth.getBounds().upperRight().getX()+1) - this.newPlantNumber;
     }
 
     public void run(){
@@ -85,6 +91,9 @@ public class SimulationDay{
         for (Vector2d position : toBeEaten.keySet()) {
             toBeEaten.get(position).eat(plantMap.get(position));
             earth.removePlant(plantMap.get(position));
+            if(position.getY()>=equatorBorders[0] && position.getY()<=equatorBorders[1]){
+                notGrownEquatorFields++;
+            }
         }
     }
 
@@ -112,12 +121,27 @@ public class SimulationDay{
         }
     }
     void spawnPlants(){
-        List<Vector2d> notGrownFieldsList = new ArrayList<>(notGrownFields);
-        Collections.shuffle(notGrownFieldsList);
-        for(int i=0; i<newPlantNumber && i<notGrownFieldsList.size(); i++){
-            //what to do when there is no space for all plants
-            //to do add poison plants
-            Vector2d position = notGrownFieldsList.get(i);
+        List<Vector2d> notGrownEquatorList = notGrownFields.stream()
+                .filter(position -> position.getY() >= equatorBorders[0] && position.getY() <= equatorBorders[1])
+                .collect(Collectors.toList());
+        List<Vector2d> notGrownSteppeList = notGrownFields.stream()
+                .filter(position -> position.getY() < equatorBorders[0] || position.getY() > equatorBorders[1])
+                .collect(Collectors.toList());
+        Collections.shuffle(notGrownEquatorList);
+        Collections.shuffle(notGrownSteppeList);
+
+        Iterator<Vector2d> equatorIterator = notGrownEquatorList.iterator();
+        Iterator<Vector2d> steppeIterator = notGrownSteppeList.iterator();
+        for(int i=0; i<newPlantNumber && i<notGrownFields.size(); i++){
+            Vector2d position;
+            int random = (int)(Math.random()*5);
+            if((random<4 || !steppeIterator.hasNext()) && equatorIterator.hasNext() ){
+                position = equatorIterator.next();
+                notGrownEquatorFields--;
+            }
+            else {
+                position = steppeIterator.next();
+            }
             Plant newPlant = new Plant(position ,plantEnergy,false);
             notGrownFields.remove(position);
             earth.placePlant(newPlant);

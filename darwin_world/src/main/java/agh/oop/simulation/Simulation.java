@@ -17,11 +17,9 @@ public class Simulation implements Runnable{
     private final int genomeLength;
     private final int initialEnergy;
     private final HashSet<Animal> animals;
-
     private final List<ChangeListener> listeners = new LinkedList<>();
 
     public Simulation(Earth earth, int reproduceEnergy, int newPlantNumber, int plantEnergy, int animalNumber, int genomeLength, int initialEnergy){
-        //to do better implementation of free fields list
         this.earth = earth;
         this.reproduceEnergy = reproduceEnergy;
         this.newPlantNumber = newPlantNumber;
@@ -66,7 +64,7 @@ public class Simulation implements Runnable{
         }
         SimulationDay simulationDay = new SimulationDay(earth,animals,notGrownFields, newPlantNumber,plantEnergy, reproduceEnergy);
         simulationDay.spawnPlants();
-        for(int i=0;i<1000;i++){
+        for(int i=0;i<1;i++){
             try {
                 simulationDay.run();
                 for (ChangeListener listener : listeners) {
