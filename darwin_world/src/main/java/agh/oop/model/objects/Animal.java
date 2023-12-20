@@ -4,6 +4,8 @@ import agh.oop.model.map.MapDirection;
 import agh.oop.model.map.MoveOptions;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.inheritance.Genome;
+import agh.oop.model.objects.inheritance.Mutation;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -62,7 +64,7 @@ public class Animal implements WorldElement {
     void setDirectionForTest() {//for tests
         this.direction = MapDirection.N;
     }//idk how to test it in other way
-    
+
     public void incrementChildrenCount(){ this.childrenCount += 1;}
 
     @Override
@@ -74,8 +76,9 @@ public class Animal implements WorldElement {
         energy+=plant.getEnergy();
     }
 
-    public Animal reproduce(Animal other) {
+    public Animal reproduce(Animal other, Mutation mutation) {
         Genome newGenome = this.getGenome().merge(other.getGenome(), this.energy, other.energy);
+        newGenome = newGenome.mutate(mutation);
         int initialEnergy = 2*copulateEnergy;
         this.setEnergy(this.getEnergy()-copulateEnergy);
         other.setEnergy(other.getEnergy()-copulateEnergy);

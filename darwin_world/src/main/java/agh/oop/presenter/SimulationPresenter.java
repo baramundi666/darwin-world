@@ -4,6 +4,8 @@ package agh.oop.presenter;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
+import agh.oop.model.objects.inheritance.Mutation;
+import agh.oop.model.objects.inheritance.StandardMutation;
 import agh.oop.simulation.Simulation;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -106,8 +108,9 @@ public class SimulationPresenter implements ChangeListener {
             arguments.put(inputlist.get(i), parameters.get(i));
         }
         var map = new Earth(arguments.get("width"), arguments.get("height"));
+        Mutation mutation = new StandardMutation(new int[]{1, 6});
         map.registerObserver(this);
-        var simulation = new Simulation(map, 10, 20, 10, 2, 32, 10);
+        var simulation = new Simulation(map, 10, 20, 10, 20, 32, 10, mutation);
         simulation.registerListener(this);
         Thread engineThread = new Thread(simulation);
         engineThread.start();

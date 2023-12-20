@@ -4,6 +4,7 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Genome;
+import agh.oop.model.objects.inheritance.Mutation;
 import agh.oop.presenter.ChangeListener;
 
 import java.util.*;
@@ -11,6 +12,7 @@ import java.util.*;
 public class Simulation implements Runnable{
     private final Earth earth;
     private final int reproduceEnergy;
+    private final Mutation mutation;
     private final int newPlantNumber;
     private final int plantEnergy;
     private final int animalNumber;
@@ -19,9 +21,10 @@ public class Simulation implements Runnable{
     private final HashSet<Animal> animals;
     private final List<ChangeListener> listeners = new LinkedList<>();
 
-    public Simulation(Earth earth, int reproduceEnergy, int newPlantNumber, int plantEnergy, int animalNumber, int genomeLength, int initialEnergy){
+    public Simulation(Earth earth, int reproduceEnergy, int newPlantNumber, int plantEnergy, int animalNumber, int genomeLength, int initialEnergy, Mutation mutation){
         this.earth = earth;
         this.reproduceEnergy = reproduceEnergy;
+        this.mutation = mutation;
         this.newPlantNumber = newPlantNumber;
         this.plantEnergy = plantEnergy;
         this.animalNumber = animalNumber;
@@ -62,9 +65,9 @@ public class Simulation implements Runnable{
                 notGrownFields.add(new Vector2d(i,j));
             }
         }
-        SimulationDay simulationDay = new SimulationDay(earth,animals,notGrownFields, newPlantNumber,plantEnergy, reproduceEnergy);
+        SimulationDay simulationDay = new SimulationDay(earth,animals,notGrownFields, newPlantNumber,plantEnergy, reproduceEnergy,mutation);
         simulationDay.spawnPlants();
-        for(int i=0;i<1;i++){
+        for(int i=0;i<200;i++){
             try {
                 simulationDay.run();
                 for (ChangeListener listener : listeners) {

@@ -15,9 +15,8 @@ Podział testów: do 27.12
 Mateusz: 
 -Earth, mutation*
 
-todo list: 
-- mutacje standard 
-- mutacje podmianka
+todo list:  
+- mutacje podmianka(check)
 - zatrute rosliny
 - wyjatki
 - statystyki(do 08.01)

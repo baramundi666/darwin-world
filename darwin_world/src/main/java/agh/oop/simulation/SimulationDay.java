@@ -4,6 +4,7 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.Plant;
+import agh.oop.model.objects.inheritance.Mutation;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,16 +14,18 @@ public class SimulationDay{
     private final HashSet<Animal> animals;//statistics purpose
     private final HashSet<Vector2d> notGrownFields;
     private final int reproduceEnergy;
+    private final Mutation mutation;
     private final int newPlantNumber;
     private final int plantEnergy;
     public int notGrownEquatorFields;
     public final int[] equatorBorders;
 
-    public SimulationDay(Earth earth, HashSet<Animal> animals, HashSet<Vector2d> notGrownFields, int newPlantNumber, int plantEnergy, int reproduceEnergy){
+    public SimulationDay(Earth earth, HashSet<Animal> animals, HashSet<Vector2d> notGrownFields, int newPlantNumber, int plantEnergy, int reproduceEnergy, Mutation mutation){
         this.earth = earth;
         this.animals = animals;
         this.notGrownFields = notGrownFields;
         this.reproduceEnergy = reproduceEnergy;
+        this.mutation = mutation;
         this.newPlantNumber = newPlantNumber;
         this.plantEnergy = plantEnergy;
         int lowerEquatorBorder = (int)(Math.ceil(earth.getBounds().upperRight().getY()/5.0 * 2));
@@ -107,7 +110,7 @@ public class SimulationDay{
                     Animal dad = strongest.get(0);
                     Animal mom = strongest.get(1);
                     if (mom.getEnergy() >= reproduceEnergy) {//we know that dad.getEnergy()>=reproduceEnergy
-                        Animal child = dad.reproduce(mom);
+                        Animal child = dad.reproduce(mom,mutation);
                         toPlace.add(child);
                         animals.add(child);
                         dad.incrementChildrenCount();

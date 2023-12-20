@@ -4,6 +4,8 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.MapDirection;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.inheritance.Genome;
+import agh.oop.model.objects.inheritance.Mutation;
+import agh.oop.model.objects.inheritance.StandardMutation;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -52,9 +54,10 @@ class AnimalTest {
         var genome2 = new Genome(genList2, 3);
         var animal1 = new Animal(new Vector2d(1, 1), 4, genome1, 1);
         var animal2 = new Animal(new Vector2d(1, 1), 8, genome2, 1);
+        var mutation = new StandardMutation(new int[]{0, 0});
 
         //When
-        var child = animal1.reproduce(animal2);
+        var child = animal1.reproduce(animal2,mutation);
 
         //Then
         assertTrue(child.isAt(animal1.getPosition()));
