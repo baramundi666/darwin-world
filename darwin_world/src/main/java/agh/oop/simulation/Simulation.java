@@ -5,7 +5,6 @@ import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Genome;
 import agh.oop.presenter.ChangeListener;
-import agh.oop.presenter.SimulationPresenter;
 
 import java.util.*;
 
@@ -69,10 +68,10 @@ public class Simulation implements Runnable{
         simulationDay.spawnPlants();
         for(int i=0;i<1000;i++){
             try {
+                simulationDay.run();
                 for (ChangeListener listener : listeners) {
                     listener.mapChanged(earth, "Map change! Day " + i);
                 }
-                simulationDay.run();
                 Thread.sleep(200);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

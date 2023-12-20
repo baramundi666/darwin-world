@@ -4,8 +4,6 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.Plant;
-import agh.oop.presenter.ChangeListener;
-import agh.oop.presenter.SimulationPresenter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,6 +32,7 @@ public class SimulationDay{
             reproduceAnimals();
             spawnPlants();
     }
+
     private void removeDeadAnimals(){
         var animalMap = earth.getAnimals();
         var toRemove = new LinkedList<Animal>();
@@ -41,8 +40,7 @@ public class SimulationDay{
             for (Vector2d position : animalMap.keySet()) {
                 var animalList = animalMap.get(position);
                 for (Animal animal : animalList) {
-                    if (animal.getEnergy() <= 0) {//remove dead
-//                        earth.removeAnimal(animal);
+                    if (animal.getEnergy() <= 0) {
                         toRemove.add(animal);
                         animals.remove(animal);
                     }
@@ -79,8 +77,6 @@ public class SimulationDay{
                     if (!animalMap.get(position).isEmpty()) {
                         List<Animal> strongest = conflict(animalMap.get(position));
                         toBeEaten.put(position, strongest.get(0));
-                        //strongest.get(0).eat(plantMap.get(position));
-                        //earth.removePlant(plantMap.get(position));
                         notGrownFields.add(position);
                     }
                 }
@@ -96,7 +92,7 @@ public class SimulationDay{
         var animalMap = earth.getAnimals();
         var toPlace = new LinkedList<Animal>();
         if(!animalMap.isEmpty()) {
-            for (Vector2d position : animalMap.keySet()) {//reproduce
+            for (Vector2d position : animalMap.keySet()) {
                 if (animalMap.get(position).size() > 1) {
                     List<Animal> strongest = conflict(animalMap.get(position));
                     Animal dad = strongest.get(0);
@@ -104,7 +100,6 @@ public class SimulationDay{
                     if (mom.getEnergy() >= reproduceEnergy) {//we know that dad.getEnergy()>=reproduceEnergy
                         Animal child = dad.reproduce(mom);
                         toPlace.add(child);
-//                        earth.placeAnimal(child);
                         animals.add(child);
                         dad.incrementChildrenCount();
                         mom.incrementChildrenCount();

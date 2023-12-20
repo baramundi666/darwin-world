@@ -11,11 +11,10 @@ public class Animal implements WorldElement {
 
     private final UUID animalId;
     private Vector2d position;
-    private MapDirection direction= MapDirection.N;
+    private MapDirection direction = MapDirection.generate();
     private int energy;
     private final Genome genome;
-
-    private final int copulateEnergy;
+    private final int copulateEnergy;//energy taken from parent and given to child
     private int lifeLength = 0;
     private int childrenCount = 0;
 
@@ -49,17 +48,21 @@ public class Animal implements WorldElement {
         return childrenCount;
     }
 
+    public Genome getGenome() {
+        return new Genome(genome.getGeneList(), genome.getGenomeLength());
+    }
+
     public void setEnergy(int energy) {
         this.energy = energy;
     }
 
-    public Genome getGenome() {
-        return new Genome(genome.getGeneList(), genome.getGenomeLength());
-    }
+    void setDirectionForTest() {//for tests
+        this.direction = MapDirection.N;
+    }//idk how to test it in other way
     public void incrementChildrenCount(){ this.childrenCount += 1;}
     @Override
     public boolean isAt(Vector2d position) {
-        return this.position==position;
+        return this.position.equals(position);
     }
     public void eat(Plant plant) {
         energy+=plant.getEnergy();
@@ -73,8 +76,9 @@ public class Animal implements WorldElement {
         return new Animal(position, initialEnergy, newGenome, copulateEnergy);
     }
 
-    public void move(MoveOptions options) {
-        direction = direction.shift(genome.getActiveGene());
+    public void move(MoveOptions options) {//move logic is okey?? to check
+        int active = genome.getActiveGene();
+        direction = direction.shift(genome.getGeneList().get(active));
         position = options.mover(position.add(direction.toVector()))
                 .orElseGet(() -> {
                     direction = direction.shift(4);
@@ -98,6 +102,7 @@ public class Animal implements WorldElement {
         Animal that = (Animal) other;
         return that.getId() == this.getId();
     }
+
     @Override
     public final int hashCode() {
         return Objects.hash(animalId);

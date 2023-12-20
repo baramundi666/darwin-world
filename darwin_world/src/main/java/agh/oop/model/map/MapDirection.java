@@ -16,6 +16,25 @@ public enum MapDirection {
         };
     }
 
+    public static MapDirection convertNumber(int number){
+        return switch(number) {
+            case 0 -> N;
+            case 1 -> NE;
+            case 2 -> E;
+            case 3 -> SE;
+            case 4 -> S;
+            case 5 -> SW;
+            case 6 -> W;
+            case 7 -> NW;
+            default -> throw new IllegalStateException("Unexpected value: " + (number));
+        };
+    }
+
+    public static MapDirection generate(){
+        int random = (int)(Math.random()*8);
+        return convertNumber(random);
+    }
+
     public MapDirection shift(int gene) {
         int currentDirection = switch(this) {
             case N -> 0;
@@ -27,16 +46,6 @@ public enum MapDirection {
             case W -> 6;
             case NW -> 7;
         };
-        return switch((currentDirection+gene)%8) {
-            case 0 -> N;
-            case 1 -> NE;
-            case 2 -> E;
-            case 3 -> SE;
-            case 4 -> S;
-            case 5 -> SW;
-            case 6 -> W;
-            case 7 -> NW;
-            default -> throw new IllegalStateException("Unexpected value: " + (currentDirection + gene) % 8);
-        };
+        return convertNumber((currentDirection + gene) % 8);
     }
 }

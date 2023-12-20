@@ -11,12 +11,11 @@ public class Earth implements MoveOptions {
     private final Map<Vector2d, HashSet<Animal>> animals = new HashMap<>();
     private final Map<Vector2d, Plant> plants = new HashMap<>();
     private final Boundary bounds;
-
     private final Set<ChangeListener> observers = new HashSet<>();
 
 
     public Earth(int width, int height) {
-        this.bounds = new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
+        this.bounds = new Boundary(new Vector2d(0, 0), new Vector2d(width-1, height-1));
     }
 
     public synchronized Map<Vector2d, HashSet<Animal>> getAnimals() {
@@ -55,6 +54,9 @@ public class Earth implements MoveOptions {
     public void removeAnimal(Animal animal) {
         Vector2d position = animal.getPosition();
         animals.get(position).remove(animal);
+        if (animals.get(position).isEmpty()) {
+            animals.remove(position);
+        }
     }
 
     public void removePlant(Plant plant) {

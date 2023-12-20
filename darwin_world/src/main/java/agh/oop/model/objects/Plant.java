@@ -31,7 +31,7 @@ public class Plant implements WorldElement {
     }
     @Override
     public boolean isAt(Vector2d position) {
-        return false;
+        return this.position.equals(position);
     }
 
     @Override

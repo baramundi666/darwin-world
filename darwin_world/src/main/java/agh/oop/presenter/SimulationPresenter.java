@@ -15,7 +15,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SimulationPresenter implements ChangeListener {
@@ -108,7 +107,7 @@ public class SimulationPresenter implements ChangeListener {
         }
         var map = new Earth(arguments.get("width"), arguments.get("height"));
         map.registerObserver(this);
-        var simulation = new Simulation(map, 10, 10, 10, 10, 32, 10);
+        var simulation = new Simulation(map, 10, 10, 10, 50, 32, 10);
         simulation.registerListener(this);
         Thread engineThread = new Thread(simulation);
         engineThread.start();
