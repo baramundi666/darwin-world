@@ -33,45 +33,27 @@ public class Simulation implements Runnable{
         this.animals = new HashSet<>();
     }
 
-    private Genome generateGenome(){
-        List<Integer> geneList = new ArrayList<>();
-        for(int i=0; i<genomeLength; i++){
-            geneList.add((int)(Math.random()*8));
-        }
-        return new Genome(geneList, genomeLength);
-    }
 
-    private void generateAnimals(){
-        List<Vector2d> freePositions = new ArrayList<>();
-        for(int i=0; i<=earth.getBounds().upperRight().getX(); i++){
-            for(int j=0; j<=earth.getBounds().upperRight().getY(); j++){
-                freePositions.add(new Vector2d(i,j));
-            }
-        }
-        Collections.shuffle(freePositions);
-        for(int i=0; i<animalNumber; i++){
-            var animal = new Animal(freePositions.get(i), initialEnergy, generateGenome(), reproduceEnergy);
-            animals.add(animal);
-            earth.placeAnimal(animal);
-        }
-    }
 
     @Override
     public void run() {
-        generateAnimals();
-        HashSet<Vector2d> notGrownFields = new HashSet<>();
-        for(int i=0; i<=earth.getBounds().upperRight().getX(); i++){
-            for(int j=0; j<=earth.getBounds().upperRight().getY(); j++){
-                notGrownFields.add(new Vector2d(i,j));
-            }
+        SimulationInitializer simulationInitialization = new SimulationInitializer(earth, animals,
+                newPlantNumber, plantEnergy, reproduceEnergy, animalNumber, genomeLength, initialEnergy);
+        try {
+            simulationInitialization.initialize();
+            notifyListeners("Map has been initialized! Day " + 0);
+            Thread.sleep(700);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        SimulationDay simulationDay = new SimulationDay(earth, animals, notGrownFields, newPlantNumber, plantEnergy, reproduceEnergy, mutation);
-        simulationDay.spawnPlants();
-        for(int i=0;i<200;i++){
+        var notGrownFields = simulationInitialization.getNotGrownFields();
+        SimulationDay simulationDay = new SimulationDay(earth, animals, notGrownFields, newPlantNumber,
+                plantEnergy, reproduceEnergy, mutation);
+        for(int i=1;i<=200;i++){
             try {
-                simulationDay.run();
-                notifyListeners("Map change! Day " + i);
-                Thread.sleep(200);
+                simulationDay.simulateOneDay();
+                notifyListeners("Map has been changed! Day " + i);
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

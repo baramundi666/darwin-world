@@ -4,6 +4,7 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.Plant;
+import agh.oop.model.objects.inheritance.Genome;
 import agh.oop.model.objects.inheritance.Mutation;
 
 import java.util.*;
@@ -20,7 +21,8 @@ public class SimulationDay{
     public int notGrownEquatorFields;
     public final int[] equatorBorders;
 
-    public SimulationDay(Earth earth, HashSet<Animal> animals, HashSet<Vector2d> notGrownFields, int newPlantNumber, int plantEnergy, int reproduceEnergy, Mutation mutation){
+    public SimulationDay(Earth earth, HashSet<Animal> animals, HashSet<Vector2d> notGrownFields,
+                         int newPlantNumber, int plantEnergy, int reproduceEnergy, Mutation mutation){
         this.earth = earth;
         this.animals = animals;
         this.notGrownFields = notGrownFields;
@@ -34,7 +36,7 @@ public class SimulationDay{
         this.notGrownEquatorFields = (equatorBorders[1]-equatorBorders[0]+1) * (earth.getBounds().upperRight().getX()+1) - this.newPlantNumber;
     }
 
-    public void run(){
+    public void simulateOneDay(){
             removeDeadAnimals();
             moveAnimals();
             animalsEat();

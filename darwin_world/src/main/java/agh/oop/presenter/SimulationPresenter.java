@@ -48,8 +48,8 @@ public class SimulationPresenter implements ChangeListener {
         int upperY = boundary.upperRight().getY();
         int rows = upperY-lowerY+1;
         int columns = upperX-lowerX+1;
-        double width = (double) 300/columns;
-        double height = (double) 300/rows;
+        double width = (double) 700/columns;
+        double height = (double) 500/rows;
         var plantsMap = earth.getPlants();
         var animalsMap = earth.getAnimals();
 
@@ -110,7 +110,7 @@ public class SimulationPresenter implements ChangeListener {
         var map = new Earth(arguments.get("width"), arguments.get("height"));
         Mutation mutation = new StandardMutation(new int[]{0, 0});
         map.registerObserver(this);
-        var simulation = new Simulation(map, 10, 20, 10, 10, 32, 5, mutation);
+        var simulation = new Simulation(map, 10, 20, 10, 50, 32, 5, mutation);
         simulation.registerListener(this);
         Thread engineThread = new Thread(simulation);
         engineThread.start();
