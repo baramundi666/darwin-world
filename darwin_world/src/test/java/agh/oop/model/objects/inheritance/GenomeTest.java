@@ -10,7 +10,7 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GenomeTest {
+class GenomeTest {
 
     @Test
     public void testGetGeneList() {

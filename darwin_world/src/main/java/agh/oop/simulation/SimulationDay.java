@@ -64,12 +64,8 @@ public class SimulationDay{
     private void moveAnimals(){
         var animalMap = earth.getAnimals();
         var toMove = new LinkedList<Animal>();
-        if(!animalMap.isEmpty()) {
-            for (Vector2d position : animalMap.keySet()) {
-                if (!animalMap.get(position).isEmpty()) {
-                    toMove.addAll(animalMap.get(position));
-                }
-            }
+        for (Vector2d position : animalMap.keySet()) {
+            toMove.addAll(animalMap.get(position));
         }
         for (Animal animal : toMove){
             earth.move(animal);
@@ -80,15 +76,11 @@ public class SimulationDay{
         var animalMap = earth.getAnimals();
         var plantMap = earth.getPlants();
         var toBeEaten = new HashMap<Vector2d, Animal>();
-        if(!animalMap.isEmpty() && !plantMap.isEmpty()) {
-            for (Vector2d position : animalMap.keySet()) {
-                if (plantMap.containsKey(position)) {
-                    if (!animalMap.get(position).isEmpty()) {
-                        List<Animal> strongest = conflict(animalMap.get(position));
-                        toBeEaten.put(position, strongest.get(0));
-                        notGrownFields.add(position);
-                    }
-                }
+        for (Vector2d position : animalMap.keySet()) {
+            if (plantMap.containsKey(position)) {
+                List<Animal> strongest = conflict(animalMap.get(position));
+                toBeEaten.put(position, strongest.get(0));
+                notGrownFields.add(position);
             }
         }
         for (Vector2d position : toBeEaten.keySet()) {
@@ -103,19 +95,17 @@ public class SimulationDay{
     private void reproduceAnimals(){
         var animalMap = earth.getAnimals();
         var toPlace = new LinkedList<Animal>();
-        if(!animalMap.isEmpty()) {
-            for (Vector2d position : animalMap.keySet()) {
-                if (animalMap.get(position).size() > 1) {
-                    List<Animal> strongest = conflict(animalMap.get(position));
-                    Animal dad = strongest.get(0);
-                    Animal mom = strongest.get(1);
-                    if (mom.getEnergy() >= reproduceEnergy) {//we know that dad.getEnergy()>=reproduceEnergy
-                        Animal child = dad.reproduce(mom,mutation);
-                        toPlace.add(child);
-                        animals.add(child);
-                        dad.incrementChildrenCount();
-                        mom.incrementChildrenCount();
-                    }
+        for (Vector2d position : animalMap.keySet()) {
+            if (animalMap.get(position).size() > 1) {
+                List<Animal> strongest = conflict(animalMap.get(position));
+                Animal dad = strongest.get(0);
+                Animal mom = strongest.get(1);
+                if (mom.getEnergy() >= reproduceEnergy) {//we know that dad.getEnergy()>=reproduceEnergy
+                    Animal child = dad.reproduce(mom,mutation);
+                    toPlace.add(child);
+                    animals.add(child);
+                    dad.incrementChildrenCount();
+                    mom.incrementChildrenCount();
                 }
             }
         }

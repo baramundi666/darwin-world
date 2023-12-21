@@ -65,14 +65,12 @@ public class Simulation implements Runnable{
                 notGrownFields.add(new Vector2d(i,j));
             }
         }
-        SimulationDay simulationDay = new SimulationDay(earth,animals,notGrownFields, newPlantNumber,plantEnergy, reproduceEnergy,mutation);
+        SimulationDay simulationDay = new SimulationDay(earth, animals, notGrownFields, newPlantNumber, plantEnergy, reproduceEnergy, mutation);
         simulationDay.spawnPlants();
         for(int i=0;i<200;i++){
             try {
                 simulationDay.run();
-                for (ChangeListener listener : listeners) {
-                    listener.mapChanged(earth, "Map change! Day " + i);
-                }
+                notifyListeners("Map change! Day " + i);
                 Thread.sleep(200);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -82,5 +80,11 @@ public class Simulation implements Runnable{
 
     public void registerListener(ChangeListener listener) {
         listeners.add(listener);
+    }
+
+    private void notifyListeners(String message) {
+        for (ChangeListener listener : listeners) {
+            listener.mapChanged(earth, message);
+        }
     }
 }

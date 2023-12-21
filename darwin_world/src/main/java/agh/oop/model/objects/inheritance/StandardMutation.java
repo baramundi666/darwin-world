@@ -11,21 +11,22 @@ public class StandardMutation extends Mutation {
         super(mutationRange);
     }
     @Override
-    List<Integer> mutateGenome(Genome genome){
+    public List<Integer> mutateGenome(Genome genome){
         if(mutationCount==0) return genome.getGeneList();
         int genomeLength = genome.getGenomeLength();
         List<Integer> newGeneList = new ArrayList<>();
         var range = new ArrayList<>(IntStream.rangeClosed(0, genomeLength-1)
                 .boxed().toList());
         Collections.shuffle(range);
-        HashSet<Integer> indexes = new HashSet<>(range.subList(0, mutationCount));
+        HashSet<Integer> indices = new HashSet<>(range.subList(0, mutationCount));
+        var preMutationGeneList = genome.getGeneList();
         for(int i=0; i<genomeLength; i++) {
-            if (indexes.contains(i)) {
-                var randomGene = (int) (Math.random() * 8);
-                newGeneList.add(randomGene);
+            if (indices.contains(i)) {
+                var randomGeneShift = 1 + (int) (Math.random() * 7);
+                newGeneList.add((preMutationGeneList.get(i)+randomGeneShift)%8);
             }
             else {
-                newGeneList.add(genome.getGeneList().get(i));
+                newGeneList.add(preMutationGeneList.get(i));
             }
         }
         return newGeneList;

@@ -108,9 +108,9 @@ public class SimulationPresenter implements ChangeListener {
             arguments.put(inputlist.get(i), parameters.get(i));
         }
         var map = new Earth(arguments.get("width"), arguments.get("height"));
-        Mutation mutation = new StandardMutation(new int[]{1, 6});
+        Mutation mutation = new StandardMutation(new int[]{0, 0});
         map.registerObserver(this);
-        var simulation = new Simulation(map, 10, 20, 10, 20, 32, 10, mutation);
+        var simulation = new Simulation(map, 10, 20, 10, 10, 32, 5, mutation);
         simulation.registerListener(this);
         Thread engineThread = new Thread(simulation);
         engineThread.start();

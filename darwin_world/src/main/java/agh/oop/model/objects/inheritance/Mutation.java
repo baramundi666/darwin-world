@@ -6,7 +6,7 @@ public abstract class Mutation {
     protected final int mutationCount;
 
     protected Mutation(int[] mutationRange){
-        this.mutationCount = (int) (Math.random()*(mutationRange[1]-mutationRange[0]+1))+mutationRange[0];
+        this.mutationCount = mutationRange[0] + (int) (Math.random()*(mutationRange[1]-mutationRange[0]+1));
     }
-    abstract List<Integer> mutateGenome(Genome genome);
+    public abstract List<Integer> mutateGenome(Genome genome);
 }
