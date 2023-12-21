@@ -6,7 +6,7 @@ import agh.oop.presenter.ChangeListener;
 
 import java.util.*;
 
-public class Earth implements MoveOptions {
+public class Earth implements MapOptions {
 
     private final Map<Vector2d, HashSet<Animal>> animals = new HashMap<>();
     private final Map<Vector2d, Plant> plants = new HashMap<>();
@@ -40,6 +40,7 @@ public class Earth implements MoveOptions {
 
     public void placeAnimal (Animal animal) {
         Vector2d position = animal.getPosition();
+//        if (!isInBounds(position)) throw new IllegalArgumentException;
         if (!animals.containsKey(position)) {
             animals.put(position, new HashSet<>());
         }
@@ -48,6 +49,7 @@ public class Earth implements MoveOptions {
 
     public void placePlant (Plant plant) {
         Vector2d position = plant.getPosition();
+//        if (!isInBounds(position)) throw new IllegalArgumentException;
         plants.put(position, plant);
     }
 
@@ -81,6 +83,12 @@ public class Earth implements MoveOptions {
         return Optional.of(newPosition);
     }
 
-
+    @Override
+    public boolean isInBounds(Vector2d position) {
+        int x = position.getX();
+        int y = position.getY();
+        return x>=bounds.lowerLeft().getX() && y>=bounds.lowerLeft().getY() &&
+                x<=bounds.upperRight().getX() && y<=bounds.upperRight().getX();
+    }
 }
 //divide into map,mapcontroller?

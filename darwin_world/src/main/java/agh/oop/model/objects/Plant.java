@@ -37,7 +37,7 @@ public class Plant implements WorldElement {
     @Override
     public String toString() {
         // to do (if isPoisonous...)
-        return "P";
+        return "Plant:" + getId();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package agh.oop.model.objects;
 
 import agh.oop.model.map.MapDirection;
-import agh.oop.model.map.MoveOptions;
+import agh.oop.model.map.MapOptions;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.inheritance.Genome;
 import agh.oop.model.objects.inheritance.Mutation;
@@ -85,7 +85,7 @@ public class Animal implements WorldElement {
         return new Animal(position, initialEnergy, newGenome, copulateEnergy);
     }
 
-    public void move(MoveOptions options) {//move logic is okey?? to check
+    public void move(MapOptions options) {//move logic is okey?? to check
         int active = genome.getActiveGene();
         direction = direction.shift(genome.getGeneList().get(active));
         position = options.mover(position.add(direction.toVector()))
@@ -100,7 +100,7 @@ public class Animal implements WorldElement {
 
     @Override
     public String toString() {
-        return "A";
+        return "Animal:" + getId();
     }
 
     @Override
