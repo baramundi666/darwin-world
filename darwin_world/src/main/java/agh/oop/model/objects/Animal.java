@@ -37,6 +37,11 @@ public class Animal implements WorldElement {
         return new Vector2d(position.getX(), position.getY());
     }
 
+    @Override
+    public String getImage() {
+        return "animal.png";
+    }
+
     public MapDirection getDirection() {
         return direction;
     }

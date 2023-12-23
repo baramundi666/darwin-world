@@ -4,6 +4,8 @@ package agh.oop.presenter;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
+import agh.oop.model.objects.Plant;
+import agh.oop.model.objects.inheritance.Genome;
 import agh.oop.model.objects.inheritance.Mutation;
 import agh.oop.model.objects.inheritance.StandardMutation;
 import agh.oop.simulation.Simulation;
@@ -15,6 +17,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -29,6 +33,10 @@ public class SimulationPresenter implements ChangeListener {
 
     @FXML
     private Label infoLabel;
+
+    private List<VBox> animalImageList;
+    private List<VBox> normalPlantImageList;
+    private List<VBox> poisonousPlantImageList;
 
 
     @Override
@@ -48,10 +56,8 @@ public class SimulationPresenter implements ChangeListener {
         int upperY = boundary.upperRight().getY();
         int rows = upperY-lowerY+1;
         int columns = upperX-lowerX+1;
-        double width = (double) 700/columns;
+        double width = (double) 500/columns;
         double height = (double) 500/rows;
-        var plantsMap = earth.getPlants();
-        var animalsMap = earth.getAnimals();
 
         mapGrid.getColumnConstraints().add(new ColumnConstraints(width));
         mapGrid.getRowConstraints().add(new RowConstraints(height));
@@ -72,33 +78,42 @@ public class SimulationPresenter implements ChangeListener {
             GridPane.setHalignment(label, HPos.CENTER);
         }
 
+        var plantsMap = earth.getPlants();
+        var animalsMap = earth.getAnimals();
+        var animalImageIterator = animalImageList.iterator();
+        var normalPlantImageIterator = normalPlantImageList.iterator();
+        var poisonousPlantImageIterator = poisonousPlantImageList.iterator();
+
         for(Vector2d position: plantsMap.keySet()){
             var plant = plantsMap.get(position);
-            var label = new Label(plant.toString());
-            mapGrid.add(label,position.getX()-lowerX+1,position.getY()-lowerY+1);
-            GridPane.setHalignment(label, HPos.CENTER);
+            VBox plantImage;
+            if (plant.isPoisonous()) {
+                plantImage = poisonousPlantImageIterator.next();
+            }
+            else {
+                plantImage = normalPlantImageIterator.next();
+            }
+            mapGrid.add(plantImage, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
+            GridPane.setHalignment(plantImage, HPos.CENTER);
         }
 
         for(Vector2d position: animalsMap.keySet()){
             if(!animalsMap.get(position).isEmpty()) {
-                Iterator<Animal> animalIterator = animalsMap.get(position).iterator();
-                // to do
-                int animalCount = 1;
-                var exampleAnimal = animalIterator.next();
-                while (animalIterator.hasNext()) {
-                    animalCount++;
-                    animalIterator.next();
-                }
-                var label = new Label(exampleAnimal.toString());
-                mapGrid.add(label, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
-                GridPane.setHalignment(label, HPos.CENTER);
-                //label.setText(String.valueOf(animalCount));
+                int animalCount = animalsMap.get(position).size();
+                var countLabel = new Label(String.valueOf(animalCount));
+                countLabel.setTextFill(Paint.valueOf("blue"));
+                var animalImage = animalImageIterator.next();
+                mapGrid.add(animalImage, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
+                mapGrid.add(countLabel, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
+                GridPane.setHalignment(animalImage, HPos.CENTER);
+                GridPane.setHalignment(countLabel, HPos.CENTER);
             }
         }
     }
 
     @FXML
     private void onSimulationStartClicked() {
+
         // arguments - mapa: nazwa argumentu -> wartosc liczbowa argumentu
         int argumentCount = 2;
         List<String> inputlist = new ArrayList<>(List.of("width","height"));
@@ -107,6 +122,10 @@ public class SimulationPresenter implements ChangeListener {
         for(int i=0; i<argumentCount; i++) {
             arguments.put(inputlist.get(i), parameters.get(i));
         }
+        var imageGenerator = new ImageGenerator(arguments.get("width"), arguments.get("height"));
+        animalImageList = imageGenerator.generateAnimalImageList();
+        normalPlantImageList = imageGenerator.generateNormalPlantImageList();
+        poisonousPlantImageList = imageGenerator.generatePoisonousPlantImageList();
         var map = new Earth(arguments.get("width"), arguments.get("height"));
         Mutation mutation = new StandardMutation(new int[]{0, 0});
         map.registerObserver(this);

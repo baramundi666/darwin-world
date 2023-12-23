@@ -19,6 +19,10 @@ public class Plant implements WorldElement {
         this.plantId = UUID.randomUUID();
     }
 
+    public boolean isPoisonous() {
+        return isPoisonous;
+    }
+
     public UUID getId() {
         return plantId;
     }
@@ -26,6 +30,17 @@ public class Plant implements WorldElement {
     public Vector2d getPosition() {
         return position;
     }
+
+    @Override
+    public String getImage() {
+        if (isPoisonous) {
+            return "poisonousPlant.png";
+        }
+        else {
+            return "plant.png";
+        }
+    }
+
     public int getEnergy() {
         return energy;
     }

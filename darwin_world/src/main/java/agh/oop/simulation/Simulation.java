@@ -53,7 +53,7 @@ public class Simulation implements Runnable{
             try {
                 simulationDay.simulateOneDay();
                 notifyListeners("Map has been changed! Day " + i);
-                Thread.sleep(300);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
