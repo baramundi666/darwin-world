@@ -16,7 +16,12 @@
 
     <top>
         <VBox>
-            <TextField fx:id="input" text="width, height " />
+            <HBox>
+                <TextField fx:id="input" text="width, height " />
+                <Button fx:id="saveSettings" text="Save settings" onAction="#onSaveClicked"/>
+            </HBox>
+
+            <Button fx:id="defaultButton" text="Input default settings" onAction="#onDefaultClicked"/>
             <HBox>
                 <Label fx:id="infoLabel"/>
             </HBox>

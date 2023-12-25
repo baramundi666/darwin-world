@@ -11,6 +11,7 @@ import agh.oop.model.objects.inheritance.StandardMutation;
 import agh.oop.model.objects.inheritance.SwapMutation;
 import agh.oop.simulation.Simulation;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
@@ -40,6 +41,8 @@ public class SimulationPresenter implements ChangeListener {
     private List<Node> normalPlantImageList;
     private List<Node> poisonousPlantImageList;
     private List<Node> steppeImageList;
+
+    private Simulation simulationToRun;
 
 
     @Override
@@ -128,7 +131,30 @@ public class SimulationPresenter implements ChangeListener {
 
     @FXML
     private void onSimulationStartClicked() {
+        simulationToRun.registerListener(this);
+        Thread engineThread = new Thread(simulationToRun);
+        engineThread.start();
+    }
 
+    private void clearGrid() {
+        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
+        mapGrid.getColumnConstraints().clear();
+        mapGrid.getRowConstraints().clear();
+    }
+
+    public void onDefaultClicked() {
+        var imageGenerator = new ImageGenerator(20, 20);
+        animalImageList = imageGenerator.generateAnimalImageList();
+        normalPlantImageList = imageGenerator.generatePlantImageList(false);
+        poisonousPlantImageList = imageGenerator.generatePlantImageList(true);
+        steppeImageList = imageGenerator.generateSteppeImageList();
+        var map = new Earth(20, 20);
+        Mutation mutation = new StandardMutation(new int[]{2, 5});
+        simulationToRun = new Simulation(map, 10, 20, 10, 50, 32, 5, mutation);
+    }
+
+    public void onSaveClicked() {
+        // to do!!!
         // arguments - mapa: nazwa argumentu -> wartosc liczbowa argumentu
         int argumentCount = 2;
         List<String> inputlist = new ArrayList<>(List.of("width","height"));
@@ -144,17 +170,7 @@ public class SimulationPresenter implements ChangeListener {
         steppeImageList = imageGenerator.generateSteppeImageList();
         var map = new Earth(arguments.get("width"), arguments.get("height"));
         Mutation mutation = new SwapMutation(new int[]{2, 5});
-        map.registerObserver(this);
-        var simulation = new Simulation(map, 10, 20, 10, 50, 32, 5, mutation);
-        simulation.registerListener(this);
-        Thread engineThread = new Thread(simulation);
-        engineThread.start();
-    }
-
-    private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
+        simulationToRun = new Simulation(map, 10, 20, 10, 50, 32, 5, mutation);
     }
 }
 
