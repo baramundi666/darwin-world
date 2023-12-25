@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class SwapMutation extends Mutation {
-    protected SwapMutation(int[] mutationRange) {
+    public SwapMutation(int[] mutationRange) {
         super(mutationRange);
     }
     @Override

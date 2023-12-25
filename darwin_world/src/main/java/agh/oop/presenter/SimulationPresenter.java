@@ -8,10 +8,12 @@ import agh.oop.model.objects.Plant;
 import agh.oop.model.objects.inheritance.Genome;
 import agh.oop.model.objects.inheritance.Mutation;
 import agh.oop.model.objects.inheritance.StandardMutation;
+import agh.oop.model.objects.inheritance.SwapMutation;
 import agh.oop.simulation.Simulation;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
@@ -34,9 +36,10 @@ public class SimulationPresenter implements ChangeListener {
     @FXML
     private Label infoLabel;
 
-    private List<VBox> animalImageList;
-    private List<VBox> normalPlantImageList;
-    private List<VBox> poisonousPlantImageList;
+    private List<Node> animalImageList;
+    private List<Node> normalPlantImageList;
+    private List<Node> poisonousPlantImageList;
+    private List<Node> steppeImageList;
 
 
     @Override
@@ -83,10 +86,22 @@ public class SimulationPresenter implements ChangeListener {
         var animalImageIterator = animalImageList.iterator();
         var normalPlantImageIterator = normalPlantImageList.iterator();
         var poisonousPlantImageIterator = poisonousPlantImageList.iterator();
+        var steppeImageIterator = steppeImageList.iterator();
+        var plantKeys = plantsMap.keySet();
+        for(int i=0; i<rows; i++) {
+            for(int j=0; j<columns; j++) {
+                var position= new Vector2d(i, j);
+                if (!plantKeys.contains(position)) {
+                    var steppeImage = steppeImageIterator.next();
+                    mapGrid.add(steppeImage, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
+                    GridPane.setHalignment(steppeImage, HPos.CENTER);
+                }
+            }
+        }
 
         for(Vector2d position: plantsMap.keySet()){
             var plant = plantsMap.get(position);
-            VBox plantImage;
+            Node plantImage;
             if (plant.isPoisonous()) {
                 plantImage = poisonousPlantImageIterator.next();
             }
@@ -101,7 +116,7 @@ public class SimulationPresenter implements ChangeListener {
             if(!animalsMap.get(position).isEmpty()) {
                 int animalCount = animalsMap.get(position).size();
                 var countLabel = new Label(String.valueOf(animalCount));
-                countLabel.setTextFill(Paint.valueOf("blue"));
+                countLabel.setTextFill(Paint.valueOf("black"));
                 var animalImage = animalImageIterator.next();
                 mapGrid.add(animalImage, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
                 mapGrid.add(countLabel, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
@@ -124,10 +139,11 @@ public class SimulationPresenter implements ChangeListener {
         }
         var imageGenerator = new ImageGenerator(arguments.get("width"), arguments.get("height"));
         animalImageList = imageGenerator.generateAnimalImageList();
-        normalPlantImageList = imageGenerator.generateNormalPlantImageList();
-        poisonousPlantImageList = imageGenerator.generatePoisonousPlantImageList();
+        normalPlantImageList = imageGenerator.generatePlantImageList(false);
+        poisonousPlantImageList = imageGenerator.generatePlantImageList(true);
+        steppeImageList = imageGenerator.generateSteppeImageList();
         var map = new Earth(arguments.get("width"), arguments.get("height"));
-        Mutation mutation = new StandardMutation(new int[]{0, 0});
+        Mutation mutation = new SwapMutation(new int[]{2, 5});
         map.registerObserver(this);
         var simulation = new Simulation(map, 10, 20, 10, 50, 32, 5, mutation);
         simulation.registerListener(this);

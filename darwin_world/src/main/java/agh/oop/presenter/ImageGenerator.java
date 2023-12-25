@@ -4,6 +4,10 @@ import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.Plant;
 import agh.oop.model.objects.inheritance.Genome;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 import java.util.LinkedList;
@@ -20,53 +24,47 @@ public class ImageGenerator {
     }
 
 
-    public LinkedList<VBox> generateAnimalImageList() {
-        var generatedAnimalImages = new LinkedList<VBox>();
-        var position = new Vector2d(0,0);
-        var genome = new Genome(List.of(0),1);
+    public LinkedList<Node> generateAnimalImageList() {
+        var generatedAnimalImages = new LinkedList<Node>();
         for(int i=0; i<width; i++) {
             for(int j=0; j<height; j++) {
-                var generatedAnimal = new Animal(position, 0, genome , 0);
-                var animalBox = new WorldElementBox(generatedAnimal, 500/width, 500/height);
-                var animalImage = animalBox.getVBox();
+                var animalNode = new NodeGenerator("animal.png", 500/width, 500/height);
+                var animalImage = animalNode.getNode();
                 generatedAnimalImages.add(animalImage);
             }
         }
-        var exampleNormalPlant = new Plant(new Vector2d(0, 0), 0, false);
-        var normalPlantBox = new WorldElementBox(exampleNormalPlant, width, height);
-        var normalPlantImage = normalPlantBox.getVBox();
-        var examplePoisonousPlant = new Plant(new Vector2d(0, 0), 0, true);
-        var poisonousPlantBox = new WorldElementBox(examplePoisonousPlant, width, height);
-        var poisonousPlantImage = poisonousPlantBox.getVBox();
-
         return generatedAnimalImages;
     }
 
-    public LinkedList<VBox> generateNormalPlantImageList() {
-        var generatedNormalPlantImages = new LinkedList<VBox>();
-        var position = new Vector2d(0,0);
+    public LinkedList<Node> generatePlantImageList(boolean isPoisonous) {
+        var generatedPlantImages = new LinkedList<Node>();
+        String plantURL;
+        if (isPoisonous) {
+            plantURL = "poisonousPlant.png";
+        }
+        else {
+            plantURL = "plant.png";
+        }
         for(int i=0; i<width; i++) {
             for(int j=0; j<height; j++) {
-                var generatedAnimal = new Plant(position, 0, false);
-                var animalBox = new WorldElementBox(generatedAnimal, 500/width, 500/height);
-                var animalImage = animalBox.getVBox();
-                generatedNormalPlantImages.add(animalImage);
+                var plantNode = new NodeGenerator(plantURL, 500/width, 500/height);
+                var plantImage = plantNode.getNode();
+                generatedPlantImages.add(plantImage);
             }
         }
-        return generatedNormalPlantImages;
+        return generatedPlantImages;
     }
 
-    public LinkedList<VBox> generatePoisonousPlantImageList() {
-        var generatedPoisonousPlantImages = new LinkedList<VBox>();
+    public LinkedList<Node> generateSteppeImageList() {
+        var generatedSteppeImages = new LinkedList<Node>();
         var position = new Vector2d(0,0);
         for(int i=0; i<width; i++) {
             for(int j=0; j<height; j++) {
-                var generatedAnimal = new Plant(position, 0, false);
-                var animalBox = new WorldElementBox(generatedAnimal, 500/width, 500/height);
-                var animalImage = animalBox.getVBox();
-                generatedPoisonousPlantImages.add(animalImage);
+                var steppeNode = new NodeGenerator("steppe.png", 500/width, 500/height);
+                var steppeImage = steppeNode.getNode();
+                generatedSteppeImages.add(steppeImage);
             }
         }
-        return generatedPoisonousPlantImages;
+        return generatedSteppeImages;
     }
 }

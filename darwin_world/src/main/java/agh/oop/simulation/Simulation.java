@@ -49,11 +49,11 @@ public class Simulation implements Runnable{
         var notGrownFields = simulationInitialization.getNotGrownFields();
         SimulationDay simulationDay = new SimulationDay(earth, animals, notGrownFields, newPlantNumber,
                 plantEnergy, reproduceEnergy, mutation);
-        for(int i=1;i<=200;i++){
+        for(int i=1;i<=1000;i++){
             try {
                 simulationDay.simulateOneDay();
                 notifyListeners("Map has been changed! Day " + i);
-                Thread.sleep(200);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
