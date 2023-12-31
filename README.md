@@ -10,10 +10,6 @@ Gałąź main modyfikowana tylko przez pull request
 
 [Diagram UML](UML_diagram.pdf)
 
-Podział testów: do 27.12
-
-Mateusz: 
--Earth, mutation*
 
 todo list:  
 - mutacje podmianka(check)
