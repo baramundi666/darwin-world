@@ -16,8 +16,8 @@ public class SimulationDay extends AbstractSimulationPart{
 
     public SimulationDay(Earth earth, HashSet<Animal> animals, HashSet<Vector2d> notGrownFields,
                          int newPlantNumber, int plantEnergy, int reproduceEnergy,
-                         Mutation mutation) {
-        super(earth, animals, notGrownFields, newPlantNumber, plantEnergy, reproduceEnergy);
+                         Mutation mutation, int[] equatorBorders) {
+        super(earth, animals, notGrownFields, newPlantNumber, plantEnergy, reproduceEnergy, equatorBorders);
         this.mutation = mutation;
     }
 

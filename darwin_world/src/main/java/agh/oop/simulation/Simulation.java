@@ -18,8 +18,10 @@ public class Simulation implements Runnable{
     private final int animalNumber;
     private final int genomeLength;
     private final int initialEnergy;
+    private final int[] equatorBorders;
     private final HashSet<Animal> animals;
     private final List<ChangeListener> listeners = new LinkedList<>();
+
 
     public Simulation(Earth earth, int reproduceEnergy, int newPlantNumber, int plantEnergy, int animalNumber, int genomeLength, int initialEnergy, Mutation mutation){
         this.earth = earth;
@@ -31,14 +33,15 @@ public class Simulation implements Runnable{
         this.genomeLength = genomeLength;
         this.initialEnergy = initialEnergy;
         this.animals = new HashSet<>();
+        int lowerEquatorBorder = (int)(Math.ceil(earth.getBounds().upperRight().getY()/5.0 * 2));
+        int upperEquatorBorder = lowerEquatorBorder + (int)(Math.ceil((earth.getBounds().upperRight().getY()+1)/5.0)-1);
+        this.equatorBorders = new int[]{lowerEquatorBorder, upperEquatorBorder};
     }
-
-
 
     @Override
     public void run() {
         SimulationInitializer simulationInitialization = new SimulationInitializer(earth, animals,
-                newPlantNumber, plantEnergy, reproduceEnergy, animalNumber, genomeLength, initialEnergy);
+                newPlantNumber, plantEnergy, reproduceEnergy, animalNumber, genomeLength, initialEnergy, equatorBorders);
         try {
             simulationInitialization.initialize();
             notifyListeners("Map has been initialized! Day " + 0);
@@ -48,7 +51,7 @@ public class Simulation implements Runnable{
         }
         var notGrownFields = simulationInitialization.getNotGrownFields();
         SimulationDay simulationDay = new SimulationDay(earth, animals, notGrownFields, newPlantNumber,
-                plantEnergy, reproduceEnergy, mutation);
+                plantEnergy, reproduceEnergy, mutation, equatorBorders);
         for(int i=1;i<=1000;i++){
             try {
                 simulationDay.simulateOneDay();

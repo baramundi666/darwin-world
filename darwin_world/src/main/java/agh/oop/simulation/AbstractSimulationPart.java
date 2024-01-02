@@ -23,16 +23,14 @@ public abstract class AbstractSimulationPart {
     protected final int[] equatorBorders;
 
     public AbstractSimulationPart(Earth earth, HashSet<Animal> animals, HashSet<Vector2d> notGrownFields,
-                         int newPlantNumber, int plantEnergy, int reproduceEnergy){
+                         int newPlantNumber, int plantEnergy, int reproduceEnergy, int[] equatorBorders){
         this.earth = earth;
         this.animals = animals;
         this.notGrownFields = notGrownFields;
         this.reproduceEnergy = reproduceEnergy;
         this.newPlantNumber = newPlantNumber;
         this.plantEnergy = plantEnergy;
-        int lowerEquatorBorder = (int)(Math.ceil(earth.getBounds().upperRight().getY()/5.0 * 2));
-        int upperEquatorBorder = lowerEquatorBorder + (int)(Math.ceil((earth.getBounds().upperRight().getY()+1)/5.0)-1);
-        this.equatorBorders = new int[]{lowerEquatorBorder, upperEquatorBorder};
+        this.equatorBorders = equatorBorders;
         this.notGrownEquatorFields = (equatorBorders[1]-equatorBorders[0]+1) * (earth.getBounds().upperRight().getX()+1) - this.newPlantNumber;
     }
 

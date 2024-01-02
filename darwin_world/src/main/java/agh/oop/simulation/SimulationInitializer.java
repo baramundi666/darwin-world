@@ -14,13 +14,12 @@ public class SimulationInitializer extends AbstractSimulationPart{
     private final int initialEnergy;
 
     public SimulationInitializer(Earth earth, HashSet<Animal> animals, int newPlantNumber, int plantEnergy,
-                                 int genomeLength, int animalNumber, int initialEnergy, int reproduceEnergy) {
-        super(earth, animals, new HashSet<>(), newPlantNumber, plantEnergy, reproduceEnergy);
+                                 int genomeLength, int animalNumber, int initialEnergy, int reproduceEnergy, int[] equatorBorders) {
+        super(earth, animals, new HashSet<>(), newPlantNumber, plantEnergy, reproduceEnergy, equatorBorders);
         this.genomeLength = genomeLength;
         this.animalNumber = animalNumber;
         this.initialEnergy = initialEnergy;
     }
-
 
     public HashSet<Vector2d> getNotGrownFields() {
         return new HashSet<>(notGrownFields);
