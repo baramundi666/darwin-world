@@ -4,35 +4,38 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Genome;
+import agh.oop.model.objects.inheritance.Mutation;
 
 import java.util.*;
 
-public class SimulationInitializer extends AbstractSimulationPart{
+public class SimulationInitializer{
 
     private final int genomeLength;
     private final int animalNumber;
     private final int initialEnergy;
 
-    public SimulationInitializer(Earth earth, HashSet<Animal> animals, int newPlantNumber, int plantEnergy,
-                                 int genomeLength, int animalNumber, int initialEnergy, int reproduceEnergy, int[] equatorBorders) {
-        super(earth, animals, new HashSet<>(), newPlantNumber, plantEnergy, reproduceEnergy, equatorBorders);
+    private final Earth earth;
+    private final HashSet<Animal> animals;//statistics purpose
+    private final int reproduceEnergy;
+
+    private final AbstractSpawner spawner;
+
+    public SimulationInitializer(Earth earth, HashSet<Animal> animals,
+                                 int genomeLength, int animalNumber,
+                                 int initialEnergy,
+                                 int reproduceEnergy, AbstractSpawner spawner) {
         this.genomeLength = genomeLength;
         this.animalNumber = animalNumber;
         this.initialEnergy = initialEnergy;
-    }
-
-    public HashSet<Vector2d> getNotGrownFields() {
-        return new HashSet<>(notGrownFields);
+        this.earth = earth;
+        this.animals = animals;
+        this.reproduceEnergy = reproduceEnergy;
+        this.spawner = spawner;
     }
 
     public void initialize() {
         generateAnimals();
-        for(int i=0; i<=earth.getBounds().upperRight().getX(); i++){
-            for(int j=0; j<=earth.getBounds().upperRight().getY(); j++){
-                notGrownFields.add(new Vector2d(i,j));
-            }
-        }
-        spawnPlants();
+        spawner.spawnPlants();
     }
 
     private Genome generateGenome(){

@@ -26,5 +26,8 @@ public class NodeGenerator {
         imageView.setFitWidth(width);
         imageView.setFitHeight(height);
         node = imageView;
+        //node.setId(imageURL);
+        // to do - addImage takes argument imageURL to
+        // distinguish which children to remove during clearGrid
     }
 }
