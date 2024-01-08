@@ -1,9 +1,10 @@
-package agh.oop.simulation;
+package agh.oop.simulation.day;
 
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Mutation;
+import agh.oop.simulation.day.AbstractSimulationDay;
 import agh.oop.simulation.spawner.AbstractSpawner;
 
 import java.util.HashSet;

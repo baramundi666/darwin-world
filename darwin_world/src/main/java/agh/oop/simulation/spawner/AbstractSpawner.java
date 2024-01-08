@@ -1,5 +1,6 @@
 package agh.oop.simulation.spawner;
 
+import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 
@@ -23,6 +24,7 @@ public abstract class AbstractSpawner {
         this.newPlantNumber = newPlantNumber;
         this.plantEnergy = plantEnergy;
     }
+
     public void setNotGrownFields(HashSet<Vector2d> notGrownFields){
         this.notGrownFields = notGrownFields;
     }
@@ -32,4 +34,6 @@ public abstract class AbstractSpawner {
     }
 
     public abstract void spawnPlants();
+
+    public abstract Boundary getSpecialAreaBorders();
 }

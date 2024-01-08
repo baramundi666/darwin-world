@@ -19,12 +19,7 @@ public class DefaultPlantSpawner extends AbstractSpawner {
         super(earth, newPlantNumber, plantEnergy);
         int lowerEquatorBorder = (int)(Math.ceil(earth.getBounds().upperRight().getY()/5.0 *2));
         int upperEquatorBorder = lowerEquatorBorder + (int)(Math.ceil((earth.getBounds().upperRight().getY()+1)/5.0)-1);
-        System.out.println(lowerEquatorBorder + " " + upperEquatorBorder);
         this.equatorBorders = new Boundary(new Vector2d(0,lowerEquatorBorder), new Vector2d(earth.getBounds().upperRight().getX(),upperEquatorBorder));
-    }
-
-    public Boundary getEquatorBorders(){
-        return equatorBorders;
     }
 
     @Override
@@ -59,4 +54,8 @@ public class DefaultPlantSpawner extends AbstractSpawner {
         }
     }
 
+    @Override
+    public Boundary getSpecialAreaBorders(){
+        return equatorBorders;
+    }
 }

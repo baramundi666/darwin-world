@@ -6,6 +6,9 @@ import agh.oop.model.objects.inheritance.Mutation;
 import agh.oop.model.objects.inheritance.StandardMutation;
 import agh.oop.model.objects.inheritance.SwapMutation;
 import agh.oop.presenter.ChangeListener;
+import agh.oop.simulation.day.AbstractSimulationDay;
+import agh.oop.simulation.day.DefaultSimulationDay;
+import agh.oop.simulation.day.VariedSimulationDay;
 import agh.oop.simulation.spawner.AbstractSpawner;
 import agh.oop.simulation.spawner.DefaultPlantSpawner;
 import agh.oop.simulation.spawner.VariedPlantSpawner;
@@ -74,7 +77,8 @@ public class Simulation implements Runnable{
                 System.out.println("not working now");
                 spawner = new VariedPlantSpawner(earth, newPlantNumber, plantEnergy);
                 var notGrownFields = spawner.getNotGrownFields();
-                simulationDay = null;//to do
+                simulationDay = new VariedSimulationDay(earth, animals, notGrownFields, newPlantNumber,
+                        plantEnergy, reproduceEnergy,spawner, mutation);
             }
             default -> throw new IllegalArgumentException("Unknown plant variant");
         };

@@ -1,4 +1,4 @@
-package agh.oop.simulation;
+package agh.oop.simulation.day;
 
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;

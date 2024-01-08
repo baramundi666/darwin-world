@@ -56,7 +56,6 @@ public class SimulationPresenter implements ChangeListener {
     private List<Node> jungleImageList;
     private Simulation simulationToRun;
 
-
     @Override
     public void mapChanged(Earth earth, String message) {
         Platform.runLater(() -> {
@@ -114,6 +113,8 @@ public class SimulationPresenter implements ChangeListener {
             }
         }
     }
+
+    //public void drawVariedBackground()//to do
     public void drawMap(Earth earth) {
         var plantsMap = earth.getPlants();
         var animalsMap = earth.getAnimals();
