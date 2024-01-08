@@ -8,6 +8,7 @@ import agh.oop.model.objects.inheritance.Mutation;
 import agh.oop.model.objects.inheritance.StandardMutation;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 
@@ -70,7 +71,7 @@ class AnimalTest {
     }
 
     @Test
-    void testSingleMove() {
+    void testSingleMove() throws NoSuchFieldException, IllegalAccessException {
         //Given
         var genList1 = List.of(1);
         var genList2 = List.of(2);
@@ -81,9 +82,16 @@ class AnimalTest {
         var animal1 = new Animal(new Vector2d(1, 1), 4, genome1, 1);
         var animal2 = new Animal(new Vector2d(1, 0), 8, genome2, 1);
         var animal3 = new Animal(new Vector2d(1, 1), 8, genome3, 1);
-        animal1.setDirectionForTest();
-        animal2.setDirectionForTest();
-        animal3.setDirectionForTest();
+        Field directionField1 = animal1.getClass().getDeclaredField("direction");
+        Field directionField2 = animal2.getClass().getDeclaredField("direction");
+        Field directionField3 = animal3.getClass().getDeclaredField("direction");
+        directionField1.setAccessible(true);
+        directionField2.setAccessible(true);
+        directionField3.setAccessible(true);
+        directionField1.set(animal1,MapDirection.N);
+        directionField2.set(animal2,MapDirection.N);
+        directionField3.set(animal3,MapDirection.N);
+
         var options = new Earth(2,2);
 
         //When
@@ -101,7 +109,7 @@ class AnimalTest {
     }
 
     @Test
-    void testMove() {
+    void testMove() throws NoSuchFieldException, IllegalAccessException {
         //Given
         var genList = List.of(2,0,6,0,1,5);
         var genome = new Genome(genList, 6);
@@ -109,7 +117,9 @@ class AnimalTest {
             genome.nextGene();
         }
         var animal1 = new Animal(new Vector2d(2, 1), 4, genome, 1);
-        animal1.setDirectionForTest();
+        Field directionField1 = animal1.getClass().getDeclaredField("direction");
+        directionField1.setAccessible(true);
+        directionField1.set(animal1,MapDirection.N);
         var options = new Earth(4,4);
 
         //When

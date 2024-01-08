@@ -3,24 +3,15 @@ package agh.oop.presenter;
 
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
-import agh.oop.model.objects.Animal;
-import agh.oop.model.objects.Plant;
-import agh.oop.model.objects.inheritance.Genome;
-import agh.oop.model.objects.inheritance.Mutation;
-import agh.oop.model.objects.inheritance.StandardMutation;
-import agh.oop.model.objects.inheritance.SwapMutation;
 import agh.oop.simulation.Simulation;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 
 import java.util.*;
@@ -30,10 +21,30 @@ public class SimulationPresenter implements ChangeListener {
 
     @FXML
     public GridPane mapGrid;
-
     @FXML
-    private TextField input;
-
+    public GridPane backgroundGrid;
+    @FXML
+    public Spinner<Integer> width;
+    @FXML
+    public Spinner<Integer> height;
+    @FXML
+    public Spinner<Integer> reproduceEnergy;
+    @FXML
+    public Spinner<Integer> initialEnergy;
+    @FXML
+    public Spinner<Integer> genomeLength;
+    @FXML
+    public Spinner<Integer> newAnimalNumber;
+    @FXML
+    public Spinner<Integer> newPlantNumber;
+    @FXML
+    public Spinner<Integer> plantEnergy;
+    @FXML
+    public ToggleGroup mutationVariant;
+    @FXML
+    public ToggleGroup plantVariant;
+    @FXML
+    public Button saveSettings;
     @FXML
     private Label infoLabel;
 
@@ -41,29 +52,30 @@ public class SimulationPresenter implements ChangeListener {
     private List<Node> normalPlantImageList;
     private List<Node> poisonousPlantImageList;
     private List<Node> steppeImageList;
-
+    private List<Node> jungleImageList;
     private Simulation simulationToRun;
 
 
     @Override
     public void mapChanged(Earth earth, String message) {
         Platform.runLater(() -> {
-            drawMap(earth);
+            drawDefaultMap(earth);
             infoLabel.setText(message);
         });
     }
-
-    public void drawMap(Earth earth) {
-        clearGrid();
+    public void drawDefaultMap(Earth earth) {
+        clearGrid(mapGrid);
         var boundary = earth.getBounds();
         int lowerX = boundary.lowerLeft().getX();
         int upperX = boundary.upperRight().getX();
         int lowerY = boundary.lowerLeft().getY();
         int upperY = boundary.upperRight().getY();
+        int lowerEquatorBorder = (int)(Math.ceil(upperY/5.0 *2));
+        int upperEquatorBorder = lowerEquatorBorder + (int)(Math.ceil((upperY+1)/5.0)-1);
         int rows = upperY-lowerY+1;
         int columns = upperX-lowerX+1;
-        double width = (double) 500/columns;
-        double height = (double) 500/rows;
+        double width = (double) 500 /columns;
+        double height = (double) 500 /rows;
 
         mapGrid.getColumnConstraints().add(new ColumnConstraints(width));
         mapGrid.getRowConstraints().add(new RowConstraints(height));
@@ -90,11 +102,17 @@ public class SimulationPresenter implements ChangeListener {
         var normalPlantImageIterator = normalPlantImageList.iterator();
         var poisonousPlantImageIterator = poisonousPlantImageList.iterator();
         var steppeImageIterator = steppeImageList.iterator();
-        var plantKeys = plantsMap.keySet();
+        var jungleImageIterator = jungleImageList.iterator();
+
         for(int i=0; i<rows; i++) {
             for(int j=0; j<columns; j++) {
                 var position= new Vector2d(i, j);
-                if (!plantKeys.contains(position)) {
+                if (j>=lowerEquatorBorder && j<=upperEquatorBorder) {
+                    var jungleImage = jungleImageIterator.next();
+                    mapGrid.add(jungleImage, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
+                    GridPane.setHalignment(jungleImage, HPos.CENTER);
+                }
+                else {
                     var steppeImage = steppeImageIterator.next();
                     mapGrid.add(steppeImage, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
                     GridPane.setHalignment(steppeImage, HPos.CENTER);
@@ -136,41 +154,37 @@ public class SimulationPresenter implements ChangeListener {
         engineThread.start();
     }
 
-    private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
-    }
-
-    public void onDefaultClicked() {
-        var imageGenerator = new ImageGenerator(20, 20);
-        animalImageList = imageGenerator.generateAnimalImageList();
-        normalPlantImageList = imageGenerator.generatePlantImageList(false);
-        poisonousPlantImageList = imageGenerator.generatePlantImageList(true);
-        steppeImageList = imageGenerator.generateSteppeImageList();
-        var map = new Earth(20, 20);
-        Mutation mutation = new StandardMutation(new int[]{2, 5});
-        simulationToRun = new Simulation(map, 10, 20, 10, 50, 32, 5, mutation);
+    private void clearGrid(GridPane grid) {
+        grid.getChildren().retainAll(grid.getChildren().get(0)); // hack to retain visible grid lines
+        grid.getColumnConstraints().clear();
+        grid.getRowConstraints().clear();
     }
 
     public void onSaveClicked() {
-        // to do!!!
-        // arguments - mapa: nazwa argumentu -> wartosc liczbowa argumentu
-        int argumentCount = 2;
-        List<String> inputlist = new ArrayList<>(List.of("width","height"));
-        var parameters = Stream.of(input.getText().split(" ")).map(Integer::valueOf).toList();
-        Map<String, Integer> arguments = new HashMap<>();
-        for(int i=0; i<argumentCount; i++) {
-            arguments.put(inputlist.get(i), parameters.get(i));
-        }
-        var imageGenerator = new ImageGenerator(arguments.get("width"), arguments.get("height"));
+        int width = this.width.getValue();
+        int height = this.height.getValue();
+        int reproduceEnergy = this.reproduceEnergy.getValue();
+        int initialEnergy = this.initialEnergy.getValue();
+        int genomeLength = this.genomeLength.getValue();
+        int newAnimalNumber = this.newAnimalNumber.getValue();
+        int newPlantNumber = this.newPlantNumber.getValue();
+        int plantEnergy = this.plantEnergy.getValue();
+
+        var mutationId = ((RadioButton) this.mutationVariant.getSelectedToggle()).getId();
+        var plantId = ((RadioButton) this.plantVariant.getSelectedToggle()).getId();
+
+        var imageGenerator = new ImageGenerator(width, height, (double) 500 /width, (double) 500 /height);
         animalImageList = imageGenerator.generateAnimalImageList();
-        normalPlantImageList = imageGenerator.generatePlantImageList(false);
-        poisonousPlantImageList = imageGenerator.generatePlantImageList(true);
+        normalPlantImageList = imageGenerator.generatePlantImageList();
+        poisonousPlantImageList = imageGenerator.generatePoisonousPlantImageList();
+        jungleImageList = imageGenerator.generateJungleImageList();
         steppeImageList = imageGenerator.generateSteppeImageList();
-        var map = new Earth(arguments.get("width"), arguments.get("height"));
-        Mutation mutation = new SwapMutation(new int[]{2, 5});
-        simulationToRun = new Simulation(map, 10, 20, 10, 50, 32, 5, mutation);
+        var map = new Earth(width, height);
+        //Mutation mutation = new SwapMutation(new int[]{2, 5});
+        var mutationRange = new int[]{2, 5};
+        simulationToRun = new Simulation(map, reproduceEnergy, newPlantNumber,
+                plantEnergy, newAnimalNumber, genomeLength, initialEnergy,
+                mutationRange, mutationId, plantId);
     }
 }
 

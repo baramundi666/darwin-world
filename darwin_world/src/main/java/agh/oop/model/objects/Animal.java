@@ -20,7 +20,6 @@ public class Animal implements WorldElement {
     private int lifeLength = 0;
     private int childrenCount = 0;
 
-
     public Animal(Vector2d position, int initialEnergy, Genome genome, int copulateEnergy) {
         this.position = position;
         this.energy = initialEnergy;
@@ -66,10 +65,6 @@ public class Animal implements WorldElement {
         this.energy = energy;
     }
 
-    void setDirectionForTest() {//for tests
-        this.direction = MapDirection.N;
-    }//idk how to test it in other way
-
     public void incrementChildrenCount(){ this.childrenCount += 1;}
 
     @Override
@@ -90,7 +85,7 @@ public class Animal implements WorldElement {
         return new Animal(position, initialEnergy, newGenome, copulateEnergy);
     }
 
-    public void move(MapOptions options) {//move logic is okey?? to check
+    public void move(MapOptions options) {
         int active = genome.getActiveGene();
         direction = direction.shift(genome.getGeneList().get(active));
         position = options.mover(position.add(direction.toVector()))

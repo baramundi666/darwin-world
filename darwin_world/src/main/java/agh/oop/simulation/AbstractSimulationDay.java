@@ -4,20 +4,34 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Mutation;
+import agh.oop.simulation.spawner.AbstractSpawner;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SimulationDay extends AbstractSimulationPart{
+public abstract class AbstractSimulationDay {
 
-    private final Mutation mutation;
+    protected final Earth earth;
+    protected final HashSet<Animal> animals;//statistics purpose
+    protected final HashSet<Vector2d> notGrownFields;
+    protected final int reproduceEnergy;
+    protected final int newPlantNumber;
+    protected final int plantEnergy;
+    protected final AbstractSpawner spawner;
+    protected final Mutation mutation;
 
 
-
-    public SimulationDay(Earth earth, HashSet<Animal> animals, HashSet<Vector2d> notGrownFields,
-                         int newPlantNumber, int plantEnergy, int reproduceEnergy,
-                         Mutation mutation) {
-        super(earth, animals, notGrownFields, newPlantNumber, plantEnergy, reproduceEnergy);
+    public AbstractSimulationDay(Earth earth, HashSet<Animal> animals,
+                                 HashSet<Vector2d> notGrownFields, int newPlantNumber,
+                                 int plantEnergy, int reproduceEnergy,
+                                 AbstractSpawner spawner, Mutation mutation) {
+        this.earth = earth;
+        this.animals = animals;
+        this.notGrownFields = notGrownFields;
+        this.reproduceEnergy = reproduceEnergy;
+        this.newPlantNumber = newPlantNumber;
+        this.plantEnergy = plantEnergy;
+        this.spawner = spawner;
         this.mutation = mutation;
     }
 
@@ -26,10 +40,30 @@ public class SimulationDay extends AbstractSimulationPart{
             moveAnimals();
             animalsEat();
             reproduceAnimals();
-            spawnPlants();
+            spawner.spawnPlants();
     }
 
-    private void removeDeadAnimals(){
+    protected abstract void moveAnimals();
+
+    protected void animalsEat(){
+        var animalMap = earth.getAnimals();
+        var plantMap = earth.getPlants();
+        var toBeEaten = new HashMap<Vector2d, Animal>();
+
+        for (Vector2d position : animalMap.keySet()) {
+            if (plantMap.containsKey(position)) {
+                List<Animal> strongest = conflict(animalMap.get(position));
+                toBeEaten.put(position, strongest.get(0));
+                notGrownFields.add(position);
+            }
+        }
+        for (Vector2d position : toBeEaten.keySet()) {
+            toBeEaten.get(position).eat(plantMap.get(position));
+            earth.removePlant(plantMap.get(position));
+        }
+    }
+
+    protected void removeDeadAnimals(){
         var animalMap = earth.getAnimals();
         var toRemove = new LinkedList<Animal>();
         if(!animalMap.isEmpty()) {
@@ -48,38 +82,7 @@ public class SimulationDay extends AbstractSimulationPart{
         }
     }
 
-    private void moveAnimals(){
-        var animalMap = earth.getAnimals();
-        var toMove = new LinkedList<Animal>();
-        for (Vector2d position : animalMap.keySet()) {
-            toMove.addAll(animalMap.get(position));
-        }
-        for (Animal animal : toMove){
-            earth.move(animal);
-        }
-    }
-
-    private void animalsEat(){
-        var animalMap = earth.getAnimals();
-        var plantMap = earth.getPlants();
-        var toBeEaten = new HashMap<Vector2d, Animal>();
-        for (Vector2d position : animalMap.keySet()) {
-            if (plantMap.containsKey(position)) {
-                List<Animal> strongest = conflict(animalMap.get(position));
-                toBeEaten.put(position, strongest.get(0));
-                notGrownFields.add(position);
-            }
-        }
-        for (Vector2d position : toBeEaten.keySet()) {
-            toBeEaten.get(position).eat(plantMap.get(position));
-            earth.removePlant(plantMap.get(position));
-            if(position.getY()>=equatorBorders[0] && position.getY()<=equatorBorders[1]){
-                notGrownEquatorFields++;
-            }
-        }
-    }
-
-    private void reproduceAnimals(){
+    protected void reproduceAnimals(){
         var animalMap = earth.getAnimals();
         var toPlace = new LinkedList<Animal>();
         for (Vector2d position : animalMap.keySet()) {
@@ -101,14 +104,14 @@ public class SimulationDay extends AbstractSimulationPart{
         }
     }
 
-    private List<Animal> conflict(HashSet<Animal> animals){//to do in one line
+    protected List<Animal> conflict(HashSet<Animal> animals){//to do in one line
         List<Animal> strongest = animals.stream()
-                .sorted(Comparator
-                        .comparingInt(Animal::getEnergy)
+                .sorted(Comparator.comparingInt(Animal::getEnergy)
                         .thenComparingInt(Animal::getLifeLength)
                         .thenComparingInt(Animal::getChildrenCount))
                 .collect(Collectors.toList());
         Collections.reverse(strongest);
         return strongest;
     }
+    //to do- random animals if there is no strongest
 }
