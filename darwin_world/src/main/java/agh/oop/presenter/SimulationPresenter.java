@@ -3,6 +3,7 @@ package agh.oop.presenter;
 
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
+import agh.oop.simulation.DataHolder;
 import agh.oop.simulation.Simulation;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -29,6 +30,8 @@ public class SimulationPresenter implements ChangeListener {
     public Spinner<Integer> heightValue;
     @FXML
     public Spinner<Integer> reproduceEnergy;
+    @FXML
+    public Spinner<Integer> copulateEnergy;
     @FXML
     public Spinner<Integer> initialEnergy;
     @FXML
@@ -166,6 +169,7 @@ public class SimulationPresenter implements ChangeListener {
         width = this.widthValue.getValue();
         height = this.heightValue.getValue();
         int reproduceEnergy = this.reproduceEnergy.getValue();
+        int copulateEnergy = this.copulateEnergy.getValue();
         int initialEnergy = this.initialEnergy.getValue();
         int genomeLength = this.genomeLength.getValue();
         int newAnimalNumber = this.newAnimalNumber.getValue();
@@ -184,9 +188,10 @@ public class SimulationPresenter implements ChangeListener {
         var map = new Earth(width, height);
         //Mutation mutation = new SwapMutation(new int[]{2, 5});
         var mutationRange = new int[]{2, 5};
-        simulationToRun = new Simulation(map, reproduceEnergy, newPlantNumber,
+        var data = new DataHolder(reproduceEnergy, copulateEnergy, newPlantNumber,
                 plantEnergy, newAnimalNumber, genomeLength, initialEnergy,
                 mutationRange, mutationId, plantId);
+        simulationToRun = new Simulation(map, data);
     }
 }
 
