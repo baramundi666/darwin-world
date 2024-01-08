@@ -4,6 +4,7 @@ import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Plant;
+import agh.oop.simulation.DataHolder;
 import agh.oop.simulation.spawner.AbstractSpawner;
 
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ import java.util.stream.Collectors;
 
 public class VariedPlantSpawner extends AbstractSpawner {
     private final Boundary poisonousAreaBorders;
-    public VariedPlantSpawner(Earth earth, int newPlantNumber, int plantEnergy) {
-        super(earth, newPlantNumber, plantEnergy);
+    public VariedPlantSpawner(Earth earth, DataHolder simulationParameters) {
+        super(earth, simulationParameters);
         this.poisonousAreaBorders = generatePoisonousAreaBorders();
     }
 

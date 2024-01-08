@@ -16,79 +16,27 @@ import agh.oop.simulation.spawner.VariedPlantSpawner;
 import java.util.*;
 
 public class Simulation implements Runnable{
-    private final Earth earth;
-    private final int reproduceEnergy;
 
-    private final int copulateEnergy;
+    private SimulationInitializer simulationInitialization;
+    private AbstractSimulationDay simulationDay;
+
+    private final Earth earth;
     private Mutation mutation;
-    private final int newPlantNumber;
-    private final int plantEnergy;
-    private final int animalNumber;
-    private final int genomeLength;
-    private final int initialEnergy;
+    private AbstractSpawner spawner;
     private final HashSet<Animal> animals;
     private final List<ChangeListener> listeners = new LinkedList<>();
-    private final int[] mutationRange;
-    private final String mutationVariant;
-    private final String plantVariant;
+    private final DataHolder simulationParameters;
 
 
     public Simulation(Earth earth, DataHolder simulationParameters){
         this.earth = earth;
-        this.simul
-        this.reproduceEnergy = data.reproduceEnergy();
-        this.copulateEnergy = data.copulateEnergy();
-        this.newPlantNumber = data.newPlantNumber();
-        this.plantEnergy = data.plantEnergy();
-        this.animalNumber = data.newAnimalNumber();
-        this.genomeLength = data.genomeLength();
-        this.initialEnergy = data.initialEnergy();
+        this.simulationParameters = simulationParameters;
         this.animals = new HashSet<>();
-        this.mutationRange = data.mutationRange();
-        this.mutationVariant = data.mutationVariant();
-        this.plantVariant = data.plantVariant();
+        configureVariants();
     }
 
     @Override
     public void run() {
-        switch(mutationVariant){//przeniesc switch
-            case "m2":
-                mutation = new SwapMutation(mutationRange);
-                break;
-            case "m1":
-                mutation = new StandardMutation(mutationRange);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown mutation variant");
-
-        }
-
-        AbstractSpawner spawner;
-        AbstractSimulationDay simulationDay;
-
-        switch (plantVariant) {
-            case "p1" -> {
-                spawner = new DefaultPlantSpawner(earth, newPlantNumber, plantEnergy);
-                var notGrownFields = spawner.getNotGrownFields();
-                simulationDay = new DefaultSimulationDay(earth, animals, notGrownFields, newPlantNumber,
-                        plantEnergy, reproduceEnergy,spawner, mutation);
-            }
-            case "p2" -> {
-                System.out.println("not working now");
-                spawner = new VariedPlantSpawner(earth, newPlantNumber, plantEnergy);
-                var notGrownFields = spawner.getNotGrownFields();
-                simulationDay = new VariedSimulationDay(earth, animals, notGrownFields, newPlantNumber,
-                        plantEnergy, copulateEnergy,spawner, mutation);
-            }
-            default -> throw new IllegalArgumentException("Unknown plant variant");
-        };
-
-
-        var simulationInitialization = new SimulationInitializer(earth, animals,
-                reproduceEnergy, animalNumber,
-                genomeLength, initialEnergy, spawner);
-
-
         try {
             simulationInitialization.initialize();
             notifyListeners("Map has been initialized! Day " + 0);
@@ -97,7 +45,7 @@ public class Simulation implements Runnable{
             throw new RuntimeException(e);
         }
 
-        for(int i=1;i<=50;i++){
+        for(int i=1;i<=simulationParameters.simulationLength();i++){
             try {
                 simulationDay.simulateOneDay();
                 notifyListeners("Map has been changed! Day " + i);
@@ -106,6 +54,39 @@ public class Simulation implements Runnable{
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private void configureVariants() {
+        switch(simulationParameters.mutationVariant()){//przeniesc switch
+            case "m2":
+                mutation = new SwapMutation(simulationParameters.mutationRange());
+                break;
+            case "m1":
+                mutation = new StandardMutation(simulationParameters.mutationRange());
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown mutation variant");
+
+        }
+
+        switch (simulationParameters.plantVariant()) {
+            case "p1" -> {
+                spawner = new DefaultPlantSpawner(earth, simulationParameters);
+                var notGrownFields = spawner.getNotGrownFields();
+                simulationDay = new DefaultSimulationDay(earth, animals, notGrownFields, spawner,
+                        mutation, simulationParameters);
+            }
+            case "p2" -> {
+                spawner = new VariedPlantSpawner(earth, simulationParameters);
+                var notGrownFields = spawner.getNotGrownFields();
+                simulationDay = new VariedSimulationDay(earth, animals, notGrownFields, spawner,
+                        mutation, simulationParameters);
+            }
+            default -> throw new IllegalArgumentException("Unknown plant variant");
+        }
+
+        simulationInitialization = new SimulationInitializer(earth, animals,
+                spawner, simulationParameters);
     }
 
     public void registerListener(ChangeListener listener) {

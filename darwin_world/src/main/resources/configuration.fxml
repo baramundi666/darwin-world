@@ -35,6 +35,14 @@
                         </Spinner>
                     </HBox>
                     <HBox>
+                        <Label text="copulate energy: " BorderPane.alignment="CENTER"/>
+                        <Spinner fx:id="copulateEnergy" BorderPane.alignment="CENTER" editable="true" >
+                            <valueFactory>
+                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="50" initialValue="10" amountToStepBy="1"/>
+                            </valueFactory>
+                        </Spinner>
+                    </HBox>
+                    <HBox>
                         <Label text="initial energy: " BorderPane.alignment="CENTER"/>
                         <Spinner fx:id="initialEnergy" BorderPane.alignment="CENTER" editable="true" >
                             <valueFactory>
@@ -74,6 +82,22 @@
                             </valueFactory>
                         </Spinner>
                     </HBox>
+                    <HBox>
+                        <Label text="mutation range min: " BorderPane.alignment="CENTER"/>
+                        <Spinner fx:id="mutationRangeMin" BorderPane.alignment="CENTER" editable="true" >
+                            <valueFactory>
+                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="10" initialValue="2" amountToStepBy="1"/>
+                            </valueFactory>
+                        </Spinner>
+                    </HBox>
+                    <HBox>
+                        <Label text="mutation range max: " BorderPane.alignment="CENTER"/>
+                        <Spinner fx:id="mutationRangeMax" BorderPane.alignment="CENTER" editable="true" >
+                            <valueFactory>
+                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="10" initialValue="4" amountToStepBy="1"/>
+                            </valueFactory>
+                        </Spinner>
+                    </HBox>
                 </VBox>
             </HBox>
             <HBox>
@@ -92,11 +116,19 @@
                 <RadioButton text="jungle" toggleGroup="$plantVariant" fx:id="p1"/>
                 <RadioButton text="poisonous plants" toggleGroup="$plantVariant" fx:id="p2"/>
             </HBox>
+            <HBox>
+                <Label text="Enter simulation length: " BorderPane.alignment="CENTER"/>
+                <Spinner fx:id="simulationLength" BorderPane.alignment="CENTER" editable="true" >
+                    <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="10000" initialValue="100" amountToStepBy="1"/>
+                    </valueFactory>
+                </Spinner>
+            </HBox>
             <Button fx:id="saveSettings" text="Save settings" onAction="#saveSettings"/>
         </VBox>
     </center>
     <bottom>
-        <Button fx:id="startButton" text="Launch simulation" onAction="#onStartClicked"/>
+        <Button text="Launch simulation" onAction="#onLaunchClicked"/>
     </bottom>
 </BorderPane>
 

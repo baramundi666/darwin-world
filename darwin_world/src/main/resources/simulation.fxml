@@ -5,10 +5,10 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane fx:controller="agh.oop.presenter.SimulationPresenter" xmlns:fx="http://javafx.com/fxml" minHeight="550.0" maxHeight="1080.0" minWidth="850.0" maxWidth="1920.0">
-    <right>
+    <center>
         <Label fx:id="infoLabel"/>
         <GridPane  fx:id="mapGrid" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" minHeight="550.0" minWidth="850.0" gridLinesVisible="true" />
-    </right>
+    </center>
 
     <bottom>
         <Button fx:id="startButton" text="Start" onAction="#onSimulationStartClicked"/>

@@ -4,6 +4,7 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Mutation;
+import agh.oop.simulation.DataHolder;
 import agh.oop.simulation.spawner.AbstractSpawner;
 
 import java.util.*;
@@ -22,15 +23,14 @@ public abstract class AbstractSimulationDay {
 
 
     public AbstractSimulationDay(Earth earth, HashSet<Animal> animals,
-                                 HashSet<Vector2d> notGrownFields, int newPlantNumber,
-                                 int plantEnergy, int reproduceEnergy,
-                                 AbstractSpawner spawner, Mutation mutation) {
+                                 HashSet<Vector2d> notGrownFields,
+                                 AbstractSpawner spawner, Mutation mutation, DataHolder simulationParameters) {
         this.earth = earth;
         this.animals = animals;
         this.notGrownFields = notGrownFields;
-        this.reproduceEnergy = reproduceEnergy;
-        this.newPlantNumber = newPlantNumber;
-        this.plantEnergy = plantEnergy;
+        this.reproduceEnergy = simulationParameters.reproduceEnergy();
+        this.newPlantNumber = simulationParameters.newPlantNumber();
+        this.plantEnergy = simulationParameters.plantEnergy();
         this.spawner = spawner;
         this.mutation = mutation;
     }

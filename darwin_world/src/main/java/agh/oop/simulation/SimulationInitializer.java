@@ -21,15 +21,13 @@ public class SimulationInitializer{
     private final AbstractSpawner spawner;
 
     public SimulationInitializer(Earth earth, HashSet<Animal> animals,
-                                 int genomeLength, int animalNumber,
-                                 int initialEnergy,
-                                 int copulateEnergy, AbstractSpawner spawner) {
-        this.genomeLength = genomeLength;
-        this.animalNumber = animalNumber;
-        this.initialEnergy = initialEnergy;
+                                 AbstractSpawner spawner, DataHolder simulationParameters) {
+        this.genomeLength = simulationParameters.genomeLength();
+        this.animalNumber = simulationParameters.newAnimalNumber();
+        this.initialEnergy = simulationParameters.initialEnergy();
         this.earth = earth;
         this.animals = animals;
-        this.copulateEnergy = copulateEnergy;
+        this.copulateEnergy = simulationParameters.copulateEnergy();
         this.spawner = spawner;
     }
 

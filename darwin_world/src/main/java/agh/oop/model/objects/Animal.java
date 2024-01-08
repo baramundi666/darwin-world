@@ -44,6 +44,9 @@ public class Animal implements WorldElement {
     public MapDirection getDirection() {
         return direction;
     }
+    public void setDirection(MapDirection direction) {
+        this.direction = direction;
+    }
 
     public int getEnergy() {
         return energy;
@@ -86,7 +89,7 @@ public class Animal implements WorldElement {
     }
 
     public void move(MapOptions options) {
-        int active = genome.getActiveGene();
+        int active = genome.takeAnotherGene();
         direction = direction.shift(active);
         position = options.mover(position.add(direction.toVector()))
                 .orElseGet(() -> {

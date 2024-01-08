@@ -20,11 +20,20 @@ public class Genome {
     public int getGenomeLength(){
         return genomeLength;
     }
+
     public int getActiveGene() {
+        return activeGene;
+    }
+    public int getActiveGeneValue() {
+        return geneList.get(activeGene);
+    }
+
+    public int takeAnotherGene() {
         int activeGeneValue = geneList.get(activeGene);
         nextGene();
         return activeGeneValue;
     }
+
     public void nextGene() {
         if (activeGene==genomeLength-1) {
             activeGene=0;
