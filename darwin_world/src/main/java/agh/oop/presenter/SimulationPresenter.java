@@ -3,6 +3,7 @@ package agh.oop.presenter;
 
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
+import agh.oop.simulation.DataHolder;
 import agh.oop.simulation.Simulation;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

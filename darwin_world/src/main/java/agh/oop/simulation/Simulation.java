@@ -18,6 +18,8 @@ import java.util.*;
 public class Simulation implements Runnable{
     private final Earth earth;
     private final int reproduceEnergy;
+
+    private final int copulateEnergy;
     private Mutation mutation;
     private final int newPlantNumber;
     private final int plantEnergy;
@@ -27,26 +29,24 @@ public class Simulation implements Runnable{
     private final HashSet<Animal> animals;
     private final List<ChangeListener> listeners = new LinkedList<>();
     private final int[] mutationRange;
-
     private final String mutationVariant;
     private final String plantVariant;
 
 
-    public Simulation(Earth earth, int reproduceEnergy,
-                      int newPlantNumber, int plantEnergy, int animalNumber,
-                      int genomeLength, int initialEnergy,
-                      int[] mutationRange, String mutationVariant, String plantVariant){
+    public Simulation(Earth earth, DataHolder simulationParameters){
         this.earth = earth;
-        this.reproduceEnergy = reproduceEnergy;
-        this.newPlantNumber = newPlantNumber;
-        this.plantEnergy = plantEnergy;
-        this.animalNumber = animalNumber;
-        this.genomeLength = genomeLength;
-        this.initialEnergy = initialEnergy;
+        this.simul
+        this.reproduceEnergy = data.reproduceEnergy();
+        this.copulateEnergy = data.copulateEnergy();
+        this.newPlantNumber = data.newPlantNumber();
+        this.plantEnergy = data.plantEnergy();
+        this.animalNumber = data.newAnimalNumber();
+        this.genomeLength = data.genomeLength();
+        this.initialEnergy = data.initialEnergy();
         this.animals = new HashSet<>();
-        this.mutationRange = mutationRange;
-        this.mutationVariant = mutationVariant;
-        this.plantVariant = plantVariant;
+        this.mutationRange = data.mutationRange();
+        this.mutationVariant = data.mutationVariant();
+        this.plantVariant = data.plantVariant();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class Simulation implements Runnable{
                 spawner = new VariedPlantSpawner(earth, newPlantNumber, plantEnergy);
                 var notGrownFields = spawner.getNotGrownFields();
                 simulationDay = new VariedSimulationDay(earth, animals, notGrownFields, newPlantNumber,
-                        plantEnergy, reproduceEnergy,spawner, mutation);
+                        plantEnergy, copulateEnergy,spawner, mutation);
             }
             default -> throw new IllegalArgumentException("Unknown plant variant");
         };
