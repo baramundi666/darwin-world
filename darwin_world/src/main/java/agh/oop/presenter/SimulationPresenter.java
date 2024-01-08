@@ -43,7 +43,8 @@ public class SimulationPresenter implements ChangeListener {
     public ToggleGroup mutationVariant;
     @FXML
     public ToggleGroup plantVariant;
-
+    @FXML
+    public Button saveSettings;
     @FXML
     private Label infoLabel;
 
@@ -58,17 +59,19 @@ public class SimulationPresenter implements ChangeListener {
     @Override
     public void mapChanged(Earth earth, String message) {
         Platform.runLater(() -> {
-            //drawMap(earth);
+            drawDefaultMap(earth);
             infoLabel.setText(message);
         });
     }
-    public void drawMap(Earth earth) {
+    public void drawDefaultMap(Earth earth) {
         clearGrid(mapGrid);
         var boundary = earth.getBounds();
         int lowerX = boundary.lowerLeft().getX();
         int upperX = boundary.upperRight().getX();
         int lowerY = boundary.lowerLeft().getY();
         int upperY = boundary.upperRight().getY();
+        int lowerEquatorBorder = (int)(Math.ceil(upperY/5.0 *2));
+        int upperEquatorBorder = lowerEquatorBorder + (int)(Math.ceil((upperY+1)/5.0)-1);
         int rows = upperY-lowerY+1;
         int columns = upperX-lowerX+1;
         double width = (double) 500 /columns;
@@ -104,7 +107,7 @@ public class SimulationPresenter implements ChangeListener {
         for(int i=0; i<rows; i++) {
             for(int j=0; j<columns; j++) {
                 var position= new Vector2d(i, j);
-                if (j>=earth.getEquatorBorders()[0] && j<=earth.getEquatorBorders()[1]) {
+                if (j>=lowerEquatorBorder && j<=upperEquatorBorder) {
                     var jungleImage = jungleImageIterator.next();
                     mapGrid.add(jungleImage, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
                     GridPane.setHalignment(jungleImage, HPos.CENTER);
@@ -156,18 +159,6 @@ public class SimulationPresenter implements ChangeListener {
         grid.getColumnConstraints().clear();
         grid.getRowConstraints().clear();
     }
-
-//    public void onDefaultClicked() {
-//        var imageGenerator = new ImageGenerator(20, 20, (double) 500 /20, (double) 500 /20);
-//        animalImageList = imageGenerator.generateAnimalImageList();
-//        normalPlantImageList = imageGenerator.generatePlantImageList();
-//        poisonousPlantImageList = imageGenerator.generatePoisonousPlantImageList();
-//        jungleImageList = imageGenerator.generateJungleImageList();
-//        steppeImageList = imageGenerator.generateSteppeImageList();
-//        var map = new Earth(20, 20);
-//        Mutation mutation = new StandardMutation(new int[]{2, 5});
-//        simulationToRun = new Simulation(map, 10, 20, 10, 50, 32, 5, );
-//    }
 
     public void onSaveClicked() {
         int width = this.width.getValue();

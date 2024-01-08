@@ -4,7 +4,7 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Genome;
-import agh.oop.model.objects.inheritance.Mutation;
+import agh.oop.simulation.spawner.AbstractSpawner;
 
 import java.util.*;
 

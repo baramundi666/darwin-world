@@ -6,6 +6,9 @@ import agh.oop.model.objects.inheritance.Mutation;
 import agh.oop.model.objects.inheritance.StandardMutation;
 import agh.oop.model.objects.inheritance.SwapMutation;
 import agh.oop.presenter.ChangeListener;
+import agh.oop.simulation.spawner.AbstractSpawner;
+import agh.oop.simulation.spawner.DefaultPlantSpawner;
+import agh.oop.simulation.spawner.VariedPlantSpawner;
 
 import java.util.*;
 
@@ -57,9 +60,22 @@ public class Simulation implements Runnable{
 
         }
 
-        AbstractSpawner spawner = switch (plantVariant) {
-            case "p2" -> new DefaultPlantSpawner(earth, newPlantNumber, plantEnergy);
-            case "p1" -> new VariedPlantSpawner(earth, newPlantNumber, plantEnergy);
+        AbstractSpawner spawner;
+        AbstractSimulationDay simulationDay;
+
+        switch (plantVariant) {
+            case "p1" -> {
+                spawner = new DefaultPlantSpawner(earth, newPlantNumber, plantEnergy);
+                var notGrownFields = spawner.getNotGrownFields();
+                simulationDay = new DefaultSimulationDay(earth, animals, notGrownFields, newPlantNumber,
+                        plantEnergy, reproduceEnergy,spawner, mutation);
+            }
+            case "p2" -> {
+                System.out.println("not working now");
+                spawner = new VariedPlantSpawner(earth, newPlantNumber, plantEnergy);
+                var notGrownFields = spawner.getNotGrownFields();
+                simulationDay = null;//to do
+            }
             default -> throw new IllegalArgumentException("Unknown plant variant");
         };
 
@@ -76,17 +92,6 @@ public class Simulation implements Runnable{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-
-        var notGrownFields = spawner.getNotGrownFields();
-        AbstractSimulationDay simulationDay = switch (plantVariant) {
-            case "p2" -> new DefaultSimulationDay(earth, animals, notGrownFields, newPlantNumber,
-                    plantEnergy, reproduceEnergy,spawner, mutation);
-//            case "p1" -> new VariedSimulationDay(earth, animals, notGrownFields, newPlantNumber,
-//                    plantEnergy, reproduceEnergy,spawner, mutation);
-            default -> throw new IllegalArgumentException("Unknown plant variant");
-        };
-
 
         for(int i=1;i<=1000;i++){
             try {

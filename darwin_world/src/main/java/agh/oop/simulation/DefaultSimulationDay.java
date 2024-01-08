@@ -4,16 +4,19 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Mutation;
+import agh.oop.simulation.spawner.AbstractSpawner;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 
 public class DefaultSimulationDay extends AbstractSimulationDay {
 
-    public DefaultSimulationDay(Earth earth, HashSet<Animal> animals, HashSet<Vector2d> notGrownFields, int newPlantNumber, int plantEnergy, int reproduceEnergy, AbstractSpawner spawner, Mutation mutation) {
-        super(earth, animals, notGrownFields, newPlantNumber, plantEnergy, reproduceEnergy, spawner, mutation);
+    public DefaultSimulationDay(Earth earth, HashSet<Animal> animals,
+                                HashSet<Vector2d> notGrownFields, int newPlantNumber,
+                                int plantEnergy, int reproduceEnergy,
+                                AbstractSpawner spawner, Mutation mutation) {
+        super(earth, animals, notGrownFields,
+                newPlantNumber, plantEnergy, reproduceEnergy, spawner, mutation);
     }
 
     @Override

@@ -1,17 +1,17 @@
-package agh.oop.simulation;
+package agh.oop.simulation.spawner;
 
 import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Plant;
+import agh.oop.simulation.spawner.AbstractSpawner;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DefaultPlantSpawner extends AbstractSpawner{
+public class DefaultPlantSpawner extends AbstractSpawner {
     private final Boundary equatorBorders;
 
     public DefaultPlantSpawner(Earth earth, int newPlantNumber, int plantEnergy) {

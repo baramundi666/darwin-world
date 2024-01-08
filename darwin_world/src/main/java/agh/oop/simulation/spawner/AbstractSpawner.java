@@ -1,4 +1,4 @@
-package agh.oop.simulation;
+package agh.oop.simulation.spawner;
 
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
