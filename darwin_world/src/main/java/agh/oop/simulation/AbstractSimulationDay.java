@@ -61,6 +61,7 @@ public abstract class AbstractSimulationDay {
             toBeEaten.get(position).eat(plantMap.get(position));
             earth.removePlant(plantMap.get(position));
         }
+        spawner.setNotGrownFields(notGrownFields);
     }
 
     protected void removeDeadAnimals(){

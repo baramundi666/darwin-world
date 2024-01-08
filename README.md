@@ -12,15 +12,11 @@ Gałąź main modyfikowana tylko przez pull request
 
 
 todo list:  
-- mutacje podmianka(check)
 - zatrute rosliny
 - wyjatki
-- statystyki(do 08.01)
-
-- warianty
+- statystyki
 - watki(dla wielu)
-
 - zapis do csv
-- ui(ograniczyć parametry)
+- ui(simulation stop, focus on one animal)
 
 

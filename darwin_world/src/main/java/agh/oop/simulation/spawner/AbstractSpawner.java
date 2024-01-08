@@ -8,7 +8,7 @@ import java.util.HashSet;
 public abstract class AbstractSpawner {
 
     protected final Earth earth;
-    protected final HashSet<Vector2d> notGrownFields;
+    protected HashSet<Vector2d> notGrownFields;
     protected final int newPlantNumber;
     protected final int plantEnergy;
 
@@ -22,6 +22,9 @@ public abstract class AbstractSpawner {
         }
         this.newPlantNumber = newPlantNumber;
         this.plantEnergy = plantEnergy;
+    }
+    public void setNotGrownFields(HashSet<Vector2d> notGrownFields){
+        this.notGrownFields = notGrownFields;
     }
 
     public HashSet<Vector2d> getNotGrownFields() {

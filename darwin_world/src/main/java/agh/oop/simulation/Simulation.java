@@ -93,7 +93,7 @@ public class Simulation implements Runnable{
             throw new RuntimeException(e);
         }
 
-        for(int i=1;i<=1000;i++){
+        for(int i=1;i<=50;i++){
             try {
                 simulationDay.simulateOneDay();
                 notifyListeners("Map has been changed! Day " + i);

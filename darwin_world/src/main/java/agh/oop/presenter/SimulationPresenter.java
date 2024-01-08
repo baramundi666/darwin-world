@@ -24,9 +24,9 @@ public class SimulationPresenter implements ChangeListener {
     @FXML
     public GridPane backgroundGrid;
     @FXML
-    public Spinner<Integer> width;
+    public Spinner<Integer> widthValue;
     @FXML
-    public Spinner<Integer> height;
+    public Spinner<Integer> heightValue;
     @FXML
     public Spinner<Integer> reproduceEnergy;
     @FXML
@@ -47,7 +47,8 @@ public class SimulationPresenter implements ChangeListener {
     public Button saveSettings;
     @FXML
     private Label infoLabel;
-
+    private int width;
+    private int height;
     private List<Node> animalImageList;
     private List<Node> normalPlantImageList;
     private List<Node> poisonousPlantImageList;
@@ -59,66 +60,66 @@ public class SimulationPresenter implements ChangeListener {
     @Override
     public void mapChanged(Earth earth, String message) {
         Platform.runLater(() -> {
-            drawDefaultMap(earth);
+            drawGrid();
+            drawDefaultBackground(earth);
+            drawMap(earth);
             infoLabel.setText(message);
         });
     }
-    public void drawDefaultMap(Earth earth) {
-        clearGrid(mapGrid);
-        var boundary = earth.getBounds();
-        int lowerX = boundary.lowerLeft().getX();
-        int upperX = boundary.upperRight().getX();
-        int lowerY = boundary.lowerLeft().getY();
-        int upperY = boundary.upperRight().getY();
-        int lowerEquatorBorder = (int)(Math.ceil(upperY/5.0 *2));
-        int upperEquatorBorder = lowerEquatorBorder + (int)(Math.ceil((upperY+1)/5.0)-1);
-        int rows = upperY-lowerY+1;
-        int columns = upperX-lowerX+1;
-        double width = (double) 500 /columns;
-        double height = (double) 500 /rows;
 
-        mapGrid.getColumnConstraints().add(new ColumnConstraints(width));
-        mapGrid.getRowConstraints().add(new RowConstraints(height));
+    public void drawGrid(){
+        clearGrid(mapGrid);
+        double cellWidth = (double) 500 /width;
+        double cellHeight = (double) 500 /height;
+
+        mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
+        mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
         Label axis = new Label("y\\x");
-        mapGrid.add(axis,0,0);
+        mapGrid.add(axis,0,0);//assume that left upper corner is (0,0)
         GridPane.setHalignment(axis, HPos.CENTER);
 
-        for (int i=0;i<rows;i++){
-            mapGrid.getRowConstraints().add(new RowConstraints(height));
-            Label label = new Label(String.valueOf(i+lowerY));
+        for (int i=0;i<height;i++){
+            mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
+            Label label = new Label(String.valueOf(i));
             mapGrid.add(label,0,i+1);
             GridPane.setHalignment(label, HPos.CENTER);
         }
-        for (int i=0;i<columns;i++){
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(width));
-            var label = new Label(String.valueOf(i+lowerX));
+        for (int i=0;i<width;i++){
+            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
+            var label = new Label(String.valueOf(i));
             mapGrid.add(label,i+1,0);
             GridPane.setHalignment(label, HPos.CENTER);
         }
+    }
 
+    public void drawDefaultBackground(Earth earth){
+        int lowerEquatorBorder = (int)(Math.ceil(earth.getBounds().upperRight().getY()/5.0 *2));
+        int upperEquatorBorder = lowerEquatorBorder + (int)(Math.ceil((earth.getBounds().upperRight().getY()+1)/5.0)-1);
+
+        var steppeImageIterator = steppeImageList.iterator();
+        var jungleImageIterator = jungleImageList.iterator();
+
+        for(int i=0; i<height; i++) {
+            for(int j=0; j<width; j++) {
+                if (j>=lowerEquatorBorder && j<=upperEquatorBorder) {
+                    var jungleImage = jungleImageIterator.next();
+                    mapGrid.add(jungleImage, i+1, j+1);
+                    GridPane.setHalignment(jungleImage, HPos.CENTER);
+                }
+                else {
+                    var steppeImage = steppeImageIterator.next();
+                    mapGrid.add(steppeImage, i+1, j+1);
+                    GridPane.setHalignment(steppeImage, HPos.CENTER);
+                }
+            }
+        }
+    }
+    public void drawMap(Earth earth) {
         var plantsMap = earth.getPlants();
         var animalsMap = earth.getAnimals();
         var animalImageIterator = animalImageList.iterator();
         var normalPlantImageIterator = normalPlantImageList.iterator();
         var poisonousPlantImageIterator = poisonousPlantImageList.iterator();
-        var steppeImageIterator = steppeImageList.iterator();
-        var jungleImageIterator = jungleImageList.iterator();
-
-        for(int i=0; i<rows; i++) {
-            for(int j=0; j<columns; j++) {
-                var position= new Vector2d(i, j);
-                if (j>=lowerEquatorBorder && j<=upperEquatorBorder) {
-                    var jungleImage = jungleImageIterator.next();
-                    mapGrid.add(jungleImage, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
-                    GridPane.setHalignment(jungleImage, HPos.CENTER);
-                }
-                else {
-                    var steppeImage = steppeImageIterator.next();
-                    mapGrid.add(steppeImage, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
-                    GridPane.setHalignment(steppeImage, HPos.CENTER);
-                }
-            }
-        }
 
         for(Vector2d position: plantsMap.keySet()){
             var plant = plantsMap.get(position);
@@ -129,7 +130,7 @@ public class SimulationPresenter implements ChangeListener {
             else {
                 plantImage = normalPlantImageIterator.next();
             }
-            mapGrid.add(plantImage, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
+            mapGrid.add(plantImage, position.getX() + 1, position.getY() + 1);
             GridPane.setHalignment(plantImage, HPos.CENTER);
         }
 
@@ -139,8 +140,8 @@ public class SimulationPresenter implements ChangeListener {
                 var countLabel = new Label(String.valueOf(animalCount));
                 countLabel.setTextFill(Paint.valueOf("black"));
                 var animalImage = animalImageIterator.next();
-                mapGrid.add(animalImage, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
-                mapGrid.add(countLabel, position.getX() - lowerX + 1, position.getY() - lowerY + 1);
+                mapGrid.add(animalImage, position.getX() + 1, position.getY() + 1);
+                mapGrid.add(countLabel, position.getX() + 1, position.getY() + 1);
                 GridPane.setHalignment(animalImage, HPos.CENTER);
                 GridPane.setHalignment(countLabel, HPos.CENTER);
             }
@@ -161,8 +162,8 @@ public class SimulationPresenter implements ChangeListener {
     }
 
     public void onSaveClicked() {
-        int width = this.width.getValue();
-        int height = this.height.getValue();
+        width = this.widthValue.getValue();
+        height = this.heightValue.getValue();
         int reproduceEnergy = this.reproduceEnergy.getValue();
         int initialEnergy = this.initialEnergy.getValue();
         int genomeLength = this.genomeLength.getValue();

@@ -7,6 +7,7 @@ import agh.oop.model.objects.Plant;
 import agh.oop.simulation.spawner.AbstractSpawner;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ public class DefaultPlantSpawner extends AbstractSpawner {
         super(earth, newPlantNumber, plantEnergy);
         int lowerEquatorBorder = (int)(Math.ceil(earth.getBounds().upperRight().getY()/5.0 *2));
         int upperEquatorBorder = lowerEquatorBorder + (int)(Math.ceil((earth.getBounds().upperRight().getY()+1)/5.0)-1);
+        System.out.println(lowerEquatorBorder + " " + upperEquatorBorder);
         this.equatorBorders = new Boundary(new Vector2d(0,lowerEquatorBorder), new Vector2d(earth.getBounds().upperRight().getX(),upperEquatorBorder));
     }
 
@@ -40,6 +42,7 @@ public class DefaultPlantSpawner extends AbstractSpawner {
 
         Iterator<Vector2d> equatorIterator = notGrownEquatorList.iterator();
         Iterator<Vector2d> steppeIterator = notGrownSteppeList.iterator();
+
 
         for(int i=0; i<newPlantNumber && i<notGrownFields.size(); i++){
             Vector2d position;
