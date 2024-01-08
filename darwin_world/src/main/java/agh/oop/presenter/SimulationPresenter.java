@@ -66,7 +66,7 @@ public class SimulationPresenter implements ChangeListener {
         });
     }
 
-    public void drawGrid(){
+    public void drawGrid(){ // to do - canvas
         clearGrid(mapGrid);
         double cellWidth = (double) 500 /width;
         double cellHeight = (double) 500 /height;

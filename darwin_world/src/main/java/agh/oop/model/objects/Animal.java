@@ -77,8 +77,8 @@ public class Animal implements WorldElement {
     }
 
     public Animal reproduce(Animal other, Mutation mutation) {
-        Genome newGenome = this.getGenome().merge(other.getGenome(), this.energy, other.energy);
-        newGenome = newGenome.mutate(mutation);
+        var percentage = (double) this.energy/(this.energy+other.energy);
+        var newGenome = this.genome.generateNewGenome(mutation, other.genome, percentage);
         int initialEnergy = 2*copulateEnergy;
         this.setEnergy(this.getEnergy()-copulateEnergy);
         other.setEnergy(other.getEnergy()-copulateEnergy);
@@ -87,13 +87,12 @@ public class Animal implements WorldElement {
 
     public void move(MapOptions options) {
         int active = genome.getActiveGene();
-        direction = direction.shift(genome.getGeneList().get(active));
+        direction = direction.shift(active);
         position = options.mover(position.add(direction.toVector()))
                 .orElseGet(() -> {
                     direction = direction.shift(4);
                     return position;
                 });
-        genome.nextGene();
         energy--;
         lifeLength++;
     }
@@ -117,4 +116,3 @@ public class Animal implements WorldElement {
         return Objects.hash(animalId);
     }
 }
-//divide into animal, animalController???

@@ -51,7 +51,7 @@ public class Simulation implements Runnable{
 
     @Override
     public void run() {
-        switch(mutationVariant){
+        switch(mutationVariant){//przeniesc switch
             case "m2":
                 mutation = new SwapMutation(mutationRange);
                 break;

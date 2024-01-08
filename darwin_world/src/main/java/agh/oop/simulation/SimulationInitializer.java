@@ -29,7 +29,7 @@ public class SimulationInitializer{
         this.initialEnergy = initialEnergy;
         this.earth = earth;
         this.animals = animals;
-        this.reproduceEnergy = reproduceEnergy;
+        this.reproduceEnergy = reproduceEnergy;//copulateEnergy to do
         this.spawner = spawner;
     }
 

@@ -19,4 +19,5 @@ todo list:
 - zapis do csv
 - ui(simulation stop, focus on one animal)
 
-
+canvas:
+https://examples.javacodegeeks.com/java-development/desktop-java/javafx/javafx-canvas-example/
