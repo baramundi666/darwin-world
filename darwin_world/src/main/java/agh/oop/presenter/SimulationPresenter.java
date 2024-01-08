@@ -22,30 +22,6 @@ public class SimulationPresenter implements ChangeListener {
     @FXML
     public GridPane mapGrid;
     @FXML
-    public GridPane backgroundGrid;
-    @FXML
-    public Spinner<Integer> widthValue;
-    @FXML
-    public Spinner<Integer> heightValue;
-    @FXML
-    public Spinner<Integer> reproduceEnergy;
-    @FXML
-    public Spinner<Integer> initialEnergy;
-    @FXML
-    public Spinner<Integer> genomeLength;
-    @FXML
-    public Spinner<Integer> newAnimalNumber;
-    @FXML
-    public Spinner<Integer> newPlantNumber;
-    @FXML
-    public Spinner<Integer> plantEnergy;
-    @FXML
-    public ToggleGroup mutationVariant;
-    @FXML
-    public ToggleGroup plantVariant;
-    @FXML
-    public Button saveSettings;
-    @FXML
     private Label infoLabel;
     private int width;
     private int height;
@@ -55,6 +31,19 @@ public class SimulationPresenter implements ChangeListener {
     private List<Node> steppeImageList;
     private List<Node> jungleImageList;
     private Simulation simulationToRun;
+
+    public void setSimulation(Simulation simulationToRun, Earth earth) {
+        this.simulationToRun = simulationToRun;
+        this.width = (int) earth.getBounds().upperRight().getX() + 1;
+        this.height = (int) earth.getBounds().upperRight().getY() + 1;
+
+        var imageGenerator = new ImageGenerator(width, height, (double) 500 /width, (double) 500 /height);
+        animalImageList = imageGenerator.generateAnimalImageList();
+        normalPlantImageList = imageGenerator.generatePlantImageList();
+        poisonousPlantImageList = imageGenerator.generatePoisonousPlantImageList();
+        jungleImageList = imageGenerator.generateJungleImageList();
+        steppeImageList = imageGenerator.generateSteppeImageList();
+    }
 
     @Override
     public void mapChanged(Earth earth, String message) {
@@ -160,33 +149,6 @@ public class SimulationPresenter implements ChangeListener {
         grid.getChildren().retainAll(grid.getChildren().get(0)); // hack to retain visible grid lines
         grid.getColumnConstraints().clear();
         grid.getRowConstraints().clear();
-    }
-
-    public void onSaveClicked() {
-        width = this.widthValue.getValue();
-        height = this.heightValue.getValue();
-        int reproduceEnergy = this.reproduceEnergy.getValue();
-        int initialEnergy = this.initialEnergy.getValue();
-        int genomeLength = this.genomeLength.getValue();
-        int newAnimalNumber = this.newAnimalNumber.getValue();
-        int newPlantNumber = this.newPlantNumber.getValue();
-        int plantEnergy = this.plantEnergy.getValue();
-
-        var mutationId = ((RadioButton) this.mutationVariant.getSelectedToggle()).getId();
-        var plantId = ((RadioButton) this.plantVariant.getSelectedToggle()).getId();
-
-        var imageGenerator = new ImageGenerator(width, height, (double) 500 /width, (double) 500 /height);
-        animalImageList = imageGenerator.generateAnimalImageList();
-        normalPlantImageList = imageGenerator.generatePlantImageList();
-        poisonousPlantImageList = imageGenerator.generatePoisonousPlantImageList();
-        jungleImageList = imageGenerator.generateJungleImageList();
-        steppeImageList = imageGenerator.generateSteppeImageList();
-        var map = new Earth(width, height);
-        //Mutation mutation = new SwapMutation(new int[]{2, 5});
-        var mutationRange = new int[]{2, 5};
-        simulationToRun = new Simulation(map, reproduceEnergy, newPlantNumber,
-                plantEnergy, newAnimalNumber, genomeLength, initialEnergy,
-                mutationRange, mutationId, plantId);
     }
 }
 

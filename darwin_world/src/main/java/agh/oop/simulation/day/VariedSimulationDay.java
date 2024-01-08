@@ -18,8 +18,8 @@ public class VariedSimulationDay extends AbstractSimulationDay {
                 newPlantNumber, plantEnergy, reproduceEnergy, spawner, mutation);
     }
 
-    @Override
-    protected void moveAnimals() {//to do- animals can notice poisonous plants
+    @Override//to do- animals can notice poisonous plants
+    protected void moveAnimals() {
         var animalMap = earth.getAnimals();
         var toMove = new LinkedList<Animal>();
         for (Vector2d position : animalMap.keySet()) {
