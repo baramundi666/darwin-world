@@ -19,7 +19,6 @@ public class Simulation implements Runnable{
 
     private SimulationInitializer simulationInitialization;
     private AbstractSimulationDay simulationDay;
-
     private final Earth earth;
     private Mutation mutation;
     private AbstractSpawner spawner;
@@ -57,7 +56,7 @@ public class Simulation implements Runnable{
     }
 
     private void configureVariants() {
-        switch(simulationParameters.mutationVariant()){//przeniesc switch
+        switch(simulationParameters.mutationVariant()){
             case "m2":
                 mutation = new SwapMutation(simulationParameters.mutationRange());
                 break;

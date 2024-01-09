@@ -11,9 +11,7 @@ Gałąź main modyfikowana tylko przez pull request
 [Diagram UML](UML_diagram.pdf)
 
 
-todo list:  
-- zatrute rosliny
-- wyjatki
+todo list:
 - statystyki
 - watki(dla wielu)
 - zapis do csv
