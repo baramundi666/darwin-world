@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <BorderPane fx:controller="agh.oop.presenter.SimulationPresenter" xmlns:fx="http://javafx.com/fxml" minHeight="550.0" maxHeight="1080.0" minWidth="850.0" maxWidth="1920.0">
     <top>
         <HBox alignment="CENTER">
@@ -12,7 +13,13 @@
         </HBox>
     </top>
     <center>
-        <GridPane  fx:id="mapGrid" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" minHeight="550.0" minWidth="850.0" gridLinesVisible="true" />
+        <HBox>
+            <VBox alignment="CENTER_LEFT">
+                <Label text="Stats"/>
+            </VBox>
+            <GridPane  fx:id="mapGrid" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" minHeight="550.0" minWidth="850.0" gridLinesVisible="true" />
+        </HBox>
+
     </center>
 
     <bottom>

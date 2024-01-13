@@ -12,6 +12,7 @@ import agh.oop.simulation.day.VariedSimulationDay;
 import agh.oop.simulation.spawner.AbstractSpawner;
 import agh.oop.simulation.spawner.DefaultPlantSpawner;
 import agh.oop.simulation.spawner.VariedPlantSpawner;
+import agh.oop.simulation.statictics.Statistics;
 
 import java.util.*;
 

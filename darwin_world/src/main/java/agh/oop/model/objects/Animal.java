@@ -75,6 +75,10 @@ public class Animal implements WorldElement {
         return this.position.equals(position);
     }
 
+    public boolean isDead() {
+        return energy <= 0;
+    }
+
     public void eat(Plant plant) {
         energy+=plant.getEnergy();
     }

@@ -6,6 +6,7 @@ import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Mutation;
 import agh.oop.simulation.DataHolder;
 import agh.oop.simulation.spawner.AbstractSpawner;
+import agh.oop.simulation.statictics.Statistics;
 
 import java.util.*;
 import java.util.stream.Collectors;

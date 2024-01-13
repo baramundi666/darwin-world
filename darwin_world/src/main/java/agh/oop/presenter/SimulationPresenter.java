@@ -5,6 +5,7 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.simulation.DataHolder;
 import agh.oop.simulation.Simulation;
+import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -141,6 +142,8 @@ public class SimulationPresenter implements ChangeListener {
 
     @FXML
     private void onSimulationStartClicked() {
+        Statistics statistics = new Statistics();
+        simulationToRun.registerListener(statistics);
         simulationToRun.registerListener(this);
         Thread engineThread = new Thread(simulationToRun);
         engineThread.start();
