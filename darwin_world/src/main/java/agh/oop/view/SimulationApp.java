@@ -2,6 +2,7 @@ package agh.oop.view;
 
 import agh.oop.model.map.Earth;
 import agh.oop.presenter.Configuration;
+import agh.oop.presenter.HomePresenter;
 import agh.oop.presenter.SimulationPresenter;
 import agh.oop.simulation.Simulation;
 import javafx.application.Application;
@@ -14,9 +15,9 @@ public class SimulationApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getClassLoader().getResource("configuration.fxml"));
+        loader.setLocation(getClass().getClassLoader().getResource("home.fxml"));
         BorderPane viewRoot = loader.load();
-        Configuration presenter = loader.getController();
+        HomePresenter presenter = loader.getController();
         configureStage(primaryStage,viewRoot);
         primaryStage.show();
     }
@@ -35,6 +36,20 @@ public class SimulationApp extends Application {
             BorderPane viewRoot = loader.load();
             SimulationPresenter presenter = loader.getController();
             presenter.setSimulation(simulationToRun,earth, mapID, isSavingStats);
+            Stage primaryStage = new Stage();
+            configureStage(primaryStage,viewRoot);
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void newConfiguration() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SimulationApp.class.getClassLoader().getResource("configuration.fxml"));
+            BorderPane viewRoot = loader.load();
+            Configuration controller = loader.getController();
             Stage primaryStage = new Stage();
             configureStage(primaryStage,viewRoot);
             primaryStage.show();

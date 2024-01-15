@@ -18,3 +18,6 @@ todo list:
 
 canvas:
 https://examples.javacodegeeks.com/java-development/desktop-java/javafx/javafx-canvas-example/
+
+pomysł odnośnie zatrzymania symulacji:
+- zarejestrowanie zwierzakowi simulationpresenter jako listener

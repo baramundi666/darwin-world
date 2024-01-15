@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.Stage;
 
 public class Configuration {
 
@@ -39,7 +40,7 @@ public class Configuration {
     @FXML
     private ToggleGroup mapVariant;
     @FXML
-    private Button saveSettings;
+    private Button saveConfiguration;
     @FXML
     private Spinner<Integer> simulationLength;
     @FXML
@@ -51,7 +52,7 @@ public class Configuration {
     private String mapID;
     private String isSavingStats;
 
-    public void saveSettings() {
+    public void saveConfiguration() {
         int width = this.widthValue.getValue();
         int height = this.heightValue.getValue();
         int simulationLength = this.simulationLength.getValue();
@@ -79,9 +80,9 @@ public class Configuration {
         this.earth = earth;
         this.mapID  = mapID;
         this.isSavingStats = isSavingStats;
-    }
 
-    public void onLaunchClicked(){
+        //Stage stage = (Stage) saveConfiguration.getScene().getWindow();
+        //stage.close();
         SimulationApp.startSimulation(simulationToRun,earth, mapID, isSavingStats);
     }
 }

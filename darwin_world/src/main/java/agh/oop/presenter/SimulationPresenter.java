@@ -30,7 +30,7 @@ public class SimulationPresenter implements ChangeListener {
     private int height;
     private List<Node> animalImageList;
     private List<Node> normalPlantImageList;
-    private List<Node> poisonousPlantImageList;
+    private Optional<List<Node>> poisonousPlantImageList;
     private List<Node> steppeImageList;
     private List<Node> specialAreaImageList;
     private Simulation simulationToRun;
@@ -44,7 +44,7 @@ public class SimulationPresenter implements ChangeListener {
         var imageGenerator = new ImageGenerator(width, height, (double) 500 /width, (double) 500 /height);
         animalImageList = imageGenerator.generateImageList("oldAnimal.png", 1.0);
         normalPlantImageList = imageGenerator.generateImageList("plant.png", 1.0);
-        poisonousPlantImageList = null;
+        poisonousPlantImageList = Optional.empty();
         steppeImageList = imageGenerator.generateImageList("steppe.png", 0.85);
 
         switch (mapID) {
@@ -53,7 +53,7 @@ public class SimulationPresenter implements ChangeListener {
                 break;
             case "p2":
                 specialAreaImageList = imageGenerator.generateImageList("poisonedArea.png", 0.3);
-                poisonousPlantImageList = imageGenerator.generateImageList("poisonousPlant.png", 0.3);
+                poisonousPlantImageList = Optional.of(imageGenerator.generateImageList("poisonousPlant.png", 0.3));
                 break;
             default: throw  new IllegalArgumentException("Invalid mapID");
         }
@@ -126,12 +126,12 @@ public class SimulationPresenter implements ChangeListener {
         var animalsMap = earth.getAnimals();
         var animalImageIterator = animalImageList.iterator();
         var normalPlantImageIterator = normalPlantImageList.iterator();
-        var poisonousPlantImageIterator = poisonousPlantImageList != null ? poisonousPlantImageList.iterator() : null;
+        var poisonousPlantImageIterator = poisonousPlantImageList.map(List::iterator).orElse(null);
 
         for(Vector2d position: plantsMap.keySet()){
             var plant = plantsMap.get(position);
             Node plantImage;
-            if (plant.isPoisonous()) {
+            if (poisonousPlantImageList.isPresent() && plant.isPoisonous()) {
                 plantImage = poisonousPlantImageIterator.next();
             }
             else {
