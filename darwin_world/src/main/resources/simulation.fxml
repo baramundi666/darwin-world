@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:controller="agh.oop.presenter.SimulationPresenter" xmlns:fx="http://javafx.com/fxml" minHeight="550.0" maxHeight="1080.0" minWidth="850.0" maxWidth="1920.0">
+<BorderPane fx:controller="agh.oop.presenter.SimulationPresenter" xmlns:fx="http://javafx.com/fxml" minHeight="550.0" maxHeight="1200.0" minWidth="850.0" maxWidth="1200.0" >
     <top>
         <HBox alignment="CENTER">
             <Label fx:id="infoLabel"/>
@@ -19,11 +19,10 @@
             </VBox>
             <GridPane  fx:id="mapGrid" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" minHeight="550.0" minWidth="850.0" gridLinesVisible="true" />
         </HBox>
-
     </center>
 
     <bottom>
-        <Button fx:id="startButton" text="Start" onAction="#onSimulationStartClicked"/>
+        <Button alignment="CENTER" fx:id="startButton" text="Start" onAction="#onSimulationStartClicked"/>
     </bottom>
 </BorderPane>
 

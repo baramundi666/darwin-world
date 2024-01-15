@@ -2,200 +2,249 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.text.Font?>
-<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="550.0" minWidth="700.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: purple; -fx-border-color: black;" xmlns:fx="http://javafx.com/fxml" fx:controller="agh.oop.presenter.Configuration">
-    <top>
-        <Label prefHeight="58.0" prefWidth="800.0" text="New configuration " textAlignment="CENTER" textFill="#ffffff" >
-            <font>
-                <Font name="Gabriola" size="40.0" />
-            </font>
-        </Label>
-    </top>
+
+<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="550.0" minWidth="700.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: purple; -fx-border-color: black;" xmlns:fx="http://javafx.com/fxml"  fx:controller="agh.oop.presenter.Configuration">
     <center>
        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
            <BorderPane.margin>
-               <Insets top="50.0"/>
+               <Insets />
            </BorderPane.margin>
            <HBox alignment="CENTER" prefWidth="800.0">
                <VBox alignment="TOP_CENTER" prefHeight="408.0" prefWidth="319.0">
                    <Label text="width: " textFill="WHITE">
                        <VBox.margin>
-                           <Insets top="4.0"/>
+                           <Insets top="4.0" />
                        </VBox.margin>
                    </Label>
                    <Label text="height: " textFill="WHITE">
                        <VBox.margin>
-                           <Insets top="5.0"/>
+                           <Insets top="5.0" />
                        </VBox.margin>
                    </Label>
                    <Label text="reproduce energy: " textFill="WHITE">
                        <VBox.margin>
-                           <Insets top="8.0"/>
+                           <Insets top="8.0" />
                        </VBox.margin>
                    </Label>
                    <Label text="copulate energy: " textFill="WHITE">
                        <VBox.margin>
-                           <Insets top="9.0"/>
+                           <Insets top="9.0" />
                        </VBox.margin>
                    </Label>
                    <Label text="initial energy: " textFill="WHITE">
                        <VBox.margin>
-                           <Insets top="7.0"/>
+                           <Insets top="7.0" />
                        </VBox.margin>
                    </Label>
                    <Label text="genome length: " textFill="WHITE">
                        <VBox.margin>
-                           <Insets top="8.0"/>
+                           <Insets top="8.0" />
                        </VBox.margin>
                    </Label>
                    <Label text="new animal number: " textFill="WHITE">
                        <VBox.margin>
-                           <Insets top="9.0"/>
+                           <Insets top="9.0" />
                        </VBox.margin>
                    </Label>
                    <Label text="new plant number: " textFill="WHITE">
                        <VBox.margin>
-                           <Insets top="8.0"/>
+                           <Insets top="8.0" />
                        </VBox.margin>
                    </Label>
                    <Label text="plant energy: " textFill="WHITE">
                        <VBox.margin>
-                           <Insets top="8.0"/>
+                           <Insets top="8.0" />
                        </VBox.margin>
                    </Label>
                    <Label text="mutation range min: " textFill="WHITE">
                        <VBox.margin>
-                           <Insets top="8.0"/>
+                           <Insets top="8.0" />
                        </VBox.margin>
                    </Label>
                    <Label text="mutation range max: " textFill="WHITE">
                        <VBox.margin>
-                           <Insets top="8.0"/>
+                           <Insets top="8.0" />
                        </VBox.margin>
                    </Label>
                    <Label text="Enter simulation length: " textFill="WHITE">
                        <VBox.margin>
-                           <Insets top="8.0"/>
+                           <Insets top="8.0" />
                        </VBox.margin>
                    </Label>
                    <HBox.margin>
-                       <Insets/>
+                       <Insets />
                    </HBox.margin>
                </VBox>
                <VBox prefHeight="523.0" prefWidth="236.0">
                    <Spinner fx:id="widthValue" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="40" min="1"/>
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="40" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="heightValue" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="40" min="1"/>
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="40" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="reproduceEnergy" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="1"/>
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="copulateEnergy" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="1"/>
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="initialEnergy" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="1"/>
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="genomeLength" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="50" min="1"/>
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="50" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="newAnimalNumber" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="30" max="50" min="1"/>
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="30" max="50" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="newPlantNumber" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="15" max="50" min="1"/>
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="15" max="50" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="plantEnergy" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="1"/>
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="mutationRangeMin" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="2" max="10" min="1"/>
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="2" max="10" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="mutationRangeMax" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="6" max="10" min="1"/>
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="6" max="10" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="simulationLength" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="100" max="10000" min="0"/>
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="100" max="10000" min="0" />
                        </valueFactory>
                    </Spinner>
                </VBox>
            </HBox>
            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                <HBox alignment="CENTER">
-                   <Label text="mutation variant: " textFill="WHITE" BorderPane.alignment="CENTER"/>
+                   <Label text="mutation variant: " textFill="WHITE" BorderPane.alignment="CENTER">
+                  <HBox.margin>
+                     <Insets right="5.0" />
+                  </HBox.margin></Label>
                    <fx:define>
                        <ToggleGroup fx:id="mutationVariant"/>
                    </fx:define>
-                   <RadioButton fx:id="m1" selected="true" text="standard" toggleGroup="$mutationVariant"
-                                textFill="WHITE"/>
+                   <RadioButton fx:id="m1" selected="true" text="standard" toggleGroup="$mutationVariant" textFill="WHITE">
+                       <HBox.margin>
+                           <Insets right="5.0" />
+                       </HBox.margin>
+                   </RadioButton>
                    <RadioButton fx:id="m2" text="swap" textFill="WHITE" toggleGroup="$mutationVariant"/>
                </HBox>
                <HBox alignment="CENTER">
-                   <Label text="map variant: " textFill="WHITE" BorderPane.alignment="CENTER"/>
+                   <Label text="map variant: " textFill="WHITE" BorderPane.alignment="CENTER" />
                    <fx:define>
                        <ToggleGroup fx:id="mapVariant"/>
                    </fx:define>
-                   <RadioButton fx:id="p1" selected="true" text="jungle" toggleGroup="$mapVariant" textFill="WHITE"/>
+                   <RadioButton fx:id="p1" selected="true" text="jungle" toggleGroup="$mapVariant" textFill="WHITE">
+                      <HBox.margin>
+                        <Insets right="5.0" />
+                      </HBox.margin>
+                   </RadioButton>
                    <RadioButton fx:id="p2" text="poisonous plants" textFill="WHITE" toggleGroup="$mapVariant"/>
                </HBox>
                <HBox alignment="CENTER">
-                   <Label text="Save statistics?" textFill="WHITE" BorderPane.alignment="CENTER"/>
+                   <Label text="Save statistics?" textFill="WHITE" BorderPane.alignment="CENTER">
+                  <HBox.margin>
+                     <Insets right="5.0" />
+                  </HBox.margin></Label>
                    <fx:define>
                        <ToggleGroup fx:id="saveStats"/>
                    </fx:define>
-                   <RadioButton fx:id="true" selected="true" text="Yes" toggleGroup="$saveStats" textFill="WHITE"/>
+                   <RadioButton fx:id="true" selected="true" text="Yes" toggleGroup="$saveStats" textFill="WHITE">
+                      <HBox.margin>
+                        <Insets right="5.0" />
+                      </HBox.margin>
+                   </RadioButton>
                    <RadioButton fx:id="false" text="No" textFill="WHITE" toggleGroup="$saveStats"/>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
                </HBox>
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
            </VBox>
        </VBox>
    </center>
     <bottom>
-        <HBox prefWidth="800.0">
-            <VBox alignment="CENTER">
-                <Button fx:id="saveConfiguration" onAction="#saveConfiguration" text="Save configuration">
+        <HBox prefWidth="800.0" BorderPane.alignment="TOP_CENTER">
+            <VBox alignment="BOTTOM_LEFT" prefHeight="90.0" prefWidth="152.0">
+                <TextField fx:id="configurationName" promptText="Enter configuration name" />
+                <Button fx:id="saveConfiguration" onAction="#saveConfiguration" prefHeight="25.0" prefWidth="151.0" text="Save configuration">
+                    <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" />
+                    </HBox.margin>
+                </Button>
+                    <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" />
+                    </HBox.margin>
+            </VBox>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="637.0">
+                <HBox.margin>
+                    <Insets right="10.0"/>
+                </HBox.margin>
+                <Button fx:id="launchSimulation" onAction="#launchSimulation" prefHeight="25.0" prefWidth="117.0"
+                        text="Launch simulation">
                     <HBox.margin>
                         <Insets bottom="10.0" left="10.0"/>
                     </HBox.margin>
                 </Button>
-                <TextField fx:id="configurationName" promptText="Enter configuration name"/>
-                    <HBox.margin>
-                        <Insets bottom="10.0" left="10.0"/>
-                    </HBox.margin>
-            </VBox>
-            <Button fx:id="launchSimulation" onAction="#launchSimulation"  text="Launch simulation">
-                <HBox.margin>
-                    <Insets bottom="10.0" left="10.0"/>
-                </HBox.margin>
-            </Button>
+            </HBox>
         </HBox>
     </bottom>
+   <top>
+       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+           <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                   <Insets left="10.0" top="10.0"/>
+               </HBox.margin>
+               <Image url="@fish_home.png"/>
+           </ImageView>
+           <Label alignment="CENTER" prefHeight="50.0" prefWidth="800.0" text="New configuration "
+                  textAlignment="CENTER" textFill="#ffffff">
+               <font>
+                   <Font name="Gabriola" size="40.0"/>
+               </font>
+            <HBox.margin>
+                <Insets top="10.0"/>
+            </HBox.margin>
+           </Label>
+           <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                   <Insets right="10.0" top="10.0"/>
+               </HBox.margin>
+               <Image url="@fish_home.png"/>
+           </ImageView>
+       </HBox>
+   </top>
 </BorderPane>

@@ -41,7 +41,7 @@ public class SimulationPresenter implements ChangeListener {
         this.width = earth.getBounds().upperRight().getX() + 1;
         this.height = earth.getBounds().upperRight().getY() + 1;
 
-        var imageGenerator = new ImageGenerator(width, height, (double) 500 /width, (double) 500 /height);
+        var imageGenerator = new ImageGenerator(width, height, (double) 400 /width, (double) 400 /height);
         animalImageList = imageGenerator.generateImageList("oldAnimal.png", 1.0);
         normalPlantImageList = imageGenerator.generateImageList("plant.png", 1.0);
         poisonousPlantImageList = Optional.empty();
@@ -78,8 +78,8 @@ public class SimulationPresenter implements ChangeListener {
 
     public void drawGrid(){ // to do - canvas
         clearGrid(mapGrid);
-        double cellWidth = (double) 500 /width;
-        double cellHeight = (double) 500 /height;
+        double cellWidth = (double) 400 /width;
+        double cellHeight = (double) 400 /height;
 
         mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
         mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
