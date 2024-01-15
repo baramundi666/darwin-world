@@ -1,10 +1,17 @@
-package agh.oop.simulation;
+package agh.oop.simulation.day;
 
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
+import agh.oop.model.objects.Plant;
 import agh.oop.model.objects.inheritance.Mutation;
+import agh.oop.presenter.ChangeListener;
+import agh.oop.simulation.DataHolder;
 import agh.oop.simulation.spawner.AbstractSpawner;
+import agh.oop.simulation.statictics.AnimalChangeListener;
+import agh.oop.simulation.statictics.DescendantsStatistics;
+import agh.oop.simulation.statictics.PlantEatenCountStatistics;
+import agh.oop.simulation.statictics.Statistics;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,18 +26,19 @@ public abstract class AbstractSimulationDay {
     protected final int plantEnergy;
     protected final AbstractSpawner spawner;
     protected final Mutation mutation;
+    protected int day = 1;
+    private final List<AnimalChangeListener> listeners = new LinkedList<>();
 
 
     public AbstractSimulationDay(Earth earth, HashSet<Animal> animals,
-                                 HashSet<Vector2d> notGrownFields, int newPlantNumber,
-                                 int plantEnergy, int reproduceEnergy,
-                                 AbstractSpawner spawner, Mutation mutation) {
+                                 HashSet<Vector2d> notGrownFields,
+                                 AbstractSpawner spawner, Mutation mutation, DataHolder simulationParameters) {
         this.earth = earth;
         this.animals = animals;
         this.notGrownFields = notGrownFields;
-        this.reproduceEnergy = reproduceEnergy;
-        this.newPlantNumber = newPlantNumber;
-        this.plantEnergy = plantEnergy;
+        this.reproduceEnergy = simulationParameters.reproduceEnergy();
+        this.newPlantNumber = simulationParameters.newPlantNumber();
+        this.plantEnergy = simulationParameters.plantEnergy();
         this.spawner = spawner;
         this.mutation = mutation;
     }
@@ -41,6 +49,7 @@ public abstract class AbstractSimulationDay {
             animalsEat();
             reproduceAnimals();
             spawner.spawnPlants();
+            day+=1;
     }
 
     protected abstract void moveAnimals();
@@ -58,9 +67,13 @@ public abstract class AbstractSimulationDay {
             }
         }
         for (Vector2d position : toBeEaten.keySet()) {
-            toBeEaten.get(position).eat(plantMap.get(position));
-            earth.removePlant(plantMap.get(position));
+            Animal animal = toBeEaten.get(position);
+            Plant plant = plantMap.get(position);
+            animal.eat(plant);
+            earth.removePlant(plant);
+            notifyListeners(animal,Optional.empty(),Optional.of(plant));
         }
+        spawner.setNotGrownFields(notGrownFields);
     }
 
     protected void removeDeadAnimals(){
@@ -78,7 +91,7 @@ public abstract class AbstractSimulationDay {
             }
         }
         for (Animal animal : toRemove) {
-            earth.removeAnimal(animal);
+            earth.removeAnimal(animal,Optional.of(day));
         }
     }
 
@@ -96,6 +109,7 @@ public abstract class AbstractSimulationDay {
                     animals.add(child);
                     dad.incrementChildrenCount();
                     mom.incrementChildrenCount();
+                    notifyListeners(child,Optional.of(List.of(dad,mom)),Optional.empty());
                 }
             }
         }
@@ -108,10 +122,19 @@ public abstract class AbstractSimulationDay {
         List<Animal> strongest = animals.stream()
                 .sorted(Comparator.comparingInt(Animal::getEnergy)
                         .thenComparingInt(Animal::getLifeLength)
-                        .thenComparingInt(Animal::getChildrenCount))
+                        .thenComparingInt(Animal::getChildrenCount)
+                        .thenComparing(Animal::getId))
                 .collect(Collectors.toList());
         Collections.reverse(strongest);
         return strongest;
     }
-    //to do- random animals if there is no strongest
+    public void registerListener(AnimalChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    protected void notifyListeners(Animal animal,Optional<List<Animal>> parents, Optional<Plant> plant) {
+        for (AnimalChangeListener listener : listeners) {
+            listener.animalStateChanged(animal,parents,plant);
+        }
+    }
 }

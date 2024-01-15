@@ -1,99 +1,59 @@
 package agh.oop.simulation;
 
+import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Mutation;
 import agh.oop.model.objects.inheritance.StandardMutation;
 import agh.oop.model.objects.inheritance.SwapMutation;
 import agh.oop.presenter.ChangeListener;
+import agh.oop.simulation.day.AbstractSimulationDay;
+import agh.oop.simulation.day.DefaultSimulationDay;
+import agh.oop.simulation.day.VariedSimulationDay;
 import agh.oop.simulation.spawner.AbstractSpawner;
 import agh.oop.simulation.spawner.DefaultPlantSpawner;
 import agh.oop.simulation.spawner.VariedPlantSpawner;
+import agh.oop.simulation.statictics.DescendantsStatistics;
+import agh.oop.simulation.statictics.PlantEatenCountStatistics;
+import agh.oop.simulation.statictics.Statistics;
 
 import java.util.*;
 
 public class Simulation implements Runnable{
+
+    private SimulationInitializer simulationInitialization;
+    private AbstractSimulationDay simulationDay;
     private final Earth earth;
-    private final int reproduceEnergy;
     private Mutation mutation;
-    private final int newPlantNumber;
-    private final int plantEnergy;
-    private final int animalNumber;
-    private final int genomeLength;
-    private final int initialEnergy;
+    private AbstractSpawner spawner;
     private final HashSet<Animal> animals;
     private final List<ChangeListener> listeners = new LinkedList<>();
-    private final int[] mutationRange;
-
-    private final String mutationVariant;
-    private final String plantVariant;
+    private final DataHolder simulationParameters;
 
 
-    public Simulation(Earth earth, int reproduceEnergy,
-                      int newPlantNumber, int plantEnergy, int animalNumber,
-                      int genomeLength, int initialEnergy,
-                      int[] mutationRange, String mutationVariant, String plantVariant){
+    public Simulation(Earth earth, DataHolder simulationParameters){
         this.earth = earth;
-        this.reproduceEnergy = reproduceEnergy;
-        this.newPlantNumber = newPlantNumber;
-        this.plantEnergy = plantEnergy;
-        this.animalNumber = animalNumber;
-        this.genomeLength = genomeLength;
-        this.initialEnergy = initialEnergy;
+        this.simulationParameters = simulationParameters;
         this.animals = new HashSet<>();
-        this.mutationRange = mutationRange;
-        this.mutationVariant = mutationVariant;
-        this.plantVariant = plantVariant;
+        configureVariants();
+    }
+
+    public Boundary getSpecialAreaBorders(){
+        return spawner.getSpecialAreaBorders();
     }
 
     @Override
     public void run() {
-        switch(mutationVariant){
-            case "m2":
-                mutation = new SwapMutation(mutationRange);
-                break;
-            case "m1":
-                mutation = new StandardMutation(mutationRange);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown mutation variant");
-
-        }
-
-        AbstractSpawner spawner;
-        AbstractSimulationDay simulationDay;
-
-        switch (plantVariant) {
-            case "p1" -> {
-                spawner = new DefaultPlantSpawner(earth, newPlantNumber, plantEnergy);
-                var notGrownFields = spawner.getNotGrownFields();
-                simulationDay = new DefaultSimulationDay(earth, animals, notGrownFields, newPlantNumber,
-                        plantEnergy, reproduceEnergy,spawner, mutation);
-            }
-            case "p2" -> {
-                System.out.println("not working now");
-                spawner = new VariedPlantSpawner(earth, newPlantNumber, plantEnergy);
-                var notGrownFields = spawner.getNotGrownFields();
-                simulationDay = null;//to do
-            }
-            default -> throw new IllegalArgumentException("Unknown plant variant");
-        };
-
-
-        var simulationInitialization = new SimulationInitializer(earth, animals,
-                reproduceEnergy, animalNumber,
-                genomeLength, initialEnergy, spawner);
-
-
         try {
             simulationInitialization.initialize();
+            registerAnimalStatistics(animals);
             notifyListeners("Map has been initialized! Day " + 0);
             Thread.sleep(700);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        for(int i=1;i<=1000;i++){
+        for(int i=1;i<=simulationParameters.simulationLength();i++){
             try {
                 simulationDay.simulateOneDay();
                 notifyListeners("Map has been changed! Day " + i);
@@ -104,6 +64,39 @@ public class Simulation implements Runnable{
         }
     }
 
+    private void configureVariants() {
+        switch(simulationParameters.mutationVariant()){
+            case "m2":
+                mutation = new SwapMutation(simulationParameters.mutationRange());
+                break;
+            case "m1":
+                mutation = new StandardMutation(simulationParameters.mutationRange());
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown mutation variant");
+
+        }
+
+        switch (simulationParameters.mapVariant()) {
+            case "p1" -> {
+                spawner = new DefaultPlantSpawner(earth, simulationParameters);
+                var notGrownFields = spawner.getNotGrownFields();
+                simulationDay = new DefaultSimulationDay(earth, animals, notGrownFields, spawner,
+                        mutation, simulationParameters);
+            }
+            case "p2" -> {
+                spawner = new VariedPlantSpawner(earth, simulationParameters);
+                var notGrownFields = spawner.getNotGrownFields();
+                simulationDay = new VariedSimulationDay(earth, animals, notGrownFields, spawner,
+                        mutation, simulationParameters);
+            }
+            default -> throw new IllegalArgumentException("Unknown map variant");
+        }
+
+        simulationInitialization = new SimulationInitializer(earth, animals,
+                spawner, simulationParameters);
+    }
+
     public void registerListener(ChangeListener listener) {
         listeners.add(listener);
     }
@@ -112,5 +105,12 @@ public class Simulation implements Runnable{
         for (ChangeListener listener : listeners) {
             listener.mapChanged(earth, message);
         }
+    }
+
+    private void registerAnimalStatistics(HashSet<Animal> animals){
+        DescendantsStatistics descendantsStatistics = new DescendantsStatistics(animals);
+        PlantEatenCountStatistics plantEatenCountStatistics = new PlantEatenCountStatistics(animals);
+        simulationDay.registerListener(descendantsStatistics);
+        simulationDay.registerListener(plantEatenCountStatistics);
     }
 }

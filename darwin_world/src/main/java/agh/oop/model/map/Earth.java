@@ -2,7 +2,7 @@ package agh.oop.model.map;
 
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.Plant;
-import agh.oop.presenter.ChangeListener;
+import java.util.UUID;
 
 import java.util.*;
 
@@ -11,7 +11,8 @@ public class Earth implements MapOptions {
     private final Map<Vector2d, HashSet<Animal>> animals = new HashMap<>();
     private final Map<Vector2d, Plant> plants = new HashMap<>();
     private final Boundary bounds;
-    private final Set<ChangeListener> observers = new HashSet<>();
+    private final HashSet<Animal> allAnimals = new HashSet<>();
+    private final UUID id  = UUID.randomUUID();
 
 
     public Earth(int width, int height) {
@@ -29,13 +30,30 @@ public class Earth implements MapOptions {
     public Boundary getBounds() {
         return new Boundary(bounds.lowerLeft(), bounds.upperRight());
     }
-
-    public void registerObserver(ChangeListener observer){
-        observers.add(observer);
+    public UUID getId() {
+        return id;
+    }
+    public int getArea(){
+        return (bounds.upperRight().getX()+1)*(bounds.upperRight().getY()+1);
     }
 
-    public void deregisterObserver(ChangeListener observer) {
-        observers.remove(observer);
+    public HashSet<Animal> getDeadAnimals() {
+        HashSet<Animal> deadAnimals = new HashSet<>();
+        for (Animal animal : allAnimals) {
+            if (animal.isDead()) {
+                deadAnimals.add(animal);
+            }
+        }
+        return deadAnimals;
+    }
+    public HashSet<Animal> getAliveAnimals() {
+        HashSet<Animal> aliveAnimals = new HashSet<>();
+        for (Animal animal : allAnimals) {
+            if (!animal.isDead()) {
+                aliveAnimals.add(animal);
+            }
+        }
+        return aliveAnimals;
     }
 
     public void placeAnimal (Animal animal) {
@@ -45,6 +63,7 @@ public class Earth implements MapOptions {
             animals.put(position, new HashSet<>());
         }
         animals.get(position).add(animal);
+        allAnimals.add(animal);
     }
 
     public void placePlant (Plant plant) {
@@ -53,9 +72,10 @@ public class Earth implements MapOptions {
         plants.put(position, plant);
     }
 
-    public void removeAnimal(Animal animal) {
+    public void removeAnimal(Animal animal,Optional<Integer> day) {
         Vector2d position = animal.getPosition();
         animals.get(position).remove(animal);
+        animal.setDayOfDeath(day);
         if (animals.get(position).isEmpty()) {
             animals.remove(position);
         }
@@ -67,7 +87,7 @@ public class Earth implements MapOptions {
     }
 
     public void move(Animal animal){
-        removeAnimal(animal);
+        removeAnimal(animal, Optional.empty());
         animal.move(this);//normal move or mirror move or change direction
         placeAnimal(animal);
     }
@@ -91,4 +111,3 @@ public class Earth implements MapOptions {
                 x<=bounds.upperRight().getX() && y<=bounds.upperRight().getX();
     }
 }
-//divide into map,mapcontroller?

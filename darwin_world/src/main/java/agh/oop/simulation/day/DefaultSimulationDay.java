@@ -1,10 +1,13 @@
-package agh.oop.simulation;
+package agh.oop.simulation.day;
 
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Mutation;
+import agh.oop.simulation.DataHolder;
+import agh.oop.simulation.day.AbstractSimulationDay;
 import agh.oop.simulation.spawner.AbstractSpawner;
+import agh.oop.simulation.statictics.Statistics;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,11 +15,10 @@ import java.util.LinkedList;
 public class DefaultSimulationDay extends AbstractSimulationDay {
 
     public DefaultSimulationDay(Earth earth, HashSet<Animal> animals,
-                                HashSet<Vector2d> notGrownFields, int newPlantNumber,
-                                int plantEnergy, int reproduceEnergy,
-                                AbstractSpawner spawner, Mutation mutation) {
+                                HashSet<Vector2d> notGrownFields,
+                                AbstractSpawner spawner, Mutation mutation, DataHolder simulationParameters) {
         super(earth, animals, notGrownFields,
-                newPlantNumber, plantEnergy, reproduceEnergy, spawner, mutation);
+                spawner, mutation, simulationParameters);
     }
 
     @Override

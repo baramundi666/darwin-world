@@ -11,16 +11,10 @@ Gałąź main modyfikowana tylko przez pull request
 [Diagram UML](UML_diagram.pdf)
 
 
-todo list:  
-- mutacje podmianka(check)
-- zatrute rosliny
-- wyjatki
-- statystyki(do 08.01)
-
-- warianty
+todo list:
+- statystyki
 - watki(dla wielu)
+- ui(simulation stop, focus on one animal)
 
-- zapis do csv
-- ui(ograniczyć parametry)
-
-
+canvas:
+https://examples.javacodegeeks.com/java-development/desktop-java/javafx/javafx-canvas-example/

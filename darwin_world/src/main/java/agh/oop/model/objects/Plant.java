@@ -42,7 +42,7 @@ public class Plant implements WorldElement {
     }
 
     public int getEnergy() {
-        return energy;
+        return isPoisonous ? -energy : energy;
     }
     @Override
     public boolean isAt(Vector2d position) {

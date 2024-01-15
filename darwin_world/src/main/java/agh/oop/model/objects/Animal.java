@@ -6,7 +6,9 @@ import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.inheritance.Genome;
 import agh.oop.model.objects.inheritance.Mutation;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Animal implements WorldElement {
@@ -19,6 +21,7 @@ public class Animal implements WorldElement {
     private final int copulateEnergy;//energy taken from parent and given to child
     private int lifeLength = 0;
     private int childrenCount = 0;
+    private Optional<Integer> dayOfDeath = Optional.empty();
 
     public Animal(Vector2d position, int initialEnergy, Genome genome, int copulateEnergy) {
         this.position = position;
@@ -43,6 +46,18 @@ public class Animal implements WorldElement {
 
     public MapDirection getDirection() {
         return direction;
+    }
+
+    public Optional<Integer> getDayOfDeath() {
+        return dayOfDeath;
+    }
+
+    public void setDirection(MapDirection direction) {
+        this.direction = direction;
+    }
+
+    public void setDayOfDeath(Optional<Integer> dayOfDeath) {
+        this.dayOfDeath = dayOfDeath;
     }
 
     public int getEnergy() {
@@ -72,13 +87,17 @@ public class Animal implements WorldElement {
         return this.position.equals(position);
     }
 
+    public boolean isDead() {
+        return energy <= 0;
+    }
+
     public void eat(Plant plant) {
         energy+=plant.getEnergy();
     }
 
     public Animal reproduce(Animal other, Mutation mutation) {
-        Genome newGenome = this.getGenome().merge(other.getGenome(), this.energy, other.energy);
-        newGenome = newGenome.mutate(mutation);
+        var percentage = (double) this.energy/(this.energy+other.energy);
+        var newGenome = this.genome.generateNewGenome(mutation, other.genome, percentage);
         int initialEnergy = 2*copulateEnergy;
         this.setEnergy(this.getEnergy()-copulateEnergy);
         other.setEnergy(other.getEnergy()-copulateEnergy);
@@ -86,14 +105,13 @@ public class Animal implements WorldElement {
     }
 
     public void move(MapOptions options) {
-        int active = genome.getActiveGene();
-        direction = direction.shift(genome.getGeneList().get(active));
+        int active = genome.takeAnotherGene();
+        direction = direction.shift(active);
         position = options.mover(position.add(direction.toVector()))
                 .orElseGet(() -> {
                     direction = direction.shift(4);
                     return position;
                 });
-        genome.nextGene();
         energy--;
         lifeLength++;
     }
@@ -117,4 +135,3 @@ public class Animal implements WorldElement {
         return Objects.hash(animalId);
     }
 }
-//divide into animal, animalController???

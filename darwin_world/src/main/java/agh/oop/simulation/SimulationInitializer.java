@@ -16,20 +16,17 @@ public class SimulationInitializer{
 
     private final Earth earth;
     private final HashSet<Animal> animals;//statistics purpose
-    private final int reproduceEnergy;
-
+    private final int copulateEnergy;
     private final AbstractSpawner spawner;
 
     public SimulationInitializer(Earth earth, HashSet<Animal> animals,
-                                 int genomeLength, int animalNumber,
-                                 int initialEnergy,
-                                 int reproduceEnergy, AbstractSpawner spawner) {
-        this.genomeLength = genomeLength;
-        this.animalNumber = animalNumber;
-        this.initialEnergy = initialEnergy;
+                                 AbstractSpawner spawner, DataHolder simulationParameters) {
+        this.genomeLength = simulationParameters.genomeLength();
+        this.animalNumber = simulationParameters.newAnimalNumber();
+        this.initialEnergy = simulationParameters.initialEnergy();
         this.earth = earth;
         this.animals = animals;
-        this.reproduceEnergy = reproduceEnergy;
+        this.copulateEnergy = simulationParameters.copulateEnergy();
         this.spawner = spawner;
     }
 
@@ -55,7 +52,7 @@ public class SimulationInitializer{
         }
         Collections.shuffle(freePositions);
         for(int i=0; i<animalNumber; i++){
-            var animal = new Animal(freePositions.get(i), initialEnergy, generateGenome(), reproduceEnergy);
+            var animal = new Animal(freePositions.get(i), initialEnergy, generateGenome(), copulateEnergy);
             animals.add(animal);
             earth.placeAnimal(animal);
         }

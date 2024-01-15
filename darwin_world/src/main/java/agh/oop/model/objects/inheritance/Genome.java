@@ -20,9 +20,20 @@ public class Genome {
     public int getGenomeLength(){
         return genomeLength;
     }
+
     public int getActiveGene() {
         return activeGene;
     }
+    public int getActiveGeneValue() {
+        return geneList.get(activeGene);
+    }
+
+    public int takeAnotherGene() {
+        int activeGeneValue = geneList.get(activeGene);
+        nextGene();
+        return activeGeneValue;
+    }
+
     public void nextGene() {
         if (activeGene==genomeLength-1) {
             activeGene=0;
@@ -31,9 +42,15 @@ public class Genome {
             activeGene++;
         }
     }
-    public Genome merge(Genome other, int energyThis, int energyOther) {
+
+    public Genome generateNewGenome(Mutation mutation, Genome other, double percentage) {
+        var newGenome = merge(other, percentage);
+        newGenome = newGenome.mutate(mutation);
+        return newGenome;
+    }
+
+    public Genome merge(Genome other, double percentage) {
         List<Integer> newGeneList = new ArrayList<>();
-        double percentage = (double) energyThis/(energyThis+energyOther);
         int cut = (int) (percentage*genomeLength);
         int mergeType = (int)(Math.random()*2);
         if (mergeType==0) {

@@ -3,116 +3,28 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
+
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 <BorderPane fx:controller="agh.oop.presenter.SimulationPresenter" xmlns:fx="http://javafx.com/fxml" minHeight="550.0" maxHeight="1080.0" minWidth="850.0" maxWidth="1920.0">
-    <right>
-        <GridPane  fx:id="mapGrid" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" minHeight="550.0" minWidth="850.0" gridLinesVisible="true" />
-    </right>
-
+    <top>
+        <HBox alignment="CENTER">
+            <Label fx:id="infoLabel"/>
+        </HBox>
+    </top>
     <center>
-        <VBox>
-            <HBox>
-                <VBox>
-                    <HBox>
-                        <Label text="width: " BorderPane.alignment="CENTER"/>
-                        <Spinner fx:id="width" BorderPane.alignment="CENTER" editable="true" >
-                            <valueFactory>
-                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="50" initialValue="20" amountToStepBy="1"/>
-                            </valueFactory>
-                        </Spinner>
-                    </HBox>
-                    <HBox>
-                        <Label text="height: " BorderPane.alignment="CENTER"/>
-                        <Spinner fx:id="height" BorderPane.alignment="CENTER" editable="true" >
-                            <valueFactory>
-                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="50" initialValue="20" amountToStepBy="1"/>
-                            </valueFactory>
-                        </Spinner>
-                    </HBox>
-                    <HBox>
-                        <Label text="reproduce energy: " BorderPane.alignment="CENTER"/>
-                        <Spinner fx:id="reproduceEnergy" BorderPane.alignment="CENTER" editable="true" >
-                            <valueFactory>
-                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="50" initialValue="10" amountToStepBy="1"/>
-                            </valueFactory>
-                        </Spinner>
-                    </HBox>
-                    <HBox>
-                        <Label text="initial energy: " BorderPane.alignment="CENTER"/>
-                        <Spinner fx:id="initialEnergy" BorderPane.alignment="CENTER" editable="true" >
-                            <valueFactory>
-                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="50" initialValue="10" amountToStepBy="1"/>
-                            </valueFactory>
-                        </Spinner>
-                    </HBox>
-                    <HBox>
-                        <Label text="genome length: " BorderPane.alignment="CENTER"/>
-                        <Spinner fx:id="genomeLength" BorderPane.alignment="CENTER" editable="true" >
-                            <valueFactory>
-                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="50" initialValue="20" amountToStepBy="1"/>
-                            </valueFactory>
-                        </Spinner>
-                    </HBox>
-                    <HBox>
-                        <Label text="new animal number: " BorderPane.alignment="CENTER"/>
-                        <Spinner fx:id="newAnimalNumber" BorderPane.alignment="CENTER" editable="true" >
-                            <valueFactory>
-                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="50" initialValue="10" amountToStepBy="1"/>
-                            </valueFactory>
-                        </Spinner>
-                    </HBox>
-                    <HBox>
-                        <Label text="new plant number: " BorderPane.alignment="CENTER"/>
-                        <Spinner fx:id="newPlantNumber" BorderPane.alignment="CENTER" editable="true" >
-                            <valueFactory>
-                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="50" initialValue="10" amountToStepBy="1"/>
-                            </valueFactory>
-                        </Spinner>
-                    </HBox>
-                    <HBox>
-                        <Label text="plant energy: " BorderPane.alignment="CENTER"/>
-                        <Spinner fx:id="plantEnergy" BorderPane.alignment="CENTER" editable="true" >
-                            <valueFactory>
-                                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="50" initialValue="10" amountToStepBy="1"/>
-                            </valueFactory>
-                        </Spinner>
-                    </HBox>
-                </VBox>
-            </HBox>
-            <HBox>
-                <Label text="mutation variant: " BorderPane.alignment="CENTER"/>
-                <fx:define>
-                    <ToggleGroup  fx:id="mutationVariant" />
-                </fx:define>
-                <children>
-                    <RadioButton text="standard" toggleGroup="$mutationVariant" fx:id="m1"/>
-                    <RadioButton text="swap" toggleGroup="$mutationVariant" fx:id="m2"/>
-                </children>
-            </HBox>
-            <HBox>
-                <Label text="plant variant: " BorderPane.alignment="CENTER"/>
-                <fx:define>
-                    <ToggleGroup  fx:id="plantVariant" />
-                </fx:define>
-                <children>
-                    <RadioButton text="jungle" toggleGroup="$plantVariant" fx:id="p1"/>
-                    <RadioButton text="poisonous plants" toggleGroup="$plantVariant" fx:id="p2"/>
-                </children>
-            </HBox>
-            <Button fx:id="saveSettings" text="Save settings" onAction="#onSaveClicked"/>
-            <HBox>
-                <Label fx:id="infoLabel"/>
-            </HBox>
+        <HBox>
+            <VBox alignment="CENTER_LEFT">
+                <Label text="Stats"/>
+            </VBox>
+            <GridPane  fx:id="mapGrid" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" minHeight="550.0" minWidth="850.0" gridLinesVisible="true" />
+        </HBox>
 
-        </VBox>
     </center>
 
     <bottom>
         <Button fx:id="startButton" text="Start" onAction="#onSimulationStartClicked"/>
     </bottom>
-
 </BorderPane>
 
 
