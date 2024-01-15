@@ -11,50 +11,48 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane minHeight="550.0" maxHeight="1080.0" minWidth="700.0" maxWidth="1920.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: purple; -fx-border-color: black;" fx:controller="agh.oop.presenter.HomePresenter" xmlns:fx="http://javafx.com/fxml" >
+<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="550.0" minWidth="700.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: purple; -fx-border-color: black;" xmlns:fx="http://javafx.com/fxml"  fx:controller="agh.oop.presenter.HomePresenter">
    <bottom>
       <HBox alignment="CENTER" prefHeight="25.0" prefWidth="397.0" BorderPane.alignment="TOP_CENTER">
          <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="400.0">
-            <Button  mnemonicParsing="false" prefHeight="25.0" prefWidth="135.0" text="New Configuration" onAction="#newConfiguration">
+            <Button mnemonicParsing="false" onAction="#newConfiguration" prefHeight="25.0" prefWidth="135.0" text="New Configuration">
                <HBox.margin>
-                  <Insets bottom="10.0" left="10.0"/>
+                  <Insets bottom="10.0" left="10.0" />
                </HBox.margin>
             </Button>
          </HBox>
          <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="400.0">
-            <Button  mnemonicParsing="false" text="Launch Simulation">
+            <Button mnemonicParsing="false" text="Launch Simulation" onAction="#onLaunchClicked">
                <HBox.margin>
-                  <Insets bottom="10.0" right="10.0"/>
+                  <Insets bottom="10.0" right="10.0" />
                </HBox.margin>
             </Button>
          </HBox>
       </HBox>
    </bottom>
    <top>
-      <Label prefHeight="58.0" prefWidth="263.0" text="Welcome to DARWIN WORLD SIMULATION" textAlignment="CENTER" textFill="#fdfcfc" BorderPane.alignment="CENTER">
+      <Label prefHeight="58.0" prefWidth="588.0" text="Welcome in DARWIN WORLD SIMULATION" textAlignment="CENTER" textFill="#fdfcfc" BorderPane.alignment="CENTER">
          <font>
-            <Font name="Gabriola" size="18.0" />
+            <Font name="Gabriola" size="40.0" />
          </font>
       </Label>
    </top>
    <left>
-      <ComboBox prefHeight="25.0" prefWidth="180.0" promptText="Saved configurations" BorderPane.alignment="CENTER">
+      <ComboBox fx:id="savedConfigurationsBox" prefHeight="25.0" prefWidth="180.0" promptText="Saved configurations" BorderPane.alignment="CENTER" onShowing="#displaySavedConfigurations">
          <BorderPane.margin>
             <Insets left="10.0" />
          </BorderPane.margin>
       </ComboBox>
    </left>
    <center>
-      <ImageView pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" fitWidth="200.0"
-                 fitHeight="150.0">
+      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <BorderPane.margin>
-            <Insets right="140.0"/>
+            <Insets bottom="50.0" right="140.0" />
          </BorderPane.margin>
          <rotationAxis>
-            <Point3D/>
+            <Point3D />
          </rotationAxis>
-         <Image url="@fish_home.png"/>
+         <Image url="@fish_home.png" />
       </ImageView>
    </center>
 </BorderPane>

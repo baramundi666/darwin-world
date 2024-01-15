@@ -6,4 +6,4 @@ darwin_world/.gitignore
 **/gradlew 
 **/gradlew.bat 
 darwin_world/src/main/resources/statistics/*
-darwin_world/src/main/resources/statistics
+darwin_world/src/main/resources/configurations/*

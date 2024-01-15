@@ -128,6 +128,5 @@ public class Statistics implements ChangeListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
