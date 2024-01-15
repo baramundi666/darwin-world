@@ -35,4 +35,12 @@ public class Vector2d {
     public final int hashCode() {
         return Objects.hash(x, y);
     }
+
+    public boolean follows(Vector2d vector2d) {
+        return this.x >= vector2d.x && this.y >= vector2d.y;
+    }
+
+    public boolean precedes(Vector2d vector2d) {
+        return this.x <= vector2d.x && this.y <= vector2d.y;
+    }
 }

@@ -1,6 +1,7 @@
 package agh.oop.presenter;
 
 
+import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.simulation.DataHolder;
@@ -31,30 +32,48 @@ public class SimulationPresenter implements ChangeListener {
     private List<Node> normalPlantImageList;
     private List<Node> poisonousPlantImageList;
     private List<Node> steppeImageList;
-    private List<Node> jungleImageList;
+    private List<Node> specialAreaImageList;
     private Simulation simulationToRun;
+    private Statistics statistics;
 
-    public void setSimulation(Simulation simulationToRun, Earth earth) {
+    public void setSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
         this.simulationToRun = simulationToRun;
-        this.width = (int) earth.getBounds().upperRight().getX() + 1;
-        this.height = (int) earth.getBounds().upperRight().getY() + 1;
+        this.width = earth.getBounds().upperRight().getX() + 1;
+        this.height = earth.getBounds().upperRight().getY() + 1;
 
         var imageGenerator = new ImageGenerator(width, height, (double) 500 /width, (double) 500 /height);
-        animalImageList = imageGenerator.generateAnimalImageList();
-        normalPlantImageList = imageGenerator.generatePlantImageList();
-        poisonousPlantImageList = imageGenerator.generatePoisonousPlantImageList();
-        jungleImageList = imageGenerator.generateJungleImageList();
-        steppeImageList = imageGenerator.generateSteppeImageList();
+        animalImageList = imageGenerator.generateImageList("oldAnimal.png", 1.0);
+        normalPlantImageList = imageGenerator.generateImageList("plant.png", 1.0);
+        poisonousPlantImageList = null;
+        steppeImageList = imageGenerator.generateImageList("steppe.png", 0.85);
+
+        switch (mapID) {
+            case "p1":
+                specialAreaImageList = imageGenerator.generateImageList("jungle.png", 0.3);
+                break;
+            case "p2":
+                specialAreaImageList = imageGenerator.generateImageList("poisonedArea.png", 0.3);
+                poisonousPlantImageList = imageGenerator.generateImageList("poisonousPlant.png", 0.3);
+                break;
+            default: throw  new IllegalArgumentException("Invalid mapID");
+        }
+        statistics = new Statistics(isSavingStats);
     }
 
     @Override
     public void mapChanged(Earth earth, String message) {
         Platform.runLater(() -> {
             drawGrid();
-            drawDefaultBackground(earth);
+            drawDefaultBackground();
             drawMap(earth);
             infoLabel.setText(message);
         });
+    }
+
+    private boolean inSpecialArea(int i, int j) {
+        Vector2d position = new Vector2d(i,j);
+        Boundary borders = simulationToRun.getSpecialAreaBorders();
+        return position.follows(borders.lowerLeft()) && position.precedes(borders.upperRight());
     }
 
     public void drawGrid(){ // to do - canvas
@@ -82,19 +101,16 @@ public class SimulationPresenter implements ChangeListener {
         }
     }
 
-    public void drawDefaultBackground(Earth earth){
-        int lowerEquatorBorder = (int)(Math.ceil(earth.getBounds().upperRight().getY()/5.0 *2));
-        int upperEquatorBorder = lowerEquatorBorder + (int)(Math.ceil((earth.getBounds().upperRight().getY()+1)/5.0)-1);
-
+    public void drawDefaultBackground(){
         var steppeImageIterator = steppeImageList.iterator();
-        var jungleImageIterator = jungleImageList.iterator();
+        var specialAreaImageIterator = specialAreaImageList.iterator();
 
         for(int i=0; i<height; i++) {
             for(int j=0; j<width; j++) {
-                if (j>=lowerEquatorBorder && j<=upperEquatorBorder) {
-                    var jungleImage = jungleImageIterator.next();
-                    mapGrid.add(jungleImage, i+1, j+1);
-                    GridPane.setHalignment(jungleImage, HPos.CENTER);
+                if (inSpecialArea(i,j)) {
+                    var specialAreaImage = specialAreaImageIterator.next();
+                    mapGrid.add(specialAreaImage, i+1, j+1);
+                    GridPane.setHalignment(specialAreaImage, HPos.CENTER);
                 }
                 else {
                     var steppeImage = steppeImageIterator.next();
@@ -105,7 +121,6 @@ public class SimulationPresenter implements ChangeListener {
         }
     }
 
-    //public void drawVariedBackground()//to do
     public void drawMap(Earth earth) {
         var plantsMap = earth.getPlants();
         var animalsMap = earth.getAnimals();
@@ -142,7 +157,6 @@ public class SimulationPresenter implements ChangeListener {
 
     @FXML
     private void onSimulationStartClicked() {
-        Statistics statistics = new Statistics();
         simulationToRun.registerListener(statistics);
         simulationToRun.registerListener(this);
         Thread engineThread = new Thread(simulationToRun);

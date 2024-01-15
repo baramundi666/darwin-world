@@ -14,7 +14,6 @@ Gałąź main modyfikowana tylko przez pull request
 todo list:
 - statystyki
 - watki(dla wielu)
-- zapis do csv
 - ui(simulation stop, focus on one animal)
 
 canvas:

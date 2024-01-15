@@ -27,29 +27,14 @@ public class ImageGenerator {
         this.imageHeight=imageHeight;
     }
 
-
-    public LinkedList<Node> generateAnimalImageList() {
-        var generatedAnimalImages = new LinkedList<Node>();
-        for(int i=0; i<width; i++) {
-            for(int j=0; j<height; j++) {
-                var animalNode = new NodeGenerator("oldAnimal.png", imageWidth, imageHeight);
-                var animalImage = animalNode.getNode();
-                generatedAnimalImages.add(animalImage);
-            }
+    public LinkedList<Node> generateImageList(String url, double coefficient) {
+        var generatedImages = new LinkedList<Node>();
+        for(int i=0; i<width*height; i++) {
+            var Node = new NodeGenerator(url, imageWidth, imageHeight);
+            var Image = Node.getNode();
+            generatedImages.add(Image);
         }
-        return generatedAnimalImages;
-    }
-
-    public LinkedList<Node> generatePlantImageList() {
-        var generatedPlantImages = new LinkedList<Node>();
-        for(int i=0; i<width; i++) {
-            for(int j=0; j<height; j++) {
-                var plantNode = new NodeGenerator("plant.png", imageWidth, imageHeight);
-                var plantImage = plantNode.getNode();
-                generatedPlantImages.add(plantImage);
-            }
-        }
-        return generatedPlantImages;
+        return generatedImages;
     }
 
     public LinkedList<Node> generatePoisonousPlantImageList() {
@@ -63,23 +48,15 @@ public class ImageGenerator {
         return generatedPoisonousPlantImage;
     }
 
-    public LinkedList<Node> generateSteppeImageList() {
-        var generatedSteppeImages = new LinkedList<Node>();
-        for(int i=0; i<width*height; i++) {
-            var steppeNode = new NodeGenerator("steppe.png", imageWidth, imageHeight);
-            var steppeImage = steppeNode.getNode();
-            generatedSteppeImages.add(steppeImage);
-        }
-        return generatedSteppeImages;
-    }
 
-    public LinkedList<Node> generateJungleImageList() {
-        var generatedJungleImages = new LinkedList<Node>();
+
+    public LinkedList<Node> generatePoisonedAreaImageList() {
+        var generatePoisonedAreaImages = new LinkedList<Node>();
         for(int i=0; i<width*height*0.5; i++) {
-            var jungleNode = new NodeGenerator("jungle.png", imageWidth, imageHeight);
-            var jungleImage = jungleNode.getNode();
-            generatedJungleImages.add(jungleImage);
+            var poisonedAreaNode = new NodeGenerator("jungle.png", imageWidth, imageHeight);
+            var poisonedAreaImage = poisonedAreaNode.getNode();
+            generatePoisonedAreaImages.add(poisonedAreaImage);
         }
-        return generatedJungleImages;
+        return generatePoisonedAreaImages;
     }
 }

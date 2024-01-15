@@ -1,5 +1,6 @@
 package agh.oop.simulation;
 
+import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Mutation;
@@ -12,6 +13,8 @@ import agh.oop.simulation.day.VariedSimulationDay;
 import agh.oop.simulation.spawner.AbstractSpawner;
 import agh.oop.simulation.spawner.DefaultPlantSpawner;
 import agh.oop.simulation.spawner.VariedPlantSpawner;
+import agh.oop.simulation.statictics.DescendantsStatistics;
+import agh.oop.simulation.statictics.PlantEatenCountStatistics;
 import agh.oop.simulation.statictics.Statistics;
 
 import java.util.*;
@@ -35,10 +38,15 @@ public class Simulation implements Runnable{
         configureVariants();
     }
 
+    public Boundary getSpecialAreaBorders(){
+        return spawner.getSpecialAreaBorders();
+    }
+
     @Override
     public void run() {
         try {
             simulationInitialization.initialize();
+            registerAnimalStatistics(animals);
             notifyListeners("Map has been initialized! Day " + 0);
             Thread.sleep(700);
         } catch (InterruptedException e) {
@@ -69,7 +77,7 @@ public class Simulation implements Runnable{
 
         }
 
-        switch (simulationParameters.plantVariant()) {
+        switch (simulationParameters.mapVariant()) {
             case "p1" -> {
                 spawner = new DefaultPlantSpawner(earth, simulationParameters);
                 var notGrownFields = spawner.getNotGrownFields();
@@ -82,7 +90,7 @@ public class Simulation implements Runnable{
                 simulationDay = new VariedSimulationDay(earth, animals, notGrownFields, spawner,
                         mutation, simulationParameters);
             }
-            default -> throw new IllegalArgumentException("Unknown plant variant");
+            default -> throw new IllegalArgumentException("Unknown map variant");
         }
 
         simulationInitialization = new SimulationInitializer(earth, animals,
@@ -97,5 +105,12 @@ public class Simulation implements Runnable{
         for (ChangeListener listener : listeners) {
             listener.mapChanged(earth, message);
         }
+    }
+
+    private void registerAnimalStatistics(HashSet<Animal> animals){
+        DescendantsStatistics descendantsStatistics = new DescendantsStatistics(animals);
+        PlantEatenCountStatistics plantEatenCountStatistics = new PlantEatenCountStatistics(animals);
+        simulationDay.registerListener(descendantsStatistics);
+        simulationDay.registerListener(plantEatenCountStatistics);
     }
 }

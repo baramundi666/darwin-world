@@ -38,13 +38,13 @@ public class SimulationApp extends Application {
         primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
         primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
     }
-    public static void startSimulation(Simulation simulationToRun, Earth earth){
+    public static void startSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(SimulationApp.class.getClassLoader().getResource("simulation.fxml"));
             BorderPane viewRoot = loader.load();
             SimulationPresenter presenter = loader.getController();
-            presenter.setSimulation(simulationToRun,earth);
+            presenter.setSimulation(simulationToRun,earth, mapID, isSavingStats);
             Stage primaryStage = new Stage();
             configureStage(primaryStage,viewRoot);
             primaryStage.show();

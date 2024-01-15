@@ -17,7 +17,6 @@ public class SimulationInitializer{
     private final Earth earth;
     private final HashSet<Animal> animals;//statistics purpose
     private final int copulateEnergy;
-
     private final AbstractSpawner spawner;
 
     public SimulationInitializer(Earth earth, HashSet<Animal> animals,

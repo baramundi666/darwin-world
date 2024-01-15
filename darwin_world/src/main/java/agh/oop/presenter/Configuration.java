@@ -13,40 +13,43 @@ import javafx.scene.control.ToggleGroup;
 public class Configuration {
 
     @FXML
-    public Spinner<Integer> widthValue;
+    private Spinner<Integer> widthValue;
     @FXML
-    public Spinner<Integer> heightValue;
+    private Spinner<Integer> heightValue;
     @FXML
-    public Spinner<Integer> reproduceEnergy;
+    private Spinner<Integer> reproduceEnergy;
     @FXML
-    public Spinner<Integer> copulateEnergy;
+    private Spinner<Integer> copulateEnergy;
     @FXML
-    public Spinner<Integer> initialEnergy;
+    private Spinner<Integer> initialEnergy;
     @FXML
-    public Spinner<Integer> genomeLength;
+    private Spinner<Integer> genomeLength;
     @FXML
-    public Spinner<Integer> newAnimalNumber;
+    private Spinner<Integer> newAnimalNumber;
     @FXML
-    public Spinner<Integer> newPlantNumber;
+    private Spinner<Integer> newPlantNumber;
     @FXML
-    public Spinner<Integer> plantEnergy;
+    private Spinner<Integer> plantEnergy;
     @FXML
-    public Spinner<Integer> mutationRangeMax;
+    private Spinner<Integer> mutationRangeMax;
     @FXML
-    public Spinner<Integer> mutationRangeMin;
-
+    private Spinner<Integer> mutationRangeMin;
     @FXML
-    public ToggleGroup mutationVariant;
+    private ToggleGroup mutationVariant;
     @FXML
-    public ToggleGroup plantVariant;
+    private ToggleGroup mapVariant;
     @FXML
-    public Button saveSettings;
+    private Button saveSettings;
     @FXML
-    public Spinner<Integer> simulationLength;
+    private Spinner<Integer> simulationLength;
+    @FXML
+    private ToggleGroup saveStats;
 
 
     private Simulation simulationToRun;
     private Earth earth;
+    private String mapID;
+    private String isSavingStats;
 
     public void saveSettings() {
         int width = this.widthValue.getValue();
@@ -61,21 +64,24 @@ public class Configuration {
         int newPlantNumber = this.newPlantNumber.getValue();
         int plantEnergy = this.plantEnergy.getValue();
 
-        var mutationId = ((RadioButton) this.mutationVariant.getSelectedToggle()).getId();
-        var plantId = ((RadioButton) this.plantVariant.getSelectedToggle()).getId();
+        var mutationID = ((RadioButton) this.mutationVariant.getSelectedToggle()).getId();
+        var mapID = ((RadioButton) this.mapVariant.getSelectedToggle()).getId();
+        var isSavingStats = ((RadioButton) this.saveStats.getSelectedToggle()).getId();
         var mutationRange = new int[]{mutationRangeMin.getValue(), mutationRangeMax.getValue()};
 
         var earth = new Earth(width, height);
         var simulationParameters = new DataHolder(simulationLength, reproduceEnergy, copulateEnergy,
                 newPlantNumber, plantEnergy, newAnimalNumber, genomeLength, initialEnergy,
-                mutationRange, mutationId, plantId);
+                mutationRange, mutationID, mapID);
 
 
         this.simulationToRun = new Simulation(earth, simulationParameters);
         this.earth = earth;
+        this.mapID  = mapID;
+        this.isSavingStats = isSavingStats;
     }
 
     public void onLaunchClicked(){
-        SimulationApp.startSimulation(simulationToRun,earth);
+        SimulationApp.startSimulation(simulationToRun,earth, mapID, isSavingStats);
     }
 }

@@ -6,7 +6,9 @@ import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.inheritance.Genome;
 import agh.oop.model.objects.inheritance.Mutation;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Animal implements WorldElement {
@@ -19,6 +21,7 @@ public class Animal implements WorldElement {
     private final int copulateEnergy;//energy taken from parent and given to child
     private int lifeLength = 0;
     private int childrenCount = 0;
+    private Optional<Integer> dayOfDeath = Optional.empty();
 
     public Animal(Vector2d position, int initialEnergy, Genome genome, int copulateEnergy) {
         this.position = position;
@@ -44,8 +47,17 @@ public class Animal implements WorldElement {
     public MapDirection getDirection() {
         return direction;
     }
+
+    public Optional<Integer> getDayOfDeath() {
+        return dayOfDeath;
+    }
+
     public void setDirection(MapDirection direction) {
         this.direction = direction;
+    }
+
+    public void setDayOfDeath(Optional<Integer> dayOfDeath) {
+        this.dayOfDeath = dayOfDeath;
     }
 
     public int getEnergy() {

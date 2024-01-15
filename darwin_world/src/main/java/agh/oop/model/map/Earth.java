@@ -72,9 +72,10 @@ public class Earth implements MapOptions {
         plants.put(position, plant);
     }
 
-    public void removeAnimal(Animal animal) {
+    public void removeAnimal(Animal animal,Optional<Integer> day) {
         Vector2d position = animal.getPosition();
         animals.get(position).remove(animal);
+        animal.setDayOfDeath(day);
         if (animals.get(position).isEmpty()) {
             animals.remove(position);
         }
@@ -86,7 +87,7 @@ public class Earth implements MapOptions {
     }
 
     public void move(Animal animal){
-        removeAnimal(animal);
+        removeAnimal(animal, Optional.empty());
         animal.move(this);//normal move or mirror move or change direction
         placeAnimal(animal);
     }
