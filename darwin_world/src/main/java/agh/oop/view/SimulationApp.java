@@ -21,16 +21,6 @@ public class SimulationApp extends Application {
         primaryStage.show();
     }
 
-//    public void startSimulation() throws Exception {
-//        FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
-//        BorderPane viewRoot = loader.load();
-//        SimulationPresenter presenter = loader.getController();
-//        Stage primaryStage = new Stage();
-//        configureStage(primaryStage,viewRoot);
-//        primaryStage.show();
-//    }
-
     private static void configureStage(Stage primaryStage, BorderPane viewRoot) {
         var scene = new Scene(viewRoot);
         primaryStage.setScene(scene);

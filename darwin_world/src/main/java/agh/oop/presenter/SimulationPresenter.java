@@ -126,7 +126,7 @@ public class SimulationPresenter implements ChangeListener {
         var animalsMap = earth.getAnimals();
         var animalImageIterator = animalImageList.iterator();
         var normalPlantImageIterator = normalPlantImageList.iterator();
-        var poisonousPlantImageIterator = poisonousPlantImageList.iterator();
+        var poisonousPlantImageIterator = poisonousPlantImageList != null ? poisonousPlantImageList.iterator() : null;
 
         for(Vector2d position: plantsMap.keySet()){
             var plant = plantsMap.get(position);
