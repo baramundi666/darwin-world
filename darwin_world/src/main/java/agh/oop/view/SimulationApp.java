@@ -48,6 +48,7 @@ public class SimulationApp extends Application {
             System.out.println(presenter);
             presenter.setSimulation(simulationToRun,earth, mapID, isSavingStats);
 //            presenter.runSimulation();
+
             Stage primaryStage = new Stage();
             configureStage(primaryStage,viewRoot);
             primaryStage.show();

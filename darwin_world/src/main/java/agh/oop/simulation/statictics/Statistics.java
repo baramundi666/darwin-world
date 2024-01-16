@@ -26,12 +26,35 @@ public class Statistics implements ChangeListener{
     }
 
 
-    @Override
-    public void mapInitialized(Earth earth, String message) {
-
+    public int getNumberOfAnimals() {
+        return numberOfAnimals;
     }
 
-    public void mapChanged(Earth earth, String message) {
+    public int getNumberOfPlants() {
+        return numberOfPlants;
+    }
+
+    public int getNumberOfNotOccupiedFields() {
+        return numberOfNotOccupiedFields;
+    }
+
+    public double getAverageEnergy() {
+        return averageEnergy;
+    }
+
+    public Optional<List<Integer>> getDominantGenotype() {
+        return dominantGenotype;
+    }
+
+    public double getAverageLifeLength() {
+        return averageLifeLength;
+    }
+
+    public double getAverageNumberOfChildren() {
+        return averageNumberOfChildren;
+    }
+
+    private void setAndWriteStatistics(Earth earth, String message){
         numberOfAnimals = earth.getAliveAnimals().size();
         numberOfPlants = earth.getPlants().size();
         numberOfNotOccupiedFields = countNotOccupiedFields(earth);
@@ -42,14 +65,19 @@ public class Statistics implements ChangeListener{
         if(Objects.equals(isSavingStats, "true")) writeToFile(earth, message);
     }
 
+    @Override
+    public void mapInitialized(Earth earth, String message) {
+        setAndWriteStatistics(earth, message);
+    }
+
+    @Override
+    public void mapChanged(Earth earth, String message) {
+        setAndWriteStatistics(earth, message);
+    }
+
     public String dominantGenotypeToString(){
         if(dominantGenotype.isEmpty()) return "No animals";
-        StringBuilder sb = new StringBuilder();
-        for(Integer gene: dominantGenotype.get()){
-            sb.append(gene);
-            sb.append(" ");
-        }
-        return sb.toString();
+        return dominantGenotype.toString();
     }
 
     private int countNotOccupiedFields(Earth earth) {
@@ -95,7 +123,6 @@ public class Statistics implements ChangeListener{
         }
         return Optional.of(maxGenotype);
     }
-    //most popular genotypes???
     
     private double findAverageNumberOfChildren(Earth earth){
         HashSet<Animal> animals = earth.getAliveAnimals();

@@ -4,6 +4,7 @@ package agh.oop.presenter;
 import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
+import agh.oop.model.objects.Animal;
 import agh.oop.simulation.Simulation;
 import agh.oop.simulation.SimulationEngine;
 import agh.oop.simulation.statictics.Statistics;
@@ -32,6 +33,36 @@ public class SimulationPresenter implements ChangeListener {
     public GridPane mapGrid;
     @FXML
     private Label infoLabel;
+    @FXML
+    private Label animalNumber;
+    @FXML
+    private Label plantNumber;
+    @FXML
+    private Label freeFields;
+    @FXML
+    private Label avgEnergy;
+    @FXML
+    private Label avgLifeLength;
+    @FXML
+    private Label avgChildrenNumber;
+    @FXML
+    private Label dominantGenotype;
+    @FXML
+    private Label dayOfDeath;
+    @FXML
+    private Label childrenNumber;
+    @FXML
+    private Label genotype;
+    @FXML
+    private Label energy;
+    @FXML
+    private Label activeGene;
+    @FXML
+    private Label plantEatenNumber;
+    @FXML
+    private Label lifeLength;
+    @FXML
+    private Label descendantsNumber;
     private int width;
     private int height;
     private List<Node> steppeImageList;
@@ -39,7 +70,7 @@ public class SimulationPresenter implements ChangeListener {
     private Simulation simulationToRun;
     private Thread engineThread;
     private Statistics statistics;
-    private List<Label> toBeCleared = new LinkedList<>();
+    private final List<Label> toBeCleared = new LinkedList<>();
 
     private boolean paused = false;
     private final Object pauseLock = new Object();
@@ -66,12 +97,27 @@ public class SimulationPresenter implements ChangeListener {
         statistics = new Statistics(isSavingStats);
     }
 
+    private void setStatistics(){
+        animalNumber.setText(String.valueOf(statistics.getNumberOfAnimals()));
+        plantNumber.setText(String.valueOf(statistics.getNumberOfPlants()));
+        freeFields.setText(String.valueOf(statistics.getNumberOfNotOccupiedFields()));
+        avgEnergy.setText(String.format("%.2f", statistics.getAverageEnergy()));
+        avgLifeLength.setText(String.format("%.2f", statistics.getAverageLifeLength()));
+        avgChildrenNumber.setText(String.format("%.2f",statistics.getAverageNumberOfChildren()));
+        dominantGenotype.setText(statistics.getDominantGenotype().map(Object::toString).orElse("No dominant genotype"));
+    }
+
+    private void setAnimalStatistics(Animal animal){//to do
+
+    }
+
     @Override
     public void mapInitialized(Earth earth, String message) {
         Platform.runLater(() -> {
             drawGrid();
             drawDefaultBackground();
             infoLabel.setText(message);
+            setStatistics();
         });
     }
 
@@ -80,13 +126,13 @@ public class SimulationPresenter implements ChangeListener {
         Platform.runLater(() -> {
             drawMapElements(earth);
             infoLabel.setText(message);
+            setStatistics();
         });
     }
 
     private boolean inSpecialArea(int i, int j) {
         Vector2d position = new Vector2d(i, j);
         Boundary borders = simulationToRun.getSpecialAreaBorders();
-        System.out.println(borders.lowerLeft() + " " + borders.upperRight());
         return position.follows(borders.lowerLeft()) && position.precedes(borders.upperRight());
     }
 
@@ -168,7 +214,8 @@ public class SimulationPresenter implements ChangeListener {
 
 
     @FXML
-    public void onSimulationStartClicked(ActionEvent actionEvent) {
+    public void onSimulationStartClicked() {
+
         simulationToRun.registerListener(statistics);
         simulationToRun.registerListener(this);
         var engine = new SimulationEngine(simulationToRun);
@@ -183,7 +230,7 @@ public class SimulationPresenter implements ChangeListener {
 
     @FXML
     private void onSimulationResumeClicked() {
-        simulationToRun.paused = false;
+        paused = false;
         synchronized (engineThread) {
             engineThread.notifyAll();
         }
@@ -195,7 +242,6 @@ public class SimulationPresenter implements ChangeListener {
         }
         toBeCleared.clear();
     }
-
 
     public void handleGridClick(MouseEvent event) {
         double mouseX = event.getSceneX();
@@ -210,6 +256,23 @@ public class SimulationPresenter implements ChangeListener {
         System.out.println(animals.get(new Vector2d(row, column)));
     }
 
-
+    public void highlightDominantGenotype() {//now higlihts while simulation is running
+        var dominantGenotype = statistics.getDominantGenotype();
+        if (dominantGenotype.isEmpty()) return;
+        var dominantGenotypeList = dominantGenotype.get();
+        var animals = simulationToRun.getEarth().getAnimals();
+        for (Vector2d position : animals.keySet()) {
+            for (var animal : animals.get(position)) {
+                if (animal.getGenome().getGeneList().equals(dominantGenotypeList)) {
+                    var animalImage = new Label("\u25A0");
+                    animalImage.setTextFill(Paint.valueOf("blue"));
+                    animalImage.setAlignment(Pos.CENTER);
+                    toBeCleared.add(animalImage);
+                    mapGrid.add(animalImage, position.getX() + 1, position.getY() + 1);
+                    GridPane.setHalignment(animalImage, HPos.CENTER);
+                }
+            }
+        }
+    }
 }
 
