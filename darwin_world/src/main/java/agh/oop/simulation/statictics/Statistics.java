@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.*;
 
-public class Statistics implements ChangeListener {
+public class Statistics implements ChangeListener{
     private String isSavingStats;
     private int numberOfAnimals=0;
     private int numberOfPlants=0;
@@ -25,6 +25,11 @@ public class Statistics implements ChangeListener {
         this.isSavingStats = isSavingStats;
     }
 
+
+    @Override
+    public void mapInitialized(Earth earth, String message) {
+
+    }
 
     public void mapChanged(Earth earth, String message) {
         numberOfAnimals = earth.getAliveAnimals().size();

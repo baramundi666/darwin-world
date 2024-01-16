@@ -4,7 +4,6 @@ package agh.oop.presenter;
 import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
-import agh.oop.simulation.DataHolder;
 import agh.oop.simulation.Simulation;
 import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Platform;
@@ -16,9 +15,9 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class SimulationPresenter implements ChangeListener {
 
@@ -36,15 +35,17 @@ public class SimulationPresenter implements ChangeListener {
     private Simulation simulationToRun;
     private Statistics statistics;
 
+    private List<Label> toBeCleared = new LinkedList<>();
+
     public void setSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
         this.simulationToRun = simulationToRun;
         this.width = earth.getBounds().upperRight().getX() + 1;
         this.height = earth.getBounds().upperRight().getY() + 1;
 
         var imageGenerator = new ImageGenerator(width, height, (double) 400 /width, (double) 400 /height);
-        animalImageList = imageGenerator.generateImageList("oldAnimal.png", 1.0);
-        normalPlantImageList = imageGenerator.generateImageList("plant.png", 1.0);
-        poisonousPlantImageList = Optional.empty();
+//        animalImageList = imageGenerator.generateImageList("oldAnimal.png", 1.0);
+//        normalPlantImageList = imageGenerator.generateImageList("plant.png", 1.0);
+//        poisonousPlantImageList = Optional.empty();
         steppeImageList = imageGenerator.generateImageList("steppe.png", 0.85);
 
         switch (mapID) {
@@ -61,14 +62,23 @@ public class SimulationPresenter implements ChangeListener {
     }
 
     @Override
-    public void mapChanged(Earth earth, String message) {
+    public void mapInitialized(Earth earth, String message) {
         Platform.runLater(() -> {
             drawGrid();
             drawDefaultBackground();
-            drawMap(earth);
             infoLabel.setText(message);
         });
     }
+
+    @Override
+    public void mapChanged(Earth earth, String message) {
+        Platform.runLater(() -> {
+//            drawMap(earth);
+            infoLabel.setText(message);
+        });
+    }
+
+
 
     private boolean inSpecialArea(int i, int j) {
         Vector2d position = new Vector2d(i,j);
@@ -124,19 +134,22 @@ public class SimulationPresenter implements ChangeListener {
     public void drawMap(Earth earth) {
         var plantsMap = earth.getPlants();
         var animalsMap = earth.getAnimals();
-        var animalImageIterator = animalImageList.iterator();
-        var normalPlantImageIterator = normalPlantImageList.iterator();
-        var poisonousPlantImageIterator = poisonousPlantImageList.map(List::iterator).orElse(null);
+//        var animalImageIterator = animalImageList.iterator();
+//        var normalPlantImageIterator = normalPlantImageList.iterator();
+//        var poisonousPlantImageIterator = poisonousPlantImageList.map(List::iterator).orElse(null);
 
         for(Vector2d position: plantsMap.keySet()){
             var plant = plantsMap.get(position);
-            Node plantImage;
-            if (poisonousPlantImageList.isPresent() && plant.isPoisonous()) {
-                plantImage = poisonousPlantImageIterator.next();
-            }
-            else {
-                plantImage = normalPlantImageIterator.next();
-            }
+            var plantImage = new Label("\u2022");
+            plantImage.setFont(Font.font(40));
+            plantImage.setTextFill(Paint.valueOf(plant.getPlantColor()));
+//            if (poisonousPlantImageList.isPresent() && plant.isPoisonous()) {
+//                plantImage = poisonousPlantImageIterator.next();
+//            }
+//            else {
+//                plantImage = normalPlantImageIterator.next();
+//            }
+            toBeCleared.add(plantImage);
             mapGrid.add(plantImage, position.getX() + 1, position.getY() + 1);
             GridPane.setHalignment(plantImage, HPos.CENTER);
         }
@@ -144,13 +157,16 @@ public class SimulationPresenter implements ChangeListener {
         for(Vector2d position: animalsMap.keySet()){
             if(!animalsMap.get(position).isEmpty()) {
                 int animalCount = animalsMap.get(position).size();
-                var countLabel = new Label(String.valueOf(animalCount));
-                countLabel.setTextFill(Paint.valueOf("black"));
-                var animalImage = animalImageIterator.next();
+                var firstAnimal = animalsMap.get(position).iterator().next();
+//                var countLabel = new Label(String.valueOf(animalCount));
+//                countLabel.setTextFill(Paint.valueOf("black"));
+                var animalImage = new Label("\u25A0");
+                animalImage.setTextFill(Paint.valueOf(firstAnimal.getAnimalColor()));
+                toBeCleared.add(animalImage);
                 mapGrid.add(animalImage, position.getX() + 1, position.getY() + 1);
-                mapGrid.add(countLabel, position.getX() + 1, position.getY() + 1);
+//                mapGrid.add(countLabel, position.getX() + 1, position.getY() + 1);
                 GridPane.setHalignment(animalImage, HPos.CENTER);
-                GridPane.setHalignment(countLabel, HPos.CENTER);
+//                GridPane.setHalignment(countLabel, HPos.CENTER);
             }
         }
     }
@@ -164,9 +180,15 @@ public class SimulationPresenter implements ChangeListener {
     }
 
     private void clearGrid(GridPane grid) {
-        grid.getChildren().retainAll(grid.getChildren().get(0)); // hack to retain visible grid lines
-        grid.getColumnConstraints().clear();
-        grid.getRowConstraints().clear();
+//        grid.getChildren().retainAll(grid.getChildren().get(0)); // hack to retain visible grid lines
+//        grid.getColumnConstraints().clear();
+//        grid.getRowConstraints().clear();
+        for (Label label : toBeCleared) {
+            grid.getChildren().remove(label);
+        }
+        toBeCleared.clear(); // Optional: Clear the list if needed
     }
+
+
 }
 

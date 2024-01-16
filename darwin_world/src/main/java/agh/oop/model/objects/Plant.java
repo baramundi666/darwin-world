@@ -49,10 +49,10 @@ public class Plant implements WorldElement {
         return this.position.equals(position);
     }
 
-    @Override
-    public String toString() {
-        // to do (if isPoisonous...)
-        return "Plant:" + getId();
+
+    public String getPlantColor() {
+        if (isPoisonous) return "Purple";
+        else return "Green";
     }
 
     @Override

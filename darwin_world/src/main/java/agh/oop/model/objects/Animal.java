@@ -13,6 +13,8 @@ import java.util.UUID;
 
 public class Animal implements WorldElement {
 
+    private static int initialEnergy;
+
     private final UUID animalId;
     private Vector2d position;
     private MapDirection direction = MapDirection.generate();
@@ -29,6 +31,7 @@ public class Animal implements WorldElement {
         this.genome = genome;
         this.animalId = UUID.randomUUID();
         this.copulateEnergy = copulateEnergy;
+        Animal.initialEnergy=initialEnergy;
     }
 
     public UUID getId() {
@@ -116,9 +119,12 @@ public class Animal implements WorldElement {
         lifeLength++;
     }
 
-    @Override
-    public String toString() {
-        return "Animal:" + getId();
+    public String getAnimalColor() {
+        String color;
+        if (energy<=0.5*initialEnergy) color = "White";
+        else if (energy<=initialEnergy) color = "Red";
+        else color = "Black";
+        return color;
     }
 
     @Override
