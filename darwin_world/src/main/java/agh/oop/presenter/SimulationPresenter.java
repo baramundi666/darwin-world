@@ -7,6 +7,7 @@ import agh.oop.model.map.Vector2d;
 import agh.oop.simulation.Simulation;
 import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -31,13 +32,27 @@ public class SimulationPresenter implements ChangeListener {
     public GridPane mapGrid;
     @FXML
     private Label infoLabel;
+    @FXML
+    private Label animalNumber;
+    @FXML
+    private Label plantNumber;
+    @FXML
+    private Label freeFields;
+    @FXML
+    private Label avgEnergy;
+    @FXML
+    private Label avgLifeLength;
+    @FXML
+    private Label avgChildrenNumber;
+    @FXML
+    private Label dominantGenotype;
     private int width;
     private int height;
     private List<Node> steppeImageList;
     private List<Node> specialAreaImageList;
     private Simulation simulationToRun;
     private Statistics statistics;
-    private List<Label> toBeCleared = new LinkedList<>();
+    private final List<Label> toBeCleared = new LinkedList<>();
 
     public void setSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
         this.simulationToRun = simulationToRun;
@@ -60,12 +75,23 @@ public class SimulationPresenter implements ChangeListener {
         statistics = new Statistics(isSavingStats);
     }
 
+    private void setStatistics(){
+        animalNumber.setText(String.valueOf(statistics.getNumberOfAnimals()));
+        plantNumber.setText(String.valueOf(statistics.getNumberOfPlants()));
+        freeFields.setText(String.valueOf(statistics.getNumberOfNotOccupiedFields()));
+        avgEnergy.setText(String.format("%.2f", statistics.getAverageEnergy()));
+        avgLifeLength.setText(String.format("%.2f", statistics.getAverageLifeLength()));
+        avgChildrenNumber.setText(String.format("%.2f",statistics.getAverageNumberOfChildren()));
+        dominantGenotype.setText(statistics.getDominantGenotype().map(Object::toString).orElse("No dominant genotype"));
+    }
+
     @Override
     public void mapInitialized(Earth earth, String message) {
         Platform.runLater(() -> {
             drawGrid();
             drawDefaultBackground();
             infoLabel.setText(message);
+            setStatistics();
         });
     }
 
@@ -74,13 +100,13 @@ public class SimulationPresenter implements ChangeListener {
         Platform.runLater(() -> {
             drawMapElements(earth);
             infoLabel.setText(message);
+            setStatistics();
         });
     }
 
     private boolean inSpecialArea(int i, int j) {
         Vector2d position = new Vector2d(i,j);
         Boundary borders = simulationToRun.getSpecialAreaBorders();
-        System.out.println(borders.lowerLeft() + " " + borders.upperRight());
         return position.follows(borders.lowerLeft()) && position.precedes(borders.upperRight());
     }
 
@@ -163,7 +189,7 @@ public class SimulationPresenter implements ChangeListener {
     }
 
     @FXML
-    private void onSimulationStartClicked() {
+    public void onSimulationStartClicked() {
         simulationToRun.registerListener(statistics);
         simulationToRun.registerListener(this);
         Thread engineThread = new Thread(simulationToRun);
@@ -190,7 +216,6 @@ public class SimulationPresenter implements ChangeListener {
         toBeCleared.clear();
     }
 
-
     public void handleGridClick(MouseEvent event) {
         double mouseX = event.getSceneX();
         double mouseY = event.getSceneY();
@@ -202,6 +227,25 @@ public class SimulationPresenter implements ChangeListener {
         System.out.println(mouseX + " " + mouseY);
         System.out.println(row + " " + column);
         System.out.println(animals.get(new Vector2d(row, column)));
+    }
+
+    public void highlightDominantGenotype() {//now higlihts while simulation is running
+        var dominantGenotype = statistics.getDominantGenotype();
+        if (dominantGenotype.isEmpty()) return;
+        var dominantGenotypeList = dominantGenotype.get();
+        var animals = simulationToRun.getEarth().getAnimals();
+        for (Vector2d position : animals.keySet()) {
+            for (var animal : animals.get(position)) {
+                if (animal.getGenome().getGeneList().equals(dominantGenotypeList)) {
+                    var animalImage = new Label("\u25A0");
+                    animalImage.setTextFill(Paint.valueOf("blue"));
+                    animalImage.setAlignment(Pos.CENTER);
+                    toBeCleared.add(animalImage);
+                    mapGrid.add(animalImage, position.getX() + 1, position.getY() + 1);
+                    GridPane.setHalignment(animalImage, HPos.CENTER);
+                }
+            }
+        }
     }
 }
 

@@ -36,6 +36,7 @@ public class SimulationApp extends Application {
             BorderPane viewRoot = loader.load();
             SimulationPresenter presenter = loader.getController();
             presenter.setSimulation(simulationToRun,earth, mapID, isSavingStats);
+            presenter.onSimulationStartClicked();
             Stage primaryStage = new Stage();
             configureStage(primaryStage,viewRoot);
             primaryStage.show();

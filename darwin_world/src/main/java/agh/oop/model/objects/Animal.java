@@ -121,9 +121,10 @@ public class Animal implements WorldElement {
 
     public String getAnimalColor() {
         String color;
-        if (energy<=0.5*initialEnergy) color = "White";
-        else if (energy<=initialEnergy) color = "Red";
-        else color = "Black";
+        if (energy<=0.5*initialEnergy) color = "#88001b";//dark red
+        else if (energy<=0.75*initialEnergy) color = "#ff0000";//red
+        else if (energy<=initialEnergy) color = "#ff9900";//orange
+        else color = "#ffffff";//white
         return color;
     }
 
