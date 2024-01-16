@@ -30,7 +30,6 @@ public class Simulation implements Runnable{
     private final List<ChangeListener> listeners = new LinkedList<>();
     private final DataHolder simulationParameters;
 
-
     public Simulation(Earth earth, DataHolder simulationParameters){
         this.earth = earth;
         this.simulationParameters = simulationParameters;
@@ -57,7 +56,7 @@ public class Simulation implements Runnable{
             throw new RuntimeException(e);
         }
 
-        for(int i=1;i<=simulationParameters.simulationLength();i++){
+        for (int i = 1; i <= simulationParameters.simulationLength(); i++) {
             try {
                 simulationDay.simulateOneDay();
                 notifyListeners("Map has been changed! Day " + i);
@@ -66,6 +65,7 @@ public class Simulation implements Runnable{
                 throw new RuntimeException(e);
             }
         }
+
     }
 
     private void configureVariants() {

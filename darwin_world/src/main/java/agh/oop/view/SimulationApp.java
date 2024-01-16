@@ -11,13 +11,23 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.util.concurrent.ExecutorService;
+
+import static java.util.concurrent.Executors.newFixedThreadPool;
+
+
 public class SimulationApp extends Application {
+
+    private ExecutorService executor = newFixedThreadPool(4);
+
+    private SimulationPresenter presenter;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("home.fxml"));
         BorderPane viewRoot = loader.load();
-        HomePresenter presenter = loader.getController();
+//        HomePresenter presenter = loader.getController();
         configureStage(primaryStage,viewRoot);
         primaryStage.show();
     }
@@ -35,7 +45,9 @@ public class SimulationApp extends Application {
             loader.setLocation(SimulationApp.class.getClassLoader().getResource("simulation.fxml"));
             BorderPane viewRoot = loader.load();
             SimulationPresenter presenter = loader.getController();
+            System.out.println(presenter);
             presenter.setSimulation(simulationToRun,earth, mapID, isSavingStats);
+//            presenter.runSimulation();
             Stage primaryStage = new Stage();
             configureStage(primaryStage,viewRoot);
             primaryStage.show();

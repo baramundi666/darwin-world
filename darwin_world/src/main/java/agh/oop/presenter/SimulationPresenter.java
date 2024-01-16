@@ -5,8 +5,10 @@ import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.simulation.Simulation;
+import agh.oop.simulation.SimulationEngine;
 import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -18,7 +20,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 import java.util.*;
 
@@ -36,15 +37,19 @@ public class SimulationPresenter implements ChangeListener {
     private List<Node> steppeImageList;
     private List<Node> specialAreaImageList;
     private Simulation simulationToRun;
+    private Thread engineThread;
     private Statistics statistics;
     private List<Label> toBeCleared = new LinkedList<>();
+
+    private boolean paused = false;
+    private final Object pauseLock = new Object();
 
     public void setSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
         this.simulationToRun = simulationToRun;
         this.width = earth.getBounds().upperRight().getX() + 1;
         this.height = earth.getBounds().upperRight().getY() + 1;
 
-        var imageGenerator = new ImageGenerator(width, height, (double) 450 /max(width,height), (double) 450/max(width,height));
+        var imageGenerator = new ImageGenerator(width, height, (double) 450 / max(width, height), (double) 450 / max(width, height));
 
         steppeImageList = imageGenerator.generateImageList("steppe.png", 0.85);
 
@@ -55,7 +60,8 @@ public class SimulationPresenter implements ChangeListener {
             case "p2":
                 specialAreaImageList = imageGenerator.generateImageList("poisonedArea.png", 0.3);
                 break;
-            default: throw  new IllegalArgumentException("Invalid mapID");
+            default:
+                throw new IllegalArgumentException("Invalid mapID");
         }
         statistics = new Statistics(isSavingStats);
     }
@@ -78,53 +84,50 @@ public class SimulationPresenter implements ChangeListener {
     }
 
     private boolean inSpecialArea(int i, int j) {
-        Vector2d position = new Vector2d(i,j);
+        Vector2d position = new Vector2d(i, j);
         Boundary borders = simulationToRun.getSpecialAreaBorders();
         System.out.println(borders.lowerLeft() + " " + borders.upperRight());
         return position.follows(borders.lowerLeft()) && position.precedes(borders.upperRight());
     }
 
-    public void drawGrid(){
+    public void drawGrid() {
         clearGrid(mapGrid);
-        double cellSize = (double) 500 /(max(width,height)+1);
+        double cellSize = (double) 500 / (max(width, height) + 1);
 
         mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
         mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
         Label axis = new Label("y\\x");
         axis.setTextFill(Paint.valueOf("white"));
-        mapGrid.add(axis,0,0);//assume that left upper corner is (0,0)
+        mapGrid.add(axis, 0, 0);//assume that left upper corner is (0,0)
         GridPane.setHalignment(axis, HPos.CENTER);
 
-        for (int i=0;i<height;i++){
+        for (int i = 0; i < height; i++) {
             mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
             Label label = new Label(String.valueOf(i));
-            label.setTextFill(Paint.valueOf("white"));
-            mapGrid.add(label,0,i+1);
+            mapGrid.add(label, 0, i + 1);
             GridPane.setHalignment(label, HPos.CENTER);
         }
-        for (int i=0;i<width;i++){
+        for (int i = 0; i < width; i++) {
             mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
             var label = new Label(String.valueOf(i));
-            label.setTextFill(Paint.valueOf("white"));
-            mapGrid.add(label,i+1,0);
+            mapGrid.add(label, i + 1, 0);
             GridPane.setHalignment(label, HPos.CENTER);
         }
     }
 
-    public void drawDefaultBackground(){
+    public void drawDefaultBackground() {
         var steppeImageIterator = steppeImageList.iterator();
         var specialAreaImageIterator = specialAreaImageList.iterator();
 
-        for(int i=0; i<width; i++) {
-            for(int j=0; j<height; j++) {
-                if (inSpecialArea(i,j)) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (inSpecialArea(i, j)) {
                     var specialAreaImage = specialAreaImageIterator.next();
-                    mapGrid.add(specialAreaImage, i+1, j+1);
+                    mapGrid.add(specialAreaImage, i + 1, j + 1);
                     GridPane.setHalignment(specialAreaImage, HPos.CENTER);
-                }
-                else {
+                } else {
                     var steppeImage = steppeImageIterator.next();
-                    mapGrid.add(steppeImage, i+1, j+1);
+                    mapGrid.add(steppeImage, i + 1, j + 1);
                     GridPane.setHalignment(steppeImage, HPos.CENTER);
                 }
             }
@@ -135,7 +138,7 @@ public class SimulationPresenter implements ChangeListener {
         clearGrid(mapGrid);
         var plantsMap = earth.getPlants();
         var animalsMap = earth.getAnimals();
-        for(Vector2d position: plantsMap.keySet()){
+        for (Vector2d position : plantsMap.keySet()) {
             var plant = plantsMap.get(position);
             var plantImage = new Label("\u2022");
             plantImage.setFont(Font.font(30));
@@ -146,8 +149,8 @@ public class SimulationPresenter implements ChangeListener {
             GridPane.setHalignment(plantImage, HPos.CENTER);
         }
 
-        for(Vector2d position: animalsMap.keySet()){
-            if(!animalsMap.get(position).isEmpty()) {
+        for (Vector2d position : animalsMap.keySet()) {
+            if (!animalsMap.get(position).isEmpty()) {
                 int animalCount = animalsMap.get(position).size();
                 var firstAnimal = animalsMap.get(position).iterator().next();
                 var animalImage = new Label("\u25A0");
@@ -162,25 +165,28 @@ public class SimulationPresenter implements ChangeListener {
         }
     }
 
+
+
     @FXML
-    private void onSimulationStartClicked() {
+    public void onSimulationStartClicked(ActionEvent actionEvent) {
         simulationToRun.registerListener(statistics);
         simulationToRun.registerListener(this);
-        Thread engineThread = new Thread(simulationToRun);
+        var engine = new SimulationEngine(simulationToRun);
+        engineThread = new Thread(engine);
         engineThread.start();
     }
 
     @FXML
-    private void onSimulationStopClicked() {
-        //simulationToRun.stop();
+    private void onSimulationPauseClicked() {
+        engineThread.suspend();
     }
 
     @FXML
     private void onSimulationResumeClicked() {
-//        simulationToRun.reset();
-//        statistics.reset();
-//        drawDefaultBackground();
-//        infoLabel.setText("Simulation reset");
+        simulationToRun.paused = false;
+        synchronized (engineThread) {
+            engineThread.notifyAll();
+        }
     }
 
     private void clearGrid(GridPane grid) {
@@ -194,14 +200,16 @@ public class SimulationPresenter implements ChangeListener {
     public void handleGridClick(MouseEvent event) {
         double mouseX = event.getSceneX();
         double mouseY = event.getSceneY();
-        double cellWidth = (double) 500 /(width+1);
-        double cellHeight = (double) 500 /(height+1);
-        int column = (int) (mouseX/cellHeight);
-        int row = (int) (mouseY/cellWidth);
+        double cellWidth = (double) 500 / (width + 1);
+        double cellHeight = (double) 500 / (height + 1);
+        int column = (int) (mouseX / cellHeight);
+        int row = (int) (mouseY / cellWidth);
         var animals = simulationToRun.getEarth().getAnimals();
         System.out.println(mouseX + " " + mouseY);
         System.out.println(row + " " + column);
         System.out.println(animals.get(new Vector2d(row, column)));
     }
+
+
 }
 

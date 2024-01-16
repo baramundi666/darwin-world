@@ -12,10 +12,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+
+import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class HomePresenter {
     @FXML
     private ComboBox<String> savedConfigurationsBox;
+
     private Simulation simulationToRun;
     private String mapID;
     private String isSavingStats;
@@ -100,4 +104,11 @@ public class HomePresenter {
             throw new IllegalArgumentException("File not found");
         }
     }
+
+//    public void runAsyncInThreadPool() throws InterruptedException {
+//        executor = newFixedThreadPool(4);
+//        for (Simulation simulation : simulationList) {
+//            executor.submit(simulation);
+//        }
+//    }
 }
