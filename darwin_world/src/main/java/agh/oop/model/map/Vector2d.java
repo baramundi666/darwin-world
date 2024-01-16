@@ -23,6 +23,14 @@ public class Vector2d {
     public Vector2d add(Vector2d other) {
         return new Vector2d(this.x + other.x, this.y + other.y);
     }
+
+    public boolean follows(Vector2d vector2d) {
+        return this.x >= vector2d.x && this.y >= vector2d.y;
+    }
+
+    public boolean precedes(Vector2d vector2d) {
+        return this.x <= vector2d.x && this.y <= vector2d.y;
+    }
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -34,13 +42,5 @@ public class Vector2d {
     @Override
     public final int hashCode() {
         return Objects.hash(x, y);
-    }
-
-    public boolean follows(Vector2d vector2d) {
-        return this.x >= vector2d.x && this.y >= vector2d.y;
-    }
-
-    public boolean precedes(Vector2d vector2d) {
-        return this.x <= vector2d.x && this.y <= vector2d.y;
     }
 }
