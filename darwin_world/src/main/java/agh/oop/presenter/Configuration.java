@@ -104,7 +104,7 @@ public class Configuration {
     }
 
     public synchronized void writeToFile(String parameters, String configurationName){
-        Path path = Path.of("C:\\Users\\macie\\OneDrive\\Pulpit\\Studia\\YEAR 2\\obiektowe\\PO_PROJEKT_2023_KROL_MAKOWSKI\\darwin_world\\src\\main\\resources\\configurations\\" + configurationName + ".txt");
+        Path path = Path.of("src\\main\\resources\\configurations\\" + configurationName + ".txt");
         File file = new File(path.toString());
         if(file.exists()){
             file.delete();
