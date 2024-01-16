@@ -29,34 +29,11 @@ public class ImageGenerator {
 
     public LinkedList<Node> generateImageList(String url, double coefficient) {
         var generatedImages = new LinkedList<Node>();
-        for(int i=0; i<width*height; i++) {
+        for(int i=0; i<width*height*coefficient; i++) {
             var Node = new NodeGenerator(url, imageWidth, imageHeight);
             var Image = Node.getNode();
             generatedImages.add(Image);
         }
         return generatedImages;
-    }
-
-    public LinkedList<Node> generatePoisonousPlantImageList() {
-        var generatedPoisonousPlantImage = new LinkedList<Node>();
-        for(int i=0; i<width*height*0.2; i++) {
-            var plantNode = new NodeGenerator("poisonousPlant.png", imageWidth, imageHeight);
-            var plantImage = plantNode.getNode();
-            generatedPoisonousPlantImage.add(plantImage);
-
-        }
-        return generatedPoisonousPlantImage;
-    }
-
-
-
-    public LinkedList<Node> generatePoisonedAreaImageList() {
-        var generatePoisonedAreaImages = new LinkedList<Node>();
-        for(int i=0; i<width*height*0.5; i++) {
-            var poisonedAreaNode = new NodeGenerator("jungle.png", imageWidth, imageHeight);
-            var poisonedAreaImage = poisonedAreaNode.getNode();
-            generatePoisonedAreaImages.add(poisonedAreaImage);
-        }
-        return generatePoisonedAreaImages;
     }
 }

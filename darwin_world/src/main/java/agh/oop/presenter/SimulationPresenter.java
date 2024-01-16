@@ -12,6 +12,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -82,7 +83,7 @@ public class SimulationPresenter implements ChangeListener {
         return position.follows(borders.lowerLeft()) && position.precedes(borders.upperRight());
     }
 
-    public void drawGrid(){ // to do - canvas
+    public void drawGrid(){
         clearGrid(mapGrid);
         double cellWidth = (double) 500 /(width+1);
         double cellHeight = (double) 500 /(height+1);
@@ -90,7 +91,7 @@ public class SimulationPresenter implements ChangeListener {
         mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
         mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
         Label axis = new Label("y\\x");
-        mapGrid.add(axis,0,0);//assume that left upper corner is (0,0)
+        mapGrid.add(axis,0,0);
         GridPane.setHalignment(axis, HPos.CENTER);
 
         for (int i=0;i<height;i++){
@@ -111,8 +112,8 @@ public class SimulationPresenter implements ChangeListener {
         var steppeImageIterator = steppeImageList.iterator();
         var specialAreaImageIterator = specialAreaImageList.iterator();
 
-        for(int i=0; i<height; i++) {
-            for(int j=0; j<width; j++) {
+        for(int i=0; i<width; i++) {
+            for(int j=0; j<height; j++) {
                 if (inSpecialArea(i,j)) {
                     var specialAreaImage = specialAreaImageIterator.next();
                     mapGrid.add(specialAreaImage, i+1, j+1);
@@ -174,5 +175,17 @@ public class SimulationPresenter implements ChangeListener {
     }
 
 
+    public void handleGridClick(MouseEvent event) {
+        double mouseX = event.getSceneX();
+        double mouseY = event.getSceneY();
+        double cellWidth = (double) 500 /(width+1);
+        double cellHeight = (double) 500 /(height+1);
+        int column = (int) (mouseX/cellHeight);
+        int row = (int) (mouseY/cellWidth);
+        var animals = simulationToRun.getEarth().getAnimals();
+        System.out.println(mouseX + " " + mouseY);
+        System.out.println(row + " " + column);
+        System.out.println(animals.get(new Vector2d(row, column)));
+    }
 }
 

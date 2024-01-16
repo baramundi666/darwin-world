@@ -38,6 +38,10 @@ public class Simulation implements Runnable{
         configureVariants();
     }
 
+    public Earth getEarth() {
+        return earth;
+    }
+
     public Boundary getSpecialAreaBorders(){
         return spawner.getSpecialAreaBorders();
     }

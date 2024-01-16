@@ -112,6 +112,6 @@ public class Earth implements MapOptions {
         int x = position.getX();
         int y = position.getY();
         return x>=bounds.lowerLeft().getX() && y>=bounds.lowerLeft().getY() &&
-                x<=bounds.upperRight().getX() && y<=bounds.upperRight().getX();
+                x<=bounds.upperRight().getX() && y<=bounds.upperRight().getY();
     }
 }

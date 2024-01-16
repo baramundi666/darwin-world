@@ -16,10 +16,8 @@
                     <Insets right="140.0" />
                 </VBox.margin>
             </Label>
-            <GridPane fx:id="mapGrid" alignment="CENTER_RIGHT" gridLinesVisible="true" minHeight="400.0" minWidth="400.0" prefHeight="505.0" prefWidth="505.0" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml">
-                <VBox.margin>
-                    <Insets right="30.0" />
-                </VBox.margin>
+            <GridPane fx:id="mapGrid" alignment="CENTER_RIGHT" gridLinesVisible="true" minHeight="400.0" minWidth="400.0" prefHeight="505.0" prefWidth="505.0" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml" onMouseClicked="#handleGridClick">
+                <Label text="Click the button and check the console for the grid coordinates." GridPane.rowIndex="1" GridPane.columnIndex="0"/>
             </GridPane>
         </VBox>
     </right>
