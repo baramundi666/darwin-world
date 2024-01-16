@@ -9,6 +9,7 @@ import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
@@ -16,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 import java.util.*;
 
@@ -27,9 +29,6 @@ public class SimulationPresenter implements ChangeListener {
     private Label infoLabel;
     private int width;
     private int height;
-    private List<Node> animalImageList;
-    private List<Node> normalPlantImageList;
-    private Optional<List<Node>> poisonousPlantImageList;
     private List<Node> steppeImageList;
     private List<Node> specialAreaImageList;
     private Simulation simulationToRun;
@@ -42,10 +41,7 @@ public class SimulationPresenter implements ChangeListener {
         this.width = earth.getBounds().upperRight().getX() + 1;
         this.height = earth.getBounds().upperRight().getY() + 1;
 
-        var imageGenerator = new ImageGenerator(width, height, (double) 400 /width, (double) 400 /height);
-//        animalImageList = imageGenerator.generateImageList("oldAnimal.png", 1.0);
-//        normalPlantImageList = imageGenerator.generateImageList("plant.png", 1.0);
-//        poisonousPlantImageList = Optional.empty();
+        var imageGenerator = new ImageGenerator(width, height, (double) 450 /width, (double) 450 /height);
 
         steppeImageList = imageGenerator.generateImageList("steppe.png", 0.85);
 
@@ -55,7 +51,6 @@ public class SimulationPresenter implements ChangeListener {
                 break;
             case "p2":
                 specialAreaImageList = imageGenerator.generateImageList("poisonedArea.png", 0.3);
-                poisonousPlantImageList = Optional.of(imageGenerator.generateImageList("poisonousPlant.png", 0.3));
                 break;
             default: throw  new IllegalArgumentException("Invalid mapID");
         }
@@ -74,7 +69,7 @@ public class SimulationPresenter implements ChangeListener {
     @Override
     public void mapChanged(Earth earth, String message) {
         Platform.runLater(() -> {
-//            drawMap(earth);
+            drawMapElements(earth);
             infoLabel.setText(message);
         });
     }
@@ -132,24 +127,16 @@ public class SimulationPresenter implements ChangeListener {
         }
     }
 
-    public void drawMap(Earth earth) {
+    public void drawMapElements(Earth earth) {
+        clearGrid(mapGrid);
         var plantsMap = earth.getPlants();
         var animalsMap = earth.getAnimals();
-//        var animalImageIterator = animalImageList.iterator();
-//        var normalPlantImageIterator = normalPlantImageList.iterator();
-//        var poisonousPlantImageIterator = poisonousPlantImageList.map(List::iterator).orElse(null);
-
         for(Vector2d position: plantsMap.keySet()){
             var plant = plantsMap.get(position);
             var plantImage = new Label("\u2022");
-            plantImage.setFont(Font.font(40));
+            plantImage.setFont(Font.font(30));
             plantImage.setTextFill(Paint.valueOf(plant.getPlantColor()));
-//            if (poisonousPlantImageList.isPresent() && plant.isPoisonous()) {
-//                plantImage = poisonousPlantImageIterator.next();
-//            }
-//            else {
-//                plantImage = normalPlantImageIterator.next();
-//            }
+            plantImage.setAlignment(Pos.CENTER);
             toBeCleared.add(plantImage);
             mapGrid.add(plantImage, position.getX() + 1, position.getY() + 1);
             GridPane.setHalignment(plantImage, HPos.CENTER);
@@ -159,15 +146,14 @@ public class SimulationPresenter implements ChangeListener {
             if(!animalsMap.get(position).isEmpty()) {
                 int animalCount = animalsMap.get(position).size();
                 var firstAnimal = animalsMap.get(position).iterator().next();
-//                var countLabel = new Label(String.valueOf(animalCount));
-//                countLabel.setTextFill(Paint.valueOf("black"));
                 var animalImage = new Label("\u25A0");
+
+
                 animalImage.setTextFill(Paint.valueOf(firstAnimal.getAnimalColor()));
+                animalImage.setAlignment(Pos.CENTER);
                 toBeCleared.add(animalImage);
                 mapGrid.add(animalImage, position.getX() + 1, position.getY() + 1);
-//                mapGrid.add(countLabel, position.getX() + 1, position.getY() + 1);
                 GridPane.setHalignment(animalImage, HPos.CENTER);
-//                GridPane.setHalignment(countLabel, HPos.CENTER);
             }
         }
     }
@@ -181,13 +167,10 @@ public class SimulationPresenter implements ChangeListener {
     }
 
     private void clearGrid(GridPane grid) {
-//        grid.getChildren().retainAll(grid.getChildren().get(0)); // hack to retain visible grid lines
-//        grid.getColumnConstraints().clear();
-//        grid.getRowConstraints().clear();
         for (Label label : toBeCleared) {
             grid.getChildren().remove(label);
         }
-        toBeCleared.clear(); // Optional: Clear the list if needed
+        toBeCleared.clear();
     }
 
 

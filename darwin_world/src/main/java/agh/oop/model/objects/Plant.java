@@ -51,8 +51,8 @@ public class Plant implements WorldElement {
 
 
     public String getPlantColor() {
-        if (isPoisonous) return "Purple";
-        else return "Green";
+        if (isPoisonous) return "Pink";
+        else return "LightGreen";
     }
 
     @Override
