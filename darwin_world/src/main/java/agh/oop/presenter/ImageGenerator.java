@@ -15,10 +15,10 @@ import java.util.List;
 
 public class ImageGenerator {
 
-    private double width;
-    private double height;
-    private double imageWidth;
-    private double imageHeight;
+    private final double width;
+    private final double height;
+    private final double imageWidth;
+    private final double imageHeight;
 
     public ImageGenerator(int width, int height, double imageWidth, double imageHeight) {
         this.width=width;

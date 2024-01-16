@@ -22,6 +22,9 @@ import javafx.scene.text.Text;
 
 import java.util.*;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class SimulationPresenter implements ChangeListener {
 
     @FXML
@@ -34,7 +37,6 @@ public class SimulationPresenter implements ChangeListener {
     private List<Node> specialAreaImageList;
     private Simulation simulationToRun;
     private Statistics statistics;
-
     private List<Label> toBeCleared = new LinkedList<>();
 
     public void setSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
@@ -42,7 +44,7 @@ public class SimulationPresenter implements ChangeListener {
         this.width = earth.getBounds().upperRight().getX() + 1;
         this.height = earth.getBounds().upperRight().getY() + 1;
 
-        var imageGenerator = new ImageGenerator(width, height, (double) 450 /width, (double) 450 /height);
+        var imageGenerator = new ImageGenerator(width, height, (double) 450 /max(width,height), (double) 450/max(width,height));
 
         steppeImageList = imageGenerator.generateImageList("steppe.png", 0.85);
 
@@ -75,34 +77,35 @@ public class SimulationPresenter implements ChangeListener {
         });
     }
 
-
-
     private boolean inSpecialArea(int i, int j) {
         Vector2d position = new Vector2d(i,j);
         Boundary borders = simulationToRun.getSpecialAreaBorders();
+        System.out.println(borders.lowerLeft() + " " + borders.upperRight());
         return position.follows(borders.lowerLeft()) && position.precedes(borders.upperRight());
     }
 
     public void drawGrid(){
         clearGrid(mapGrid);
-        double cellWidth = (double) 500 /(width+1);
-        double cellHeight = (double) 500 /(height+1);
+        double cellSize = (double) 500 /(max(width,height)+1);
 
-        mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
-        mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
+        mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
+        mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
         Label axis = new Label("y\\x");
-        mapGrid.add(axis,0,0);
+        axis.setTextFill(Paint.valueOf("white"));
+        mapGrid.add(axis,0,0);//assume that left upper corner is (0,0)
         GridPane.setHalignment(axis, HPos.CENTER);
 
         for (int i=0;i<height;i++){
-            mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
+            mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
             Label label = new Label(String.valueOf(i));
+            label.setTextFill(Paint.valueOf("white"));
             mapGrid.add(label,0,i+1);
             GridPane.setHalignment(label, HPos.CENTER);
         }
         for (int i=0;i<width;i++){
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
+            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
             var label = new Label(String.valueOf(i));
+            label.setTextFill(Paint.valueOf("white"));
             mapGrid.add(label,i+1,0);
             GridPane.setHalignment(label, HPos.CENTER);
         }
@@ -165,6 +168,19 @@ public class SimulationPresenter implements ChangeListener {
         simulationToRun.registerListener(this);
         Thread engineThread = new Thread(simulationToRun);
         engineThread.start();
+    }
+
+    @FXML
+    private void onSimulationStopClicked() {
+        //simulationToRun.stop();
+    }
+
+    @FXML
+    private void onSimulationResumeClicked() {
+//        simulationToRun.reset();
+//        statistics.reset();
+//        drawDefaultBackground();
+//        infoLabel.setText("Simulation reset");
     }
 
     private void clearGrid(GridPane grid) {
