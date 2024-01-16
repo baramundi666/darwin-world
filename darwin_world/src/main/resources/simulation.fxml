@@ -11,10 +11,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="1200.0" maxWidth="1500.0" minHeight="550.0" minWidth="850.0" prefHeight="600.0" prefWidth="1200.0" style="-fx-background-color: purple;" xmlns:fx="http://javafx.com/fxml" fx:controller="agh.oop.presenter.SimulationPresenter">
+<BorderPane maxHeight="1200.0" maxWidth="1500.0" minHeight="550.0" minWidth="850.0" prefHeight="600.0" prefWidth="1200.0" style="-fx-background-color: #f5f1f5;" xmlns:fx="http://javafx.com/fxml" fx:controller="agh.oop.presenter.SimulationPresenter">
     <right>
         <VBox alignment="CENTER_RIGHT">
-            <Label fx:id="infoLabel" textFill="WHITE" BorderPane.alignment="TOP_CENTER">
+            <Label fx:id="infoLabel" textFill="#000000" BorderPane.alignment="TOP_CENTER">
                 <VBox.margin>
                     <Insets bottom="10.0" right="30.0" />
                 </VBox.margin>
@@ -24,7 +24,6 @@
                     <Insets right="30.0" />
                 </VBox.margin>
             </GridPane>
-            <Label text="Kliknij w dowolne pole mapy" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
         </VBox>
     </right>
     <left>
@@ -33,9 +32,9 @@
    <bottom>
        <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
            <HBox prefHeight="30.0" prefWidth="312.0">
-<!--               <Button onAction="#onSimulationPauseClicked" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0"-->
-<!--                       text="Pause"/>-->
-<!--               <Button onAction="#onSimulationResumeClicked" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Resume" />-->
+               <Button onAction="#onSimulationPauseClicked" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0"
+                       text="Pause"/>
+               <Button onAction="#onSimulationResumeClicked" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Resume" />
            </HBox>
            <HBox alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="600.0">
                <HBox.margin>
@@ -50,7 +49,7 @@
                <Insets left="10.0" />
            </BorderPane.margin>
            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="493.0">
-               <Label text="Statistics" textFill="WHITE">
+               <Label text="Statistics" textFill="#000000">
                    <font>
                        <Font name="Gabriola" size="25.0" />
                    </font>
@@ -60,62 +59,62 @@
             </VBox.margin>
            </HBox>
            <HBox alignment="CENTER" prefHeight="26.0" prefWidth="185.0">
-               <Label text="Animal number: " textFill="WHITE" />
-               <Label fx:id="animalNumber" text="val" textFill="WHITE" />
+               <Label text="Animal number: " textFill="#000000"/>
+               <Label fx:id="animalNumber" text="val" textFill="#000000"/>
            </HBox>
            <HBox alignment="CENTER" layoutX="10.0" layoutY="43.0" prefHeight="26.0" prefWidth="185.0">
-               <Label text="Plant number: " textFill="WHITE" />
-               <Label fx:id="plantNumber" text="val" textFill="WHITE" />
+               <Label text="Plant number: " textFill="#000000"/>
+               <Label fx:id="plantNumber" text="val" textFill="#000000" />
            </HBox>
            <HBox alignment="CENTER" layoutX="10.0" layoutY="43.0" prefHeight="26.0" prefWidth="185.0">
-               <Label text="Not occupied fields: " textFill="WHITE" />
-               <Label fx:id="freeFields" text="val" textFill="WHITE" />
+               <Label text="Not occupied fields: " textFill="#000000" />
+               <Label fx:id="freeFields" text="val" textFill="#000000" />
            </HBox>
            <HBox alignment="CENTER" layoutX="10.0" layoutY="43.0" prefHeight="26.0" prefWidth="185.0">
-               <Label text="Average energy: " textFill="WHITE" />
-               <Label fx:id="avgEnergy" text="val" textFill="WHITE" />
+               <Label text="Average energy: " textFill="#000000" />
+               <Label fx:id="avgEnergy" text="val" textFill="#000000" />
            </HBox>
            <HBox alignment="CENTER" layoutX="10.0" layoutY="43.0" prefHeight="26.0" prefWidth="185.0">
-               <Label text="Average children number: " textFill="WHITE" />
-               <Label fx:id="avgChildrenNumber" text="val" textFill="WHITE" />
+               <Label text="Average children number: " textFill="#000000" />
+               <Label fx:id="avgChildrenNumber" text="val" textFill="#000000" />
            </HBox>
            <HBox alignment="CENTER" layoutX="10.0" layoutY="43.0" prefHeight="26.0" prefWidth="185.0">
-               <Label text="Average life length: " textFill="WHITE" />
-               <Label fx:id="avgLifeLength" text="val" textFill="WHITE" />
+               <Label text="Average life length: " textFill="#000000" />
+               <Label fx:id="avgLifeLength" text="val" textFill="#000000" />
            </HBox>
            <VBox alignment="TOP_CENTER" prefHeight="109.0" prefWidth="200.0">
-               <Label alignment="CENTER" text="Dominant genotype:" textFill="WHITE" />
-               <Label fx:id="dominantGenotype" text="val" textFill="WHITE">
+               <Label alignment="CENTER" text="Dominant genotype:" textFill="#000000" />
+               <Label fx:id="dominantGenotype" text="val" textFill="#000000">
                    <font>
                        <Font size="10.0" />
                    </font>
                </Label>
-               <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="185.0" text="Select to highlight animals" textFill="WHITE">
+               <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="185.0" text="Select to highlight animals" textFill="#000000">
                    <VBox.margin>
                        <Insets top="20.0" />
                    </VBox.margin>
                 </Label>
-               <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="185.0" text="with dominant genotype" textFill="WHITE" />
+               <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="185.0" text="with dominant genotype" textFill="#000000" />
                <Button mnemonicParsing="false" onAction="#highlightDominantGenotype" prefHeight="30.0" prefWidth="185.0" text="Highlight animals" />
            </VBox>
            <VBox alignment="TOP_CENTER" prefHeight="109.0" prefWidth="200.0">
                <VBox.margin>
                    <Insets top="10.0" />
                </VBox.margin>
-               <Label alignment="CENTER" text="Animal energy colors" textFill="WHITE" />
+               <Label alignment="CENTER" text="Animal energy colors" textFill="#000000" />
                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                    <Image url="@animalEnergyColor.png" />
                </ImageView>
            </VBox>
            <VBox prefHeight="200.0" prefWidth="100.0">
                <HBox alignment="CENTER" prefHeight="23.0" prefWidth="200.0">
-                   <Label alignment="CENTER" prefHeight="17.0" prefWidth="51.0" text="&lt;0.5*E" textFill="WHITE" />
-                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="49.0" text="&lt;0.75*E" textFill="WHITE" />
-                   <Label alignment="CENTER" prefHeight="17.0" prefWidth="50.0" text="&lt;1*E" textFill="WHITE" />
-                   <Label alignment="CENTER" prefHeight="17.0" prefWidth="48.0" text="&gt;=1*E" textFill="WHITE" />
+                   <Label alignment="CENTER" prefHeight="17.0" prefWidth="51.0" text="&lt;0.5*E" textFill="#000000" />
+                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="49.0" text="&lt;0.75*E" textFill="#000000" />
+                   <Label alignment="CENTER" prefHeight="17.0" prefWidth="50.0" text="&lt;1*E" textFill="#000000" />
+                   <Label alignment="CENTER" prefHeight="17.0" prefWidth="48.0" text="&gt;=1*E" textFill="#000000" />
                </HBox>
                <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
-                   <Label alignment="CENTER" text="E- Animal initial energy" textFill="WHITE" />
+                   <Label alignment="CENTER" text="E- Animal initial energy" textFill="#000000" />
                </HBox>
            </VBox>
        </VBox>
@@ -129,44 +128,44 @@
                <VBox.margin>
                    <Insets top="50.0"/>
                </VBox.margin>
-               <Label text="Selected animal info" textFill="WHITE">
+               <Label text="Selected animal info" textFill="#000000">
                    <font>
                        <Font name="Gabriola" size="25.0"/>
                    </font>
                </Label>
            </HBox>
            <HBox alignment="CENTER" prefHeight="16.0" prefWidth="161.0">
-               <Label text="Energy: " textFill="WHITE"/>
-               <Label fx:id="energy" text=" " textFill="WHITE"/>
+               <Label text="Energy: " textFill="#000000"/>
+               <Label fx:id="energy" text=" " textFill="#000000"/>
            </HBox>
            <HBox alignment="CENTER" prefHeight="17.0" prefWidth="161.0">
-               <Label text="Eaten plant number: " textFill="WHITE"/>
+               <Label text="Eaten plant number: " textFill="#000000"/>
                <Label fx:id="plantEatenNumber" text=" "/>
            </HBox>
            <HBox alignment="CENTER" prefHeight="17.0" prefWidth="161.0">
-               <Label text="Children number: " textFill="WHITE"/>
+               <Label text="Children number: " textFill="#000000"/>
                <Label fx:id="childrenNumber" text=" "/>
            </HBox>
            <HBox alignment="CENTER" prefHeight="17.0" prefWidth="161.0">
-               <Label text="Descendants number: " textFill="WHITE"/>
+               <Label text="Descendants number: " textFill="#000000"/>
                <Label fx:id="descendantsNumber" text=" "/>
            </HBox>
            <HBox alignment="CENTER" prefHeight="13.0" prefWidth="161.0">
-               <Label text="Life length: " textFill="WHITE"/>
+               <Label text="Life length: " textFill="#000000"/>
                <Label fx:id="lifeLength" text=" "/>
            </HBox>
            <HBox alignment="CENTER" prefHeight="17.0" prefWidth="161.0">
-               <Label text="Day of death: " textFill="WHITE"/>
+               <Label text="Day of death: " textFill="#000000"/>
                <Label fx:id="dayOfDeath" text=" "/>
            </HBox>
            <HBox alignment="CENTER" prefHeight="17.0" prefWidth="161.0">
-               <Label prefHeight="13.0" prefWidth="55.0" text="Genotype:" textFill="WHITE"/>
+               <Label prefHeight="13.0" prefWidth="55.0" text="Genotype:" textFill="#000000"/>
            </HBox>
            <HBox alignment="TOP_CENTER" prefHeight="15.0" prefWidth="161.0">
-               <Label fx:id="genotype" text=" " textFill="WHITE"/>
+               <Label fx:id="genotype" text=" " textFill="#000000"/>
            </HBox>
            <HBox alignment="CENTER" prefHeight="19.0" prefWidth="161.0">
-               <Label text="Active gene: " textFill="WHITE"/>
+               <Label text="Active gene: " textFill="#000000"/>
                <Label fx:id="activeGene" text=" "/>
            </HBox>
        </VBox>

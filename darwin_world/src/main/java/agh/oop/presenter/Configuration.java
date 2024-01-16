@@ -16,7 +16,7 @@ import java.nio.file.Path;
 
 public class Configuration {
 
-    private HomePresenter homePage;
+
     @FXML
     private Spinner<Integer> widthValue;
     @FXML
@@ -55,6 +55,7 @@ public class Configuration {
     private String isSavingStats;
     private int width;
     private int height;
+    private HomePresenter homePage;
 
 
     public void setHomePage(HomePresenter homePage) {

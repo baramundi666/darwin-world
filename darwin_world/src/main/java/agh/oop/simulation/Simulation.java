@@ -30,11 +30,22 @@ public class Simulation implements Runnable{
     private final List<ChangeListener> listeners = new LinkedList<>();
     private final DataHolder simulationParameters;
 
+    private final Object simulationLock = new Object();
+    private volatile boolean threadSuspended;
+
     public Simulation(Earth earth, DataHolder simulationParameters){
         this.earth = earth;
         this.simulationParameters = simulationParameters;
         this.animals = new HashSet<>();
         configureVariants();
+    }
+
+    public synchronized boolean isThreadSuspended() {
+        return threadSuspended;
+    }
+
+    public void setThreadSuspended(boolean threadSuspended) {
+        this.threadSuspended = threadSuspended;
     }
 
     public Earth getEarth() {
@@ -50,23 +61,57 @@ public class Simulation implements Runnable{
         try {
             simulationInitialization.initialize();
             registerAnimalStatistics(animals);
-            notifyListeners("Map has been initialized! Day " + 0);
+            notifyListeners("Map " + earth.getId() + " has been initialized! Day " + 0);
             Thread.sleep(700);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        for (int i = 1; i <= simulationParameters.simulationLength(); i++) {
+        int i = 1;
+        while (i <= simulationParameters.simulationLength()) {
+            try {
+                synchronized(this) {
+                    while (threadSuspended)
+                        wait();
+                }
+            } catch (InterruptedException e){
+            }
+
             try {
                 simulationDay.simulateOneDay();
-                notifyListeners("Map has been changed! Day " + i);
-                Thread.sleep(250);
+                notifyListeners("Map " + earth.getId() + " has been changed! Day " + i);
+
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-        }
 
+            i++;
+        }
     }
+
+//    @Override
+//    public void run() {
+//        try {
+//            simulationInitialization.initialize();
+//            registerAnimalStatistics(animals);
+//            notifyListeners("Map has been initialized! Day " + 0);
+//            Thread.sleep(700);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        for (int i = 1; i <= simulationParameters.simulationLength(); i++) {
+//            try {
+//                simulationDay.simulateOneDay();
+//                notifyListeners("Map has been changed! Day " + i);
+//                Thread.sleep(250);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//
+//    }
 
     private void configureVariants() {
         switch(simulationParameters.mutationVariant()){
@@ -107,7 +152,7 @@ public class Simulation implements Runnable{
 
     private void notifyListeners(String message) {
         for (ChangeListener listener : listeners) {
-            if (message.equals("Map has been initialized! Day " + 0)) listener.mapInitialized(earth, message);
+            if (message.endsWith("Day 0")) listener.mapInitialized(earth, message);
             else listener.mapChanged(earth, message);
         }
     }

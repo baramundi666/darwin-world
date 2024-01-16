@@ -19,7 +19,7 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class SimulationApp extends Application {
 
-    private ExecutorService executor = newFixedThreadPool(4);
+    private static final ExecutorService executor = newFixedThreadPool(8);
 
     private static HomePresenter homePage;
 
@@ -53,7 +53,8 @@ public class SimulationApp extends Application {
             simulationToRun.registerListener(presenter);
             // i tutaj ja wykonujemy
             var thread = new Thread(simulationToRun);
-            thread.start();
+            executor.submit(thread);
+
             Stage primaryStage = new Stage();
             configureStage(primaryStage,viewRoot);
             primaryStage.show();
