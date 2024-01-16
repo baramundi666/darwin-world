@@ -27,7 +27,7 @@ public class HomePresenter {
     }
 
     private Optional<List<String>> getSavedConfigurations(){
-        Path path = Path.of("C:\\Users\\macie\\OneDrive\\Pulpit\\Studia\\YEAR 2\\obiektowe\\PO_PROJEKT_2023_KROL_MAKOWSKI\\darwin_world\\src\\main\\resources\\configurations");
+        Path path = Path.of("src\\main\\resources\\configurations");
         File folder = new File(path.toString());
         File[] listOfFiles = folder.listFiles();
 
@@ -51,7 +51,7 @@ public class HomePresenter {
 
     private List<String> setSavedConfigurations() throws IOException {
         String fileName = savedConfigurationsBox.getValue();
-        Path path = Path.of("C:\\Users\\macie\\OneDrive\\Pulpit\\Studia\\YEAR 2\\obiektowe\\PO_PROJEKT_2023_KROL_MAKOWSKI\\darwin_world\\src\\main\\resources\\configurations\\" + fileName);
+        Path path = Path.of("src\\main\\resources\\configurations\\" + fileName);
         List<String> simulationParameters = new LinkedList<>();
         try(Scanner scanner = new Scanner(path)) {
             while(scanner.hasNextLine()){
