@@ -25,17 +25,6 @@ public class AnimalStatistics {
         descendantsCount = descendantsStatistics.getNumberOfDescendants(animal);
         lifeLength = animal.getLifeLength();
         dayOfDeath = animal.getDayOfDeath();
-        
-    }
-
-    public String getGenotypeToString(){
-        if(genotype.isEmpty()) return "No animals";
-        StringBuilder sb = new StringBuilder();
-        for(Integer gene: genotype){
-            sb.append(gene);
-            sb.append(" ");
-        }
-        return sb.toString();
     }
 
     public int getActiveGene() {

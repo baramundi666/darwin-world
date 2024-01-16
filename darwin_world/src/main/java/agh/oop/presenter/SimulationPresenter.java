@@ -4,6 +4,7 @@ package agh.oop.presenter;
 import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
+import agh.oop.model.objects.Animal;
 import agh.oop.simulation.Simulation;
 import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Platform;
@@ -46,6 +47,22 @@ public class SimulationPresenter implements ChangeListener {
     private Label avgChildrenNumber;
     @FXML
     private Label dominantGenotype;
+    @FXML
+    private Label dayOfDeath;
+    @FXML
+    private Label childrenNumber;
+    @FXML
+    private Label genotype;
+    @FXML
+    private Label energy;
+    @FXML
+    private Label activeGene;
+    @FXML
+    private Label plantEatenNumber;
+    @FXML
+    private Label lifeLength;
+    @FXML
+    private Label descendantsNumber;
     private int width;
     private int height;
     private List<Node> steppeImageList;
@@ -83,6 +100,10 @@ public class SimulationPresenter implements ChangeListener {
         avgLifeLength.setText(String.format("%.2f", statistics.getAverageLifeLength()));
         avgChildrenNumber.setText(String.format("%.2f",statistics.getAverageNumberOfChildren()));
         dominantGenotype.setText(statistics.getDominantGenotype().map(Object::toString).orElse("No dominant genotype"));
+    }
+
+    private void setAnimalStatistics(Animal animal){//to do
+
     }
 
     @Override
