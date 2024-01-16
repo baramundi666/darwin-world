@@ -15,10 +15,10 @@ import java.util.List;
 
 public class ImageGenerator {
 
-    private double width;
-    private double height;
-    private double imageWidth;
-    private double imageHeight;
+    private final double width;
+    private final double height;
+    private final double imageWidth;
+    private final double imageHeight;
 
     public ImageGenerator(int width, int height, double imageWidth, double imageHeight) {
         this.width=width;
@@ -35,28 +35,5 @@ public class ImageGenerator {
             generatedImages.add(Image);
         }
         return generatedImages;
-    }
-
-    public LinkedList<Node> generatePoisonousPlantImageList() {
-        var generatedPoisonousPlantImage = new LinkedList<Node>();
-        for(int i=0; i<width*height*0.2; i++) {
-            var plantNode = new NodeGenerator("poisonousPlant.png", imageWidth, imageHeight);
-            var plantImage = plantNode.getNode();
-            generatedPoisonousPlantImage.add(plantImage);
-
-        }
-        return generatedPoisonousPlantImage;
-    }
-
-
-
-    public LinkedList<Node> generatePoisonedAreaImageList() {
-        var generatePoisonedAreaImages = new LinkedList<Node>();
-        for(int i=0; i<width*height*0.5; i++) {
-            var poisonedAreaNode = new NodeGenerator("jungle.png", imageWidth, imageHeight);
-            var poisonedAreaImage = poisonedAreaNode.getNode();
-            generatePoisonedAreaImages.add(poisonedAreaImage);
-        }
-        return generatePoisonedAreaImages;
     }
 }
