@@ -118,7 +118,7 @@ public class Statistics implements ChangeListener{
     }
 
     public synchronized void writeToFile(Earth earth, String message) {
-        Path path = Path.of("C:\\Users\\macie\\OneDrive\\Pulpit\\Studia\\YEAR 2\\obiektowe\\PO_PROJEKT_2023_KROL_MAKOWSKI\\darwin_world\\src\\main\\resources\\statistics\\" + "map_" + earth.getId() + ".csv");
+        Path path = Path.of("src\\main\\resources\\statistics\\" + "map_" + earth.getId() + ".csv");
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(path.toString(), true))) {
             writer.println(message);

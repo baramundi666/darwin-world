@@ -46,6 +46,7 @@ public class SimulationPresenter implements ChangeListener {
 //        animalImageList = imageGenerator.generateImageList("oldAnimal.png", 1.0);
 //        normalPlantImageList = imageGenerator.generateImageList("plant.png", 1.0);
 //        poisonousPlantImageList = Optional.empty();
+
         steppeImageList = imageGenerator.generateImageList("steppe.png", 0.85);
 
         switch (mapID) {
@@ -88,8 +89,8 @@ public class SimulationPresenter implements ChangeListener {
 
     public void drawGrid(){ // to do - canvas
         clearGrid(mapGrid);
-        double cellWidth = (double) 400 /width;
-        double cellHeight = (double) 400 /height;
+        double cellWidth = (double) 500 /(width+1);
+        double cellHeight = (double) 500 /(height+1);
 
         mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
         mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));

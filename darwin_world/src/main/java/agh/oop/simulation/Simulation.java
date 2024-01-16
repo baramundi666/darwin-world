@@ -103,7 +103,8 @@ public class Simulation implements Runnable{
 
     private void notifyListeners(String message) {
         for (ChangeListener listener : listeners) {
-            listener.mapChanged(earth, message);
+            if (message.equals("Map has been initialized! Day " + 0)) listener.mapInitialized(earth, message);
+            else listener.mapChanged(earth, message);
         }
     }
 
