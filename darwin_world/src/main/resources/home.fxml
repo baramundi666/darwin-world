@@ -31,14 +31,14 @@
       </HBox>
    </bottom>
    <top>
-      <Label prefHeight="58.0" prefWidth="588.0" text="Welcome in DARWIN WORLD SIMULATION" textAlignment="CENTER" textFill="#fdfcfc" BorderPane.alignment="CENTER">
+      <Label prefHeight="58.0" prefWidth="588.0" text="Welcome to DARWIN WORLD SIMULATION" textAlignment="CENTER" textFill="#fdfcfc" BorderPane.alignment="CENTER">
          <font>
             <Font name="Gabriola" size="40.0" />
          </font>
       </Label>
    </top>
    <left>
-      <ComboBox fx:id="savedConfigurationsBox" prefHeight="25.0" prefWidth="180.0" promptText="Saved configurations" BorderPane.alignment="CENTER" onShowing="#displaySavedConfigurations">
+      <ComboBox fx:id="savedConfigurationsBox" prefHeight="25.0" prefWidth="180.0" promptText="Saved configurations" BorderPane.alignment="CENTER" onShowing="#displaySavedConfigurations" onAction="#comboBoxUseHandler">
          <BorderPane.margin>
             <Insets left="10.0" />
          </BorderPane.margin>

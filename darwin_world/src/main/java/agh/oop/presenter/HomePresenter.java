@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
 
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
@@ -24,6 +23,19 @@ public class HomePresenter {
     private String mapID;
     private String isSavingStats;
     private Earth earth;
+    private DataHolder simulationParameters;
+
+    private boolean comboBoxSelected = true;
+
+
+
+    public void passOnParametersToHome(DataHolder parameters, String isSavingStats, int width, int height, String mapID) {
+        this.simulationParameters = parameters;
+        this.isSavingStats = isSavingStats;
+        this.earth = new Earth(width, height);
+        this.mapID = mapID;
+        comboBoxSelected = false;
+    }
 
 
     public void newConfiguration() {
@@ -69,7 +81,8 @@ public class HomePresenter {
         return simulationParameters;
     }
 
-    private void setSimulationParameters(List<String> parameters){
+    private void setSimulationParametersFromFile() throws IOException {
+        List<String> parameters = setSavedConfigurations();
         int simulationLength = Integer.parseInt(parameters.get(0));
         int reproduceEnergy = Integer.parseInt(parameters.get(1));
         int copulateEnergy = Integer.parseInt(parameters.get(2));
@@ -95,20 +108,26 @@ public class HomePresenter {
         this.isSavingStats = isSavingStats;
     }
 
-    public void onLaunchClicked() {
-        try {
-            List<String> simulationParameters = setSavedConfigurations();
-            setSimulationParameters(simulationParameters);
-            SimulationApp.startSimulation(simulationToRun, earth, mapID, isSavingStats);
-        } catch (IOException e){
-            throw new IllegalArgumentException("File not found");
-        }
+    private void setSimulationParametersFromConfiguration() {
+        this.simulationToRun = new Simulation(earth, simulationParameters);
     }
 
-//    public void runAsyncInThreadPool() throws InterruptedException {
-//        executor = newFixedThreadPool(4);
-//        for (Simulation simulation : simulationList) {
-//            executor.submit(simulation);
-//        }
-//    }
+    public void onLaunchClicked() {
+        if (comboBoxSelected) {
+            try {
+                setSimulationParametersFromFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else {
+            setSimulationParametersFromConfiguration();
+        }
+        SimulationApp.startSimulation(simulationToRun, earth, mapID, isSavingStats);
+    }
+
+
+    public void comboBoxUseHandler() {
+        comboBoxSelected = true;
+    }
 }

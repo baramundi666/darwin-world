@@ -6,10 +6,9 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.simulation.Simulation;
-import agh.oop.simulation.SimulationEngine;
+//import agh.oop.simulation.SimulationEngine;
 import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -95,6 +94,10 @@ public class SimulationPresenter implements ChangeListener {
                 throw new IllegalArgumentException("Invalid mapID");
         }
         statistics = new Statistics(isSavingStats);
+    }
+
+    public Statistics getStatistics() {
+        return this.statistics;
     }
 
     private void setStatistics(){
@@ -213,28 +216,26 @@ public class SimulationPresenter implements ChangeListener {
 
 
 
-    @FXML
-    public void onSimulationStartClicked() {
+//    @FXML
+//    public void onSimulationStartClicked() {
+//        simulationToRun.registerListener(statistics);
+//        simulationToRun.registerListener(this);
+//        engineThread = new Thread(simulationToRun);
+//        engineThread.start();
+//    }
 
-        simulationToRun.registerListener(statistics);
-        simulationToRun.registerListener(this);
-        var engine = new SimulationEngine(simulationToRun);
-        engineThread = new Thread(engine);
-        engineThread.start();
-    }
+//    @FXML
+//    private void onSimulationPauseClicked() {
+//        engineThread.suspend();
+//    }
 
-    @FXML
-    private void onSimulationPauseClicked() {
-        engineThread.suspend();
-    }
-
-    @FXML
-    private void onSimulationResumeClicked() {
-        paused = false;
-        synchronized (engineThread) {
-            engineThread.notifyAll();
-        }
-    }
+//    @FXML
+//    private void onSimulationResumeClicked() {
+//        paused = false;
+//        synchronized (engineThread) {
+//            engineThread.notifyAll();
+//        }
+//    }
 
     private void clearGrid(GridPane grid) {
         for (Label label : toBeCleared) {
@@ -244,16 +245,21 @@ public class SimulationPresenter implements ChangeListener {
     }
 
     public void handleGridClick(MouseEvent event) {
-        double mouseX = event.getSceneX();
-        double mouseY = event.getSceneY();
-        double cellWidth = (double) 500 / (width + 1);
-        double cellHeight = (double) 500 / (height + 1);
-        int column = (int) (mouseX / cellHeight);
-        int row = (int) (mouseY / cellWidth);
-        var animals = simulationToRun.getEarth().getAnimals();
-        System.out.println(mouseX + " " + mouseY);
-        System.out.println(row + " " + column);
-        System.out.println(animals.get(new Vector2d(row, column)));
+        Node source = (Node) event.getSource();
+        Integer colIndex = GridPane.getColumnIndex(source);
+        Integer rowIndex = GridPane.getRowIndex(source);
+        System.out.printf("Mouse entered cell [%d, %d]%n", colIndex.intValue(), rowIndex.intValue());
+
+//        double mouseX = event.getSceneX();
+//        double mouseY = event.getSceneY();
+//        double cellWidth = (double) 500 / (width + 1);
+//        double cellHeight = (double) 500 / (height + 1);
+//        int column = (int) (mouseX / cellHeight);
+//        int row = (int) (mouseY / cellWidth);
+//        var animals = simulationToRun.getEarth().getAnimals();
+//        System.out.println(mouseX + " " + mouseY);
+//        System.out.println(row + " " + column);
+//        System.out.println(animals.get(new Vector2d(row, column)));
     }
 
     public void highlightDominantGenotype() {//now higlihts while simulation is running

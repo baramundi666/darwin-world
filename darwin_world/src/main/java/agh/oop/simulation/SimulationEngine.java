@@ -1,5 +1,5 @@
-package agh.oop.simulation;
-
-public class SimulationEngine implements Runnable{
-
-}
+//package agh.oop.simulation;
+//
+//public class SimulationEngine implements Runnable{
+//
+//}

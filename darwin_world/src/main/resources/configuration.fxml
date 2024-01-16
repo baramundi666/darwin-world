@@ -200,7 +200,7 @@
         <HBox prefWidth="800.0" BorderPane.alignment="TOP_CENTER">
             <VBox alignment="BOTTOM_LEFT" prefHeight="90.0" prefWidth="152.0">
                 <TextField fx:id="configurationName" promptText="Enter configuration name" />
-                <Button fx:id="saveConfiguration" onAction="#saveConfiguration" prefHeight="25.0" prefWidth="151.0" text="Save configuration">
+                <Button fx:id="saveConfiguration" onAction="#saveConfigurationToFile" prefHeight="25.0" prefWidth="200.0" text="Save your config to file">
                     <HBox.margin>
                         <Insets bottom="10.0" left="10.0" />
                     </HBox.margin>
@@ -209,17 +209,27 @@
                         <Insets bottom="10.0" left="10.0" />
                     </HBox.margin>
             </VBox>
-            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="637.0">
-                <HBox.margin>
-                    <Insets right="10.0"/>
-                </HBox.margin>
-                <Button fx:id="launchSimulation" onAction="#launchSimulation" prefHeight="25.0" prefWidth="117.0"
-                        text="Launch simulation">
+            <VBox alignment="BOTTOM_LEFT" prefHeight="90.0" prefWidth="152.0">
+                <Button fx:id="saveCurrent" onAction="#useCurrentConfiguration" prefHeight="25.0" prefWidth="151.0" text="Use current configuration">
                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0"/>
+                        <Insets bottom="10.0" left="10.0" />
                     </HBox.margin>
                 </Button>
-            </HBox>
+                <HBox.margin>
+                    <Insets bottom="10.0" left="10.0" />
+                </HBox.margin>
+            </VBox>
+<!--            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="637.0">-->
+<!--                <HBox.margin>-->
+<!--                    <Insets right="10.0"/>-->
+<!--                </HBox.margin>-->
+<!--                <Button fx:id="launchSimulation" onAction="#launchSimulation" prefHeight="25.0" prefWidth="117.0"-->
+<!--                        text="Launch simulation">-->
+<!--                    <HBox.margin>-->
+<!--                        <Insets bottom="10.0" left="10.0"/>-->
+<!--                    </HBox.margin>-->
+<!--                </Button>-->
+<!--            </HBox>-->
         </HBox>
     </bottom>
    <top>

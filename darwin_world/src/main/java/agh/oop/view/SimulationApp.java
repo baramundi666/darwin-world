@@ -5,6 +5,7 @@ import agh.oop.presenter.Configuration;
 import agh.oop.presenter.HomePresenter;
 import agh.oop.presenter.SimulationPresenter;
 import agh.oop.simulation.Simulation;
+import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,14 +21,14 @@ public class SimulationApp extends Application {
 
     private ExecutorService executor = newFixedThreadPool(4);
 
-    private SimulationPresenter presenter;
+    private static HomePresenter homePage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("home.fxml"));
         BorderPane viewRoot = loader.load();
-//        HomePresenter presenter = loader.getController();
+        homePage = loader.getController();
         configureStage(primaryStage,viewRoot);
         primaryStage.show();
     }
@@ -46,9 +47,13 @@ public class SimulationApp extends Application {
             BorderPane viewRoot = loader.load();
             SimulationPresenter presenter = loader.getController();
             System.out.println(presenter);
+            // mowimy mu jaka symulacje wyswietlic
             presenter.setSimulation(simulationToRun,earth, mapID, isSavingStats);
-//            presenter.runSimulation();
-
+            simulationToRun.registerListener(presenter.getStatistics());
+            simulationToRun.registerListener(presenter);
+            // i tutaj ja wykonujemy
+            var thread = new Thread(simulationToRun);
+            thread.start();
             Stage primaryStage = new Stage();
             configureStage(primaryStage,viewRoot);
             primaryStage.show();
@@ -63,6 +68,7 @@ public class SimulationApp extends Application {
             loader.setLocation(SimulationApp.class.getClassLoader().getResource("configuration.fxml"));
             BorderPane viewRoot = loader.load();
             Configuration controller = loader.getController();
+            controller.setHomePage(homePage);
             Stage primaryStage = new Stage();
             configureStage(primaryStage,viewRoot);
             primaryStage.show();

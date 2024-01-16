@@ -16,6 +16,7 @@ import java.nio.file.Path;
 
 public class Configuration {
 
+    private HomePresenter homePage;
     @FXML
     private Spinner<Integer> widthValue;
     @FXML
@@ -56,6 +57,10 @@ public class Configuration {
     private int height;
 
 
+    public void setHomePage(HomePresenter homePage) {
+        this.homePage = homePage;
+    }
+
     public DataHolder getSimulationParameters(){
         this.width = this.widthValue.getValue();
         this.height = this.heightValue.getValue();
@@ -94,13 +99,18 @@ public class Configuration {
                 height;
     }
 
-    public void saveConfiguration() {
+    public void useCurrentConfiguration() {
+        DataHolder simulationParameters = getSimulationParameters();
+        homePage.passOnParametersToHome(simulationParameters,isSavingStats, width, height, mapID);
+        Stage stage = (Stage) saveConfiguration.getScene().getWindow();
+        stage.close();
+    }
+
+    public void saveConfigurationToFile() {
         DataHolder simulationParameters = getSimulationParameters();
         String parameters = simulationParametersToString(simulationParameters, isSavingStats, width, height);
         String configurationName = this.configurationName.getText();
         writeToFile(parameters, configurationName);
-        Stage stage = (Stage) saveConfiguration.getScene().getWindow();
-        stage.close();
     }
 
     public synchronized void writeToFile(String parameters, String configurationName){
@@ -114,20 +124,5 @@ public class Configuration {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void launchSimulation(){
-        DataHolder simulationParameters = getSimulationParameters();
-        var isSavingStats = ((RadioButton) this.saveStats.getSelectedToggle()).getId();
-        int width = this.widthValue.getValue();
-        int height = this.heightValue.getValue();
-
-        Earth earth = new Earth(width, height);
-        Simulation simulationToRun = new Simulation(earth,simulationParameters);
-
-        Stage stage = (Stage) saveConfiguration.getScene().getWindow();
-        SimulationApp.startSimulation(simulationToRun,earth,mapID, isSavingStats);
-        stage.close();
     }
 }
