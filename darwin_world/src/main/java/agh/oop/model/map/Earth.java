@@ -58,7 +58,9 @@ public class Earth implements MapOptions {
 
     public void placeAnimal (Animal animal) {
         Vector2d position = animal.getPosition();
-//        if (!isInBounds(position)) throw new IllegalArgumentException;
+        if (!isInBounds(position)) {
+            throw new IllegalArgumentException("Position " + position.toString() + " is out of bounds");
+        }
         if (!animals.containsKey(position)) {
             animals.put(position, new HashSet<>());
         }
@@ -68,7 +70,9 @@ public class Earth implements MapOptions {
 
     public void placePlant (Plant plant) {
         Vector2d position = plant.getPosition();
-//        if (!isInBounds(position)) throw new IllegalArgumentException;
+        if (!isInBounds(position)) {
+            throw new IllegalArgumentException("Position " + position.toString() + " is out of bounds");
+        }
         plants.put(position, plant);
     }
 

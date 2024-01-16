@@ -4,45 +4,72 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class Vector2dTest {
-    
+import agh.oop.model.map.Vector2d;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class Vector2dTest {
+
     @Test
-    public void testEquals() {
-        //Given
-
-        //When
-        var v1 = new Vector2d(2, 2);
-        var v2 = new Vector2d(3, 2);
-
-        //Then
-        assertEquals(new Vector2d(2, 2), v1);
-        assertNotEquals(v1, v2);
+    void testConstructorAndGetters() {
+        Vector2d vector = new Vector2d(2, 3);
+        assertEquals(2, vector.getX());
+        assertEquals(3, vector.getY());
     }
 
     @Test
-    public void testToString() {
-        //Given
-        int x = 2;
-        int y = 3;
-
-        //When
-        var vector = new Vector2d(x, y);
-
-        //Then
+    void testToString() {
+        Vector2d vector = new Vector2d(2, 3);
         assertEquals("(2, 3)", vector.toString());
     }
 
     @Test
-    public void testAdd() {
-        //Given
+    void testAdd() {
+        Vector2d vector1 = new Vector2d(2, 3);
+        Vector2d vector2 = new Vector2d(-1, 1);
 
-        //When
-        var v1 = new Vector2d(3, 2);
-        var v2 = new Vector2d(1, 2);
-        var v3 = new Vector2d(4, 4);
+        Vector2d result = vector1.add(vector2);
 
-        //Then
-        assertEquals(v3, v1.add(v2));
-        assertNotEquals(v1, v2.add(v3));
+        assertEquals(1, result.getX());
+        assertEquals(4, result.getY());
+    }
+
+    @Test
+    void testFollows() {
+        Vector2d vector1 = new Vector2d(2, 3);
+        Vector2d vector2 = new Vector2d(1, 2);
+
+        assertTrue(vector1.follows(vector2));
+        assertFalse(vector2.follows(vector1));
+    }
+
+    @Test
+    void testPrecedes() {
+        Vector2d vector1 = new Vector2d(2, 3);
+        Vector2d vector2 = new Vector2d(3, 4);
+
+        assertTrue(vector1.precedes(vector2));
+        assertFalse(vector2.precedes(vector1));
+    }
+
+    @Test
+    void testEquals() {
+        Vector2d vector1 = new Vector2d(2, 3);
+        Vector2d vector2 = new Vector2d(2, 3);
+        Vector2d vector3 = new Vector2d(4, 5);
+
+        assertEquals(vector1, vector2);
+        assertNotEquals(vector1, vector3);
+    }
+
+    @Test
+    void testHashCode() {
+        Vector2d vector1 = new Vector2d(2, 3);
+        Vector2d vector2 = new Vector2d(2, 3);
+        Vector2d vector3 = new Vector2d(4, 5);
+
+        assertEquals(vector1.hashCode(), vector2.hashCode());
+        assertNotEquals(vector1.hashCode(), vector3.hashCode());
     }
 }
