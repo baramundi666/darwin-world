@@ -73,6 +73,7 @@ public class SimulationPresenter implements ChangeListener {
     private final List<Label> toBeCleared = new LinkedList<>();
     private Animal spectatedAnimal;
     private AnimalStatistics spectatedAnimalStatistics;
+    private double cellSize;
 
 
     public void setSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
@@ -138,7 +139,7 @@ public class SimulationPresenter implements ChangeListener {
     }
 
     public void drawGrid() {
-        double cellSize = (double) 500 / (max(width, height) + 1);
+        cellSize = (double) 500 / (max(width, height) + 1);
 
         mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
         mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
@@ -198,7 +199,7 @@ public class SimulationPresenter implements ChangeListener {
         for (Vector2d position : animalsMap.keySet()) {
             if (!animalsMap.get(position).isEmpty()) {
                 var firstAnimal = animalsMap.get(position).iterator().next();
-                var animalImage = new Label("\u25A0");
+                var animalImage = new Label("\u25FC");
                 animalImage.setOnMouseClicked((mouseEvent) ->
                     setSpectatedAnimal(firstAnimal)
                 );
@@ -293,14 +294,14 @@ public class SimulationPresenter implements ChangeListener {
         for (Vector2d position : animalsKeys) {
             for (var animal : animals.get(position)) {
                 if (animal.getGenome().getGeneList().equals(dominantGenotypeList)) {
-                    setSpecialAnimalLabel("blue", animal);
+                    setSpecialAnimalLabel("purple", animal);
                 }
             }
         }
     }
 
     public void setSpecialAnimalLabel(String color, Animal animal){
-        var animalImage = new Label("\u25A0");
+        var animalImage = new Label("\u25FC");
         animalImage.setTextFill(Paint.valueOf(color));
         animalImage.setAlignment(Pos.CENTER);
         toBeCleared.add(animalImage);

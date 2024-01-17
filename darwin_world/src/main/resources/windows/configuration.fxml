@@ -84,12 +84,12 @@
                <VBox prefHeight="523.0" prefWidth="236.0">
                    <Spinner fx:id="widthValue" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="50" min="2" />
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="40" min="2" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="heightValue" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="50" min="2" />
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="40" min="2" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="reproduceEnergy" editable="true">
@@ -109,7 +109,7 @@
                    </Spinner>
                    <Spinner fx:id="genomeLength" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="5" max="20" min="1" />
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="30" min="5" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="newAnimalNumber" editable="true">
