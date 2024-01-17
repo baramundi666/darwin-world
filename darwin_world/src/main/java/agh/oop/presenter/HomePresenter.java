@@ -7,13 +7,10 @@ import agh.oop.view.SimulationApp;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-
-import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class HomePresenter {
     @FXML
@@ -24,7 +21,6 @@ public class HomePresenter {
     private String isSavingStats;
     private Earth earth;
     private DataHolder simulationParameters;
-
     private boolean comboBoxSelected = true;
 
 
@@ -36,7 +32,6 @@ public class HomePresenter {
         this.mapID = mapID;
         comboBoxSelected = false;
     }
-
 
     public void newConfiguration() {
         SimulationApp.newConfiguration();
@@ -126,8 +121,8 @@ public class HomePresenter {
         SimulationApp.startSimulation(simulationToRun, earth, mapID, isSavingStats);
     }
 
-
-    public void comboBoxUseHandler() {
+    @FXML
+    private void comboBoxUseHandler() {
         comboBoxSelected = true;
     }
 }

@@ -13,6 +13,7 @@ import agh.oop.simulation.day.VariedSimulationDay;
 import agh.oop.simulation.spawner.AbstractSpawner;
 import agh.oop.simulation.spawner.DefaultPlantSpawner;
 import agh.oop.simulation.spawner.VariedPlantSpawner;
+import agh.oop.simulation.statictics.AnimalStatistics;
 import agh.oop.simulation.statictics.DescendantsStatistics;
 import agh.oop.simulation.statictics.PlantEatenCountStatistics;
 import agh.oop.simulation.statictics.Statistics;
@@ -30,6 +31,8 @@ public class Simulation implements Runnable{
     private final List<ChangeListener> listeners = new LinkedList<>();
     private final DataHolder simulationParameters;
     private volatile boolean threadSuspended = false;
+    private PlantEatenCountStatistics plantEatenCountStatistics;
+    private DescendantsStatistics descendantsStatistics;
 
     public Simulation(Earth earth, DataHolder simulationParameters){
         this.earth = earth;
@@ -54,6 +57,10 @@ public class Simulation implements Runnable{
         return spawner.getSpecialAreaBorders();
     }
 
+    public AnimalStatistics getAnimalStatistics(Animal animal){
+        return new AnimalStatistics(animal, plantEatenCountStatistics, descendantsStatistics);
+    }
+
     @Override
     public void run() {
         try {
@@ -71,7 +78,7 @@ public class Simulation implements Runnable{
             try {
                 simulationDay.simulateOneDay();
                 notifyListeners("Map " + earth.getId() + " has been changed! Day " + i);
-
+                System.out.println(i);
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -149,8 +156,8 @@ public class Simulation implements Runnable{
     }
 
     private void registerAnimalStatistics(HashSet<Animal> animals){
-        DescendantsStatistics descendantsStatistics = new DescendantsStatistics(animals);
-        PlantEatenCountStatistics plantEatenCountStatistics = new PlantEatenCountStatistics(animals);
+        descendantsStatistics = new DescendantsStatistics(animals);
+        plantEatenCountStatistics = new PlantEatenCountStatistics(animals);
         simulationDay.registerListener(descendantsStatistics);
         simulationDay.registerListener(plantEatenCountStatistics);
     }

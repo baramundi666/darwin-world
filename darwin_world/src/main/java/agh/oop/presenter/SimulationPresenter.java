@@ -7,6 +7,7 @@ import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.simulation.Simulation;
 //import agh.oop.simulation.SimulationEngine;
+import agh.oop.simulation.statictics.AnimalStatistics;
 import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -73,6 +74,7 @@ public class SimulationPresenter implements ChangeListener {
     private Statistics statistics;
     private final List<Label> toBeCleared = new LinkedList<>();
     private Animal spectatedAnimal;
+    private AnimalStatistics spectatedAnimalStatistics;
 
 
     public void setSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
@@ -127,6 +129,7 @@ public class SimulationPresenter implements ChangeListener {
             drawMapElements(earth);
             infoLabel.setText(message);
             setStatistics();
+            if(spectatedAnimal != null) spectateAnimal(spectatedAnimal);
         });
     }
 
@@ -203,7 +206,7 @@ public class SimulationPresenter implements ChangeListener {
                 var firstAnimal = animalsMap.get(position).iterator().next();
                 var animalImage = new Label("\u25A0");
                 animalImage.setOnMouseClicked((mouseEvent) ->
-                    spectateAnimal(firstAnimal)
+                    setSpectatedAnimal(firstAnimal)
                 );
                 animalImage.setTextFill(Paint.valueOf(firstAnimal.getAnimalColor()));
                 animalImage.setAlignment(Pos.CENTER);
@@ -214,14 +217,47 @@ public class SimulationPresenter implements ChangeListener {
         }
     }
 
+    private void setSpectatedAnimal(Animal animal){
+        spectatedAnimal = animal;
+        spectateAnimal(animal);
+    }
+
     private void spectateAnimal(Animal animal) {
-        setAnimalStatistics(animal);
+        spectatedAnimalStatistics = simulationToRun.getAnimalStatistics(animal);
+        setAnimalStatistics();
+        if(!animal.isDead()) setSpecialAnimalLabel("purple", animal);
     }
 
-    private void setAnimalStatistics(Animal animal){//to do
-
+    @FXML
+    private void onClickStopSpectatingAnimal(){
+        spectatedAnimal = null;
+        childrenNumber.setText("");
+        energy.setText("");
+        plantEatenNumber.setText("");
+        descendantsNumber.setText("");
+        lifeLength.setText("");
+        dayOfDeath.setText("");
+        activeGene.setText("");
+        genotype.setText("");
     }
 
+    private void setAnimalStatistics(){
+        childrenNumber.setText(String.valueOf(spectatedAnimalStatistics.getChildrenCount()));
+        energy.setText(String.valueOf(spectatedAnimalStatistics.getEnergy()));
+        plantEatenNumber.setText(String.valueOf(spectatedAnimalStatistics.getPlantEatenCount()));
+        descendantsNumber.setText(String.valueOf(spectatedAnimalStatistics.getDescendantsCount()));
+        lifeLength.setText(String.valueOf(spectatedAnimalStatistics.getLifeLength()));
+        dayOfDeath.setText(spectatedAnimalStatistics.getDayOfDeath());
+        if(dayOfDeath.getText().equals("Alive")) {
+            dayOfDeath.setTextFill(Paint.valueOf("green"));
+            activeGene.setText(String.valueOf(spectatedAnimalStatistics.getActiveGene()));
+        }
+        else{
+            dayOfDeath.setTextFill(Paint.valueOf("red"));
+            activeGene.setText("");
+        }
+        genotype.setText(spectatedAnimalStatistics.getGenotype());
+    }
 
     @FXML
     private void onSimulationPauseClicked() {
@@ -253,7 +289,7 @@ public class SimulationPresenter implements ChangeListener {
         }
         toBeCleared.clear();
     }
-    
+
     public void handleGridClick(MouseEvent event) {
         double mouseX = event.getSceneX();
         double mouseY = event.getSceneY();
@@ -276,15 +312,19 @@ public class SimulationPresenter implements ChangeListener {
         for (Vector2d position : animalsKeys) {
             for (var animal : animals.get(position)) {
                 if (animal.getGenome().getGeneList().equals(dominantGenotypeList)) {
-                    var animalImage = new Label("\u25A0");
-                    animalImage.setTextFill(Paint.valueOf("blue"));
-                    animalImage.setAlignment(Pos.CENTER);
-                    toBeCleared.add(animalImage);
-                    mapGrid.add(animalImage, position.getX() + 1, position.getY() + 1);
-                    GridPane.setHalignment(animalImage, HPos.CENTER);
+                    setSpecialAnimalLabel("blue", animal);
                 }
             }
         }
+    }
+
+    public void setSpecialAnimalLabel(String color, Animal animal){
+        var animalImage = new Label("\u25A0");
+        animalImage.setTextFill(Paint.valueOf(color));
+        animalImage.setAlignment(Pos.CENTER);
+        toBeCleared.add(animalImage);
+        mapGrid.add(animalImage, animal.getPosition().getX() + 1, animal.getPosition().getY() + 1);
+        GridPane.setHalignment(animalImage, HPos.CENTER);
     }
 }
 

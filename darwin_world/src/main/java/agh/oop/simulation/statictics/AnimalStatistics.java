@@ -15,16 +15,20 @@ public class AnimalStatistics {
     private int lifeLength;
     private Optional<Integer> dayOfDeath = Optional.empty();
 
-    public void setAnimalStatistics(Animal animal, PlantEatenCountStatistics plantEatenCountStatistics,
+    public AnimalStatistics(Animal animal, PlantEatenCountStatistics plantEatenCountStatistics,
                                     DescendantsStatistics descendantsStatistics){
         genotype = animal.getGenome().getGeneList();
-        activeGene = animal.getGenome().getActiveGene();
         energy = animal.getEnergy();
         plantEatenCount = plantEatenCountStatistics.getPlantEatenCount(animal);
         childrenCount = animal.getChildrenCount();
         descendantsCount = descendantsStatistics.getNumberOfDescendants(animal);
         lifeLength = animal.getLifeLength();
         dayOfDeath = animal.getDayOfDeath();
+        activeGene = animal.getGenome().getActiveGeneValue();
+    }
+
+    public String getGenotype(){
+        return genotype.toString();
     }
 
     public int getActiveGene() {
