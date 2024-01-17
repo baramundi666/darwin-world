@@ -16,7 +16,6 @@ import agh.oop.simulation.spawner.VariedPlantSpawner;
 import agh.oop.simulation.statictics.AnimalStatistics;
 import agh.oop.simulation.statictics.DescendantsStatistics;
 import agh.oop.simulation.statictics.PlantEatenCountStatistics;
-import agh.oop.simulation.statictics.Statistics;
 
 import java.util.*;
 
@@ -78,7 +77,7 @@ public class Simulation implements Runnable{
             try {
                 simulationDay.simulateOneDay();
                 notifyListeners("Map " + earth.getId() + " has been changed! Day " + i);
-                System.out.println(i);
+                //System.out.println(i);
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -158,7 +157,7 @@ public class Simulation implements Runnable{
     private void registerAnimalStatistics(HashSet<Animal> animals){
         descendantsStatistics = new DescendantsStatistics(animals);
         plantEatenCountStatistics = new PlantEatenCountStatistics(animals);
-        simulationDay.registerListener(descendantsStatistics);
-        simulationDay.registerListener(plantEatenCountStatistics);
+        simulationDay.registerStatisticsListener(descendantsStatistics);
+        simulationDay.registerStatisticsListener(plantEatenCountStatistics);
     }
 }

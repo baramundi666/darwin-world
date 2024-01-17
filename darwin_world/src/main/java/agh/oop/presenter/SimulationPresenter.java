@@ -129,7 +129,7 @@ public class SimulationPresenter implements ChangeListener {
             drawMapElements(earth);
             infoLabel.setText(message);
             setStatistics();
-            if(spectatedAnimal != null) spectateAnimal(spectatedAnimal);
+            if(!Objects.isNull(spectatedAnimal)) spectateAnimal(spectatedAnimal);
         });
     }
 
@@ -242,21 +242,22 @@ public class SimulationPresenter implements ChangeListener {
     }
 
     private void setAnimalStatistics(){
-        childrenNumber.setText(String.valueOf(spectatedAnimalStatistics.getChildrenCount()));
-        energy.setText(String.valueOf(spectatedAnimalStatistics.getEnergy()));
-        plantEatenNumber.setText(String.valueOf(spectatedAnimalStatistics.getPlantEatenCount()));
-        descendantsNumber.setText(String.valueOf(spectatedAnimalStatistics.getDescendantsCount()));
-        lifeLength.setText(String.valueOf(spectatedAnimalStatistics.getLifeLength()));
-        dayOfDeath.setText(spectatedAnimalStatistics.getDayOfDeath());
+        var statisticsData = spectatedAnimalStatistics.getStatisticsData();
+        childrenNumber.setText(String.valueOf(statisticsData.childrenCount()));
+        energy.setText(String.valueOf(statisticsData.energy()));
+        plantEatenNumber.setText(String.valueOf(statisticsData.plantEatenCount()));
+        descendantsNumber.setText(String.valueOf(statisticsData.descendantsCount()));
+        lifeLength.setText(String.valueOf(statisticsData.lifeLength()));
+        dayOfDeath.setText(statisticsData.dayOfDeath());
         if(dayOfDeath.getText().equals("Alive")) {
             dayOfDeath.setTextFill(Paint.valueOf("green"));
-            activeGene.setText(String.valueOf(spectatedAnimalStatistics.getActiveGene()));
+            activeGene.setText(String.valueOf(statisticsData.activeGene()));
         }
         else{
             dayOfDeath.setTextFill(Paint.valueOf("red"));
             activeGene.setText("");
         }
-        genotype.setText(spectatedAnimalStatistics.getGenotype());
+        genotype.setText(statisticsData.genotype().toString());
     }
 
     @FXML
@@ -268,7 +269,6 @@ public class SimulationPresenter implements ChangeListener {
         else {
             simulationToRun.setThreadSuspended(true);
         }
-
     }
 
     @FXML

@@ -6,56 +6,17 @@ import java.util.List;
 import java.util.Optional;
 
 public class AnimalStatistics {
-    private List<Integer> genotype;
-    private int activeGene;
-    private int energy;
-    private int plantEatenCount;
-    private int childrenCount;
-    private int descendantsCount;
-    private int lifeLength;
-    private Optional<Integer> dayOfDeath = Optional.empty();
+    private final StatisticsData statisticsData;
 
     public AnimalStatistics(Animal animal, PlantEatenCountStatistics plantEatenCountStatistics,
-                                    DescendantsStatistics descendantsStatistics){
-        genotype = animal.getGenome().getGeneList();
-        energy = animal.getEnergy();
-        plantEatenCount = plantEatenCountStatistics.getPlantEatenCount(animal);
-        childrenCount = animal.getChildrenCount();
-        descendantsCount = descendantsStatistics.getNumberOfDescendants(animal);
-        lifeLength = animal.getLifeLength();
-        dayOfDeath = animal.getDayOfDeath();
-        activeGene = animal.getGenome().getActiveGeneValue();
+                            DescendantsStatistics descendantsStatistics){
+        statisticsData = new StatisticsData(animal.getGenome().getGeneList(), animal.getGenome().getActiveGene(),
+                animal.getEnergy(), plantEatenCountStatistics.getPlantEatenCount(animal), animal.getChildrenCount(),
+                descendantsStatistics.getNumberOfDescendants(animal), animal.getLifeLength(),
+                animal.getDayOfDeath().map(Object::toString).orElse("Alive"));
     }
 
-    public String getGenotype(){
-        return genotype.toString();
-    }
-
-    public int getActiveGene() {
-        return activeGene;
-    }
-
-    public int getEnergy() {
-        return energy;
-    }
-
-    public int getPlantEatenCount() {
-        return plantEatenCount;
-    }
-
-    public int getChildrenCount() {
-        return childrenCount;
-    }
-
-    public int getDescendantsCount() {
-        return descendantsCount;
-    }
-
-    public int getLifeLength() {
-        return lifeLength;
-    }
-
-    public String getDayOfDeath() {
-        return dayOfDeath.map(Object::toString).orElse("Alive");
+    public StatisticsData getStatisticsData(){
+        return statisticsData;
     }
 }

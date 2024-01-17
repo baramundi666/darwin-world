@@ -71,7 +71,7 @@ public abstract class AbstractSimulationDay {
             Plant plant = plantMap.get(position);
             animal.eat(plant);
             earth.removePlant(plant);
-            notifyListeners(animal,Optional.empty(),Optional.of(plant));
+            notifyStatisticsListeners(animal,Optional.empty(),Optional.of(plant));
         }
         spawner.setNotGrownFields(notGrownFields);
     }
@@ -109,7 +109,7 @@ public abstract class AbstractSimulationDay {
                     animals.add(child);
                     dad.incrementChildrenCount();
                     mom.incrementChildrenCount();
-                    notifyListeners(child,Optional.of(List.of(dad,mom)),Optional.empty());
+                    notifyStatisticsListeners(child,Optional.of(List.of(dad,mom)),Optional.empty());
                 }
             }
         }
@@ -128,11 +128,11 @@ public abstract class AbstractSimulationDay {
         Collections.reverse(strongest);
         return strongest;
     }
-    public void registerListener(AnimalChangeListener listener) {
+    public void registerStatisticsListener(AnimalChangeListener listener) {
         listeners.add(listener);
     }
 
-    protected void notifyListeners(Animal animal,Optional<List<Animal>> parents, Optional<Plant> plant) {
+    protected void notifyStatisticsListeners(Animal animal,Optional<List<Animal>> parents, Optional<Plant> plant) {
         for (AnimalChangeListener listener : listeners) {
             listener.animalStateChanged(animal,parents,plant);
         }
