@@ -60,7 +60,7 @@ public class Simulation implements Runnable{
             simulationInitialization.initialize();
             registerAnimalStatistics(animals);
             notifyListeners("Map " + earth.getId() + " has been initialized! Day " + 0);
-            Thread.sleep(700);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

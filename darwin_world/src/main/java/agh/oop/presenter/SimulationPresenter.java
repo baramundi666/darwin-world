@@ -64,12 +64,15 @@ public class SimulationPresenter implements ChangeListener {
     private Label descendantsNumber;
     private int width;
     private int height;
+
+    private double realWidth;
+    private double realHeight;
     private List<Node> steppeImageList;
     private List<Node> specialAreaImageList;
     private Simulation simulationToRun;
     private Statistics statistics;
     private final List<Label> toBeCleared = new LinkedList<>();
-
+    private Animal spectatedAnimal;
 
 
     public void setSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
@@ -108,10 +111,6 @@ public class SimulationPresenter implements ChangeListener {
         dominantGenotype.setText(statistics.getDominantGenotype().map(Object::toString).orElse("No dominant genotype"));
     }
 
-    private void setAnimalStatistics(Animal animal){//to do
-
-    }
-
     @Override
     public void mapInitialized(Earth earth, String message) {
         Platform.runLater(() -> {
@@ -138,7 +137,6 @@ public class SimulationPresenter implements ChangeListener {
     }
 
     public void drawGrid() {
-        clearGrid(mapGrid);
         double cellSize = (double) 500 / (max(width, height) + 1);
 
         mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
@@ -160,6 +158,9 @@ public class SimulationPresenter implements ChangeListener {
             mapGrid.add(label, i + 1, 0);
             GridPane.setHalignment(label, HPos.CENTER);
         }
+        realHeight = mapGrid.getHeight();
+        realWidth = mapGrid.getWidth();
+        System.out.println(realWidth + ", "+ realHeight);
     }
 
     public void drawDefaultBackground() {
@@ -201,6 +202,9 @@ public class SimulationPresenter implements ChangeListener {
                 int animalCount = animalsMap.get(position).size();
                 var firstAnimal = animalsMap.get(position).iterator().next();
                 var animalImage = new Label("\u25A0");
+                animalImage.setOnMouseClicked((mouseEvent) ->
+                    spectateAnimal(firstAnimal)
+                );
                 animalImage.setTextFill(Paint.valueOf(firstAnimal.getAnimalColor()));
                 animalImage.setAlignment(Pos.CENTER);
                 toBeCleared.add(animalImage);
@@ -210,38 +214,44 @@ public class SimulationPresenter implements ChangeListener {
         }
     }
 
+    private void spectateAnimal(Animal animal) {
+        setAnimalStatistics(animal);
+    }
+
+    private void setAnimalStatistics(Animal animal){//to do
+
+    }
+
 
     @FXML
     private void onSimulationPauseClicked() {
-        simulationToRun.setThreadSuspended(true);
+        var isSuspended = simulationToRun.isThreadSuspended();
+        if (isSuspended) {
+            System.out.println("Simulation is already paused!");
+        }
+        else {
+            simulationToRun.setThreadSuspended(true);
+        }
+
     }
 
     @FXML
     private void onSimulationResumeClicked() {
-        simulationToRun.setThreadSuspended(false);
+        var isSuspended = simulationToRun.isThreadSuspended();
+        if (!isSuspended) {
+            System.out.println("Simulation is already running!");
+        }
+        else {
+            simulationToRun.setThreadSuspended(false);
+        }
     }
 
     private void clearGrid(GridPane grid) {
+        var children = grid.getChildren();
         for (Label label : toBeCleared) {
-            grid.getChildren().remove(label);
+            children.remove(label);
         }
         toBeCleared.clear();
-    }
-
-    public void handleGridClick(MouseEvent event) {
-
-        double mouseX = event.getX();
-        double mouseY = event.getY();
-        double cellWidth = (double) 500 / (width + 1);
-        double cellHeight = (double) 500 / (height + 1);
-        int column = (int) (mouseX / cellHeight) - 1;
-        int row = (int) (mouseY / cellWidth) - 1;
-        var animals = simulationToRun.getEarth().getAnimals();
-        var plants = simulationToRun.getEarth().getPlants();
-        System.out.println(mouseX + " " + mouseY);
-        System.out.println(row + " " + column);
-        System.out.println(animals.get(new Vector2d(row, column)));
-        System.out.println(plants.get(new Vector2d(row, column)));
     }
 
     public void highlightDominantGenotype() {//now higlihts while simulation is running
