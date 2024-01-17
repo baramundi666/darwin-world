@@ -68,15 +68,9 @@ public class SimulationPresenter implements ChangeListener {
     private List<Node> specialAreaImageList;
     private Simulation simulationToRun;
     private Statistics statistics;
-    private volatile boolean threadSuspended=false;
     private final List<Label> toBeCleared = new LinkedList<>();
 
-    private HomePresenter homePage;
 
-
-    public void setHomePage(HomePresenter homePage) {
-        this.homePage = homePage;
-    }
 
     public void setSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
         this.simulationToRun = simulationToRun;
@@ -92,7 +86,7 @@ public class SimulationPresenter implements ChangeListener {
                 specialAreaImageList = imageGenerator.generateImageList("jungle.png", 0.5);
                 break;
             case "p2":
-                specialAreaImageList = imageGenerator.generateImageList("poisonedArea.png", 0.3);
+                specialAreaImageList = imageGenerator.generateImageList("poisonedArea.png", 0.5);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid mapID");
@@ -219,10 +213,12 @@ public class SimulationPresenter implements ChangeListener {
 
     @FXML
     private void onSimulationPauseClicked() {
+        simulationToRun.setThreadSuspended(true);
     }
 
     @FXML
     private void onSimulationResumeClicked() {
+        simulationToRun.setThreadSuspended(false);
     }
 
     private void clearGrid(GridPane grid) {

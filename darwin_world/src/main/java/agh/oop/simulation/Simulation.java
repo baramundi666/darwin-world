@@ -29,9 +29,7 @@ public class Simulation implements Runnable{
     private final HashSet<Animal> animals;
     private final List<ChangeListener> listeners = new LinkedList<>();
     private final DataHolder simulationParameters;
-
-    private final Object simulationLock = new Object();
-    private volatile boolean threadSuspended;
+    private volatile boolean threadSuspended = false;
 
     public Simulation(Earth earth, DataHolder simulationParameters){
         this.earth = earth;
@@ -69,14 +67,7 @@ public class Simulation implements Runnable{
 
         int i = 1;
         while (i <= simulationParameters.simulationLength()) {
-            try {
-                synchronized(this) {
-                    while (threadSuspended)
-                        wait();
-                }
-            } catch (InterruptedException e){
-            }
-
+            if (threadSuspended) continue;
             try {
                 simulationDay.simulateOneDay();
                 notifyListeners("Map " + earth.getId() + " has been changed! Day " + i);
