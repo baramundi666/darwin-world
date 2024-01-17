@@ -7,7 +7,6 @@ import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.presenter.generator.ImageGenerator;
 import agh.oop.simulation.Simulation;
-//import agh.oop.simulation.SimulationEngine;
 import agh.oop.simulation.statictics.AnimalStatistics;
 import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Platform;
@@ -16,7 +15,6 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -26,7 +24,6 @@ import javafx.scene.text.Font;
 import java.util.*;
 
 import static java.lang.Math.max;
-import static java.lang.Math.min;
 
 public class SimulationPresenter implements ChangeListener {
 
@@ -73,7 +70,6 @@ public class SimulationPresenter implements ChangeListener {
     private final List<Label> toBeCleared = new LinkedList<>();
     private Animal spectatedAnimal;
     private AnimalStatistics spectatedAnimalStatistics;
-    private double cellSize;
 
 
     public void setSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
@@ -139,13 +135,13 @@ public class SimulationPresenter implements ChangeListener {
     }
 
     public void drawGrid() {
-        cellSize = (double) 500 / (max(width, height) + 1);
+        double cellSize = (double) 500 / (max(width, height) + 1);
 
         mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
         mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
         Label axis = new Label("y\\x");
         axis.setTextFill(Paint.valueOf("black"));
-        mapGrid.add(axis, 0, 0);//assume that left upper corner is (0,0)
+        mapGrid.add(axis, 0, 0);
         GridPane.setHalignment(axis, HPos.CENTER);
 
         for (int i = 0; i < height; i++) {
@@ -285,7 +281,7 @@ public class SimulationPresenter implements ChangeListener {
         toBeCleared.clear();
     }
 
-    public void highlightDominantGenotype() {//now higlights while simulation is running
+    public void highlightDominantGenotype() {
         var dominantGenotype = statistics.getDominantGenotype();
         if (dominantGenotype.isEmpty()) return;
         var dominantGenotypeList = dominantGenotype.get();

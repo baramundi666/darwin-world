@@ -18,8 +18,8 @@ public class Statistics implements ChangeListener{
     private int numberOfNotOccupiedFields=0;
     private double averageEnergy=0;
     private Optional<List<Integer>> dominantGenotype=Optional.empty();
-    private double averageLifeLength=0;//for dead
-    private double averageNumberOfChildren=0;//for alive
+    private double averageLifeLength=0;
+    private double averageNumberOfChildren=0;
 
     public Statistics(String isSavingStats){
         this.isSavingStats = isSavingStats;

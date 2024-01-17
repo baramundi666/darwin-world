@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractSimulationDay {
 
     protected final Earth earth;
-    protected final HashSet<Animal> animals;//statistics purpose
+    protected final HashSet<Animal> animals;
     protected final HashSet<Vector2d> notGrownFields;
     protected final int reproduceEnergy;
     protected final int newPlantNumber;
@@ -99,7 +99,7 @@ public abstract class AbstractSimulationDay {
                 List<Animal> strongest = conflict(animalMap.get(position));
                 Animal dad = strongest.get(0);
                 Animal mom = strongest.get(1);
-                if (mom.getEnergy() >= reproduceEnergy) {//we know that dad.getEnergy()>=reproduceEnergy
+                if (mom.getEnergy() >= reproduceEnergy) {
                     Animal child = dad.reproduce(mom,mutation);
                     toPlace.add(child);
                     animals.add(child);
@@ -114,7 +114,7 @@ public abstract class AbstractSimulationDay {
         }
     }
 
-    protected List<Animal> conflict(HashSet<Animal> animals){//to do in one line
+    protected List<Animal> conflict(HashSet<Animal> animals){
         List<Animal> strongest = animals.stream()
                 .sorted(Comparator.comparingInt(Animal::getEnergy)
                         .thenComparingInt(Animal::getLifeLength)

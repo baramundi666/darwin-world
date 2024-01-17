@@ -20,7 +20,7 @@ public class Animal implements WorldElement {
     private MapDirection direction = MapDirection.generate();
     private int energy;
     private final Genome genome;
-    private final int copulateEnergy;//energy taken from parent and given to child
+    private final int copulateEnergy;
     private int lifeLength = 0;
     private int childrenCount = 0;
     private Optional<Integer> dayOfDeath = Optional.empty();
@@ -119,9 +119,9 @@ public class Animal implements WorldElement {
     public String getAnimalColor() {
         String color;
         if (energy<=0.5*initialEnergy) color = "black";
-        else if (energy<=0.75*initialEnergy) color = "#ff0000";//red
-        else if (energy<=initialEnergy) color = "#ff9900";//orange
-        else color = "#ffffff";//white
+        else if (energy<=0.75*initialEnergy) color = "#ff0000";
+        else if (energy<=initialEnergy) color = "#ff9900";
+        else color = "#ffffff";
         return color;
     }
 

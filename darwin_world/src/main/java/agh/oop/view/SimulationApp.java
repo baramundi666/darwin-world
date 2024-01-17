@@ -42,13 +42,12 @@ public class SimulationApp extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(SimulationApp.class.getClassLoader().getResource("windows/simulation.fxml"));
             BorderPane viewRoot = loader.load();
+
             SimulationPresenter presenter = loader.getController();
-            System.out.println(presenter);
-            // mowimy mu jaka symulacje wyswietlic
             presenter.setSimulation(simulationToRun,earth, mapID, isSavingStats);
+
             simulationToRun.registerListener(presenter.getStatistics());
             simulationToRun.registerListener(presenter);
-            // i tutaj ja wykonujemy
             var thread = new Thread(simulationToRun);
             executor.submit(thread);
 

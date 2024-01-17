@@ -18,7 +18,7 @@ public class VariedSimulationDay extends AbstractSimulationDay {
                 spawner, mutation, simulationParameters);
     }
 
-    @Override//needs testing
+    @Override
     protected void moveAnimals() {
         var animalMap = earth.getAnimals();
         var toMove = new LinkedList<Animal>();
@@ -31,7 +31,7 @@ public class VariedSimulationDay extends AbstractSimulationDay {
             var direction = animal.getDirection().shift(animal.getGenome().getActiveGeneValue());
             var newPosition = position.add(direction.toVector());
 
-            boolean hasBeenAlreadyMoved = false; //temporary flag solution
+            boolean hasBeenAlreadyMoved = false;
             if (plantsMap.containsKey(newPosition)) {
                 if (plantsMap.get(newPosition).isPoisonous()) {
                     var random = (int) (Math.random()*5);
