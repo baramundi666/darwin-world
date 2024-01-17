@@ -103,7 +103,9 @@ public class HomePage {
     }
 
     private void setSimulationParametersFromConfiguration() {
-        this.simulationToRun = new Simulation(earth, simulationParameters);
+        var oldMapBounds = earth.getBounds();
+        var newEarth = new Earth(oldMapBounds.upperRight().getX()+1, oldMapBounds.upperRight().getY()+1);
+        this.simulationToRun = new Simulation(newEarth, simulationParameters);
     }
 
     public void onLaunchClicked() {
