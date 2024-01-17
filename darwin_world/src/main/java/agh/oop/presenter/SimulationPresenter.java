@@ -253,13 +253,27 @@ public class SimulationPresenter implements ChangeListener {
         }
         toBeCleared.clear();
     }
+    
+    public void handleGridClick(MouseEvent event) {
+        double mouseX = event.getSceneX();
+        double mouseY = event.getSceneY();
+        double cellWidth = (double) 500 /(width+1);
+        double cellHeight = (double) 500 /(height+1);
+        int column = (int) (mouseX/cellHeight);
+        int row = (int) (mouseY/cellWidth);
+        var animals = simulationToRun.getEarth().getAnimals();
+        System.out.println(mouseX + " " + mouseY);
+        System.out.println(row + " " + column);
+        System.out.println(animals.get(new Vector2d(row, column)));
+    }
 
-    public void highlightDominantGenotype() {//now higlihts while simulation is running
+    public void highlightDominantGenotype() {//now higlights while simulation is running
         var dominantGenotype = statistics.getDominantGenotype();
         if (dominantGenotype.isEmpty()) return;
         var dominantGenotypeList = dominantGenotype.get();
         var animals = simulationToRun.getEarth().getAnimals();
-        for (Vector2d position : animals.keySet()) {
+        var animalsKeys = animals.keySet();
+        for (Vector2d position : animalsKeys) {
             for (var animal : animals.get(position)) {
                 if (animal.getGenome().getGeneList().equals(dominantGenotypeList)) {
                     var animalImage = new Label("\u25A0");
