@@ -3,7 +3,7 @@ package agh.oop.simulation.spawner;
 import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
-import agh.oop.simulation.DataHolder;
+import agh.oop.simulation.data.SimulationData;
 
 import java.util.HashSet;
 
@@ -14,7 +14,7 @@ public abstract class AbstractSpawner {
     protected final int newPlantNumber;
     protected final int plantEnergy;
 
-    public AbstractSpawner(Earth earth, DataHolder simulationParameters){
+    public AbstractSpawner(Earth earth, SimulationData simulationParameters){
         this.earth = earth;
         this.notGrownFields = new HashSet<>();
         for(int i=0; i<=earth.getBounds().upperRight().getX(); i++){

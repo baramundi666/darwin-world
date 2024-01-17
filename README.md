@@ -12,12 +12,10 @@ Gałąź main modyfikowana tylko przez pull request
 
 
 todo list:
-- statystyki
-- watki(dla wielu)
-- ui(simulation stop, focus on one animal)
+- poisoned area size bug 
+- active gene ui bug 
+- unsafe park bug 
+- refactorig
 
-canvas:
-https://examples.javacodegeeks.com/java-development/desktop-java/javafx/javafx-canvas-example/
 
-pomysł odnośnie zatrzymania symulacji:
-- zarejestrowanie zwierzakowi simulationpresenter jako listener
+

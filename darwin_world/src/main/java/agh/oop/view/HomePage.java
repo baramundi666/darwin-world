@@ -1,26 +1,36 @@
-package agh.oop.presenter;
+package agh.oop.view;
 
 import agh.oop.model.map.Earth;
-import agh.oop.simulation.DataHolder;
+import agh.oop.simulation.data.SimulationData;
 import agh.oop.simulation.Simulation;
-import agh.oop.view.SimulationApp;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
-public class HomePresenter {
+public class HomePage {
     @FXML
     private ComboBox<String> savedConfigurationsBox;
+
     private Simulation simulationToRun;
     private String mapID;
     private String isSavingStats;
     private Earth earth;
+    private SimulationData simulationParameters;
+    private boolean comboBoxSelected = true;
 
+
+
+    public void passOnParametersToHome(SimulationData parameters, String isSavingStats, int width, int height, String mapID) {
+        this.simulationParameters = parameters;
+        this.isSavingStats = isSavingStats;
+        this.earth = new Earth(width, height);
+        this.mapID = mapID;
+        comboBoxSelected = false;
+    }
 
     public void newConfiguration() {
         SimulationApp.newConfiguration();
@@ -65,7 +75,8 @@ public class HomePresenter {
         return simulationParameters;
     }
 
-    private void setSimulationParameters(List<String> parameters){
+    private void setSimulationParametersFromFile() throws IOException {
+        List<String> parameters = setSavedConfigurations();
         int simulationLength = Integer.parseInt(parameters.get(0));
         int reproduceEnergy = Integer.parseInt(parameters.get(1));
         int copulateEnergy = Integer.parseInt(parameters.get(2));
@@ -81,7 +92,7 @@ public class HomePresenter {
         int width = Integer.parseInt(parameters.get(13));
         int height = Integer.parseInt(parameters.get(14));
 
-        DataHolder simulationParameters = new DataHolder(simulationLength, reproduceEnergy, copulateEnergy,
+        SimulationData simulationParameters = new SimulationData(simulationLength, reproduceEnergy, copulateEnergy,
                 newPlantNumber, plantEnergy, newAnimalNumber, genomeLength, initialEnergy,
                 mutationRange, mutationID, mapID);
 
@@ -91,13 +102,26 @@ public class HomePresenter {
         this.isSavingStats = isSavingStats;
     }
 
+    private void setSimulationParametersFromConfiguration() {
+        this.simulationToRun = new Simulation(earth, simulationParameters);
+    }
+
     public void onLaunchClicked() {
-        try {
-            List<String> simulationParameters = setSavedConfigurations();
-            setSimulationParameters(simulationParameters);
-            SimulationApp.startSimulation(simulationToRun, earth, mapID, isSavingStats);
-        } catch (IOException e){
-            throw new IllegalArgumentException("File not found");
+        if (comboBoxSelected) {
+            try {
+                setSimulationParametersFromFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+        else {
+            setSimulationParametersFromConfiguration();
+        }
+        SimulationApp.startSimulation(simulationToRun, earth, mapID, isSavingStats);
+    }
+
+    @FXML
+    private void comboBoxUseHandler() {
+        comboBoxSelected = true;
     }
 }

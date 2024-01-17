@@ -4,6 +4,7 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Genome;
+import agh.oop.simulation.data.SimulationData;
 import agh.oop.simulation.spawner.AbstractSpawner;
 
 import java.util.*;
@@ -20,7 +21,7 @@ public class SimulationInitializer{
     private final AbstractSpawner spawner;
 
     public SimulationInitializer(Earth earth, HashSet<Animal> animals,
-                                 AbstractSpawner spawner, DataHolder simulationParameters) {
+                                 AbstractSpawner spawner, SimulationData simulationParameters) {
         this.genomeLength = simulationParameters.genomeLength();
         this.animalNumber = simulationParameters.newAnimalNumber();
         this.initialEnergy = simulationParameters.initialEnergy();

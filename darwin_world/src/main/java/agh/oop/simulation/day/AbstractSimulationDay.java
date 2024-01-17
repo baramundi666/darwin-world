@@ -5,13 +5,9 @@ import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.Plant;
 import agh.oop.model.objects.inheritance.Mutation;
-import agh.oop.presenter.ChangeListener;
-import agh.oop.simulation.DataHolder;
+import agh.oop.simulation.data.SimulationData;
 import agh.oop.simulation.spawner.AbstractSpawner;
 import agh.oop.simulation.statictics.AnimalChangeListener;
-import agh.oop.simulation.statictics.DescendantsStatistics;
-import agh.oop.simulation.statictics.PlantEatenCountStatistics;
-import agh.oop.simulation.statictics.Statistics;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,7 +28,7 @@ public abstract class AbstractSimulationDay {
 
     public AbstractSimulationDay(Earth earth, HashSet<Animal> animals,
                                  HashSet<Vector2d> notGrownFields,
-                                 AbstractSpawner spawner, Mutation mutation, DataHolder simulationParameters) {
+                                 AbstractSpawner spawner, Mutation mutation, SimulationData simulationParameters) {
         this.earth = earth;
         this.animals = animals;
         this.notGrownFields = notGrownFields;
@@ -71,7 +67,7 @@ public abstract class AbstractSimulationDay {
             Plant plant = plantMap.get(position);
             animal.eat(plant);
             earth.removePlant(plant);
-            notifyListeners(animal,Optional.empty(),Optional.of(plant));
+            notifyStatisticsListeners(animal,Optional.empty(),Optional.of(plant));
         }
         spawner.setNotGrownFields(notGrownFields);
     }
@@ -109,7 +105,7 @@ public abstract class AbstractSimulationDay {
                     animals.add(child);
                     dad.incrementChildrenCount();
                     mom.incrementChildrenCount();
-                    notifyListeners(child,Optional.of(List.of(dad,mom)),Optional.empty());
+                    notifyStatisticsListeners(child,Optional.of(List.of(dad,mom)),Optional.empty());
                 }
             }
         }
@@ -128,11 +124,11 @@ public abstract class AbstractSimulationDay {
         Collections.reverse(strongest);
         return strongest;
     }
-    public void registerListener(AnimalChangeListener listener) {
+    public void registerStatisticsListener(AnimalChangeListener listener) {
         listeners.add(listener);
     }
 
-    protected void notifyListeners(Animal animal,Optional<List<Animal>> parents, Optional<Plant> plant) {
+    protected void notifyStatisticsListeners(Animal animal,Optional<List<Animal>> parents, Optional<Plant> plant) {
         for (AnimalChangeListener listener : listeners) {
             listener.animalStateChanged(animal,parents,plant);
         }

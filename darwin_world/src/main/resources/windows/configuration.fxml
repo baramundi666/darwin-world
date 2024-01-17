@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="550.0" minWidth="700.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: purple; -fx-border-color: black;" xmlns:fx="http://javafx.com/fxml"  fx:controller="agh.oop.presenter.Configuration">
+<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="550.0" minWidth="700.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: purple; -fx-border-color: black;" xmlns:fx="http://javafx.com/fxml"  fx:controller="agh.oop.view.ConfigurationPage">
     <center>
        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
            <BorderPane.margin>
@@ -84,12 +84,12 @@
                <VBox prefHeight="523.0" prefWidth="236.0">
                    <Spinner fx:id="widthValue" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="40" min="1" />
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="50" min="2" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="heightValue" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="40" min="1" />
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="50" min="2" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="reproduceEnergy" editable="true">
@@ -109,22 +109,22 @@
                    </Spinner>
                    <Spinner fx:id="genomeLength" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="20" max="50" min="1" />
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="5" max="20" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="newAnimalNumber" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="30" max="50" min="1" />
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="30" max="100" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="newPlantNumber" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="15" max="50" min="1" />
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="15" max="100" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="plantEnergy" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="50" min="1" />
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="100" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="mutationRangeMin" editable="true">
@@ -139,7 +139,7 @@
                    </Spinner>
                    <Spinner fx:id="simulationLength" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="100" max="10000" min="0" />
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="1000" max="10000" min="10" />
                        </valueFactory>
                    </Spinner>
                </VBox>
@@ -200,7 +200,7 @@
         <HBox prefWidth="800.0" BorderPane.alignment="TOP_CENTER">
             <VBox alignment="BOTTOM_LEFT" prefHeight="90.0" prefWidth="152.0">
                 <TextField fx:id="configurationName" promptText="Enter configuration name" />
-                <Button fx:id="saveConfiguration" onAction="#saveConfiguration" prefHeight="25.0" prefWidth="151.0" text="Save configuration">
+                <Button fx:id="saveConfiguration" onAction="#saveConfigurationToFile" prefHeight="25.0" prefWidth="200.0" text="Save your config to file">
                     <HBox.margin>
                         <Insets bottom="10.0" left="10.0" />
                     </HBox.margin>
@@ -209,17 +209,27 @@
                         <Insets bottom="10.0" left="10.0" />
                     </HBox.margin>
             </VBox>
-            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="637.0">
-                <HBox.margin>
-                    <Insets right="10.0"/>
-                </HBox.margin>
-                <Button fx:id="launchSimulation" onAction="#launchSimulation" prefHeight="25.0" prefWidth="117.0"
-                        text="Launch simulation">
+            <VBox alignment="BOTTOM_LEFT" prefHeight="90.0" prefWidth="152.0">
+                <Button fx:id="saveCurrent" onAction="#useCurrentConfiguration" prefHeight="25.0" prefWidth="151.0" text="Use current configuration">
                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0"/>
+                        <Insets bottom="10.0" left="10.0" />
                     </HBox.margin>
                 </Button>
-            </HBox>
+                <HBox.margin>
+                    <Insets bottom="10.0" left="10.0" />
+                </HBox.margin>
+            </VBox>
+<!--            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="637.0">-->
+<!--                <HBox.margin>-->
+<!--                    <Insets right="10.0"/>-->
+<!--                </HBox.margin>-->
+<!--                <Button fx:id="launchSimulation" onAction="#launchSimulation" prefHeight="25.0" prefWidth="117.0"-->
+<!--                        text="Launch simulation">-->
+<!--                    <HBox.margin>-->
+<!--                        <Insets bottom="10.0" left="10.0"/>-->
+<!--                    </HBox.margin>-->
+<!--                </Button>-->
+<!--            </HBox>-->
         </HBox>
     </bottom>
    <top>
@@ -228,7 +238,7 @@
                <HBox.margin>
                    <Insets left="10.0" top="10.0"/>
                </HBox.margin>
-               <Image url="@fish_home.png"/>
+               <Image url="@../images/fish_home.png"/>
            </ImageView>
            <Label alignment="CENTER" prefHeight="50.0" prefWidth="800.0" text="New configuration "
                   textAlignment="CENTER" textFill="#ffffff">
@@ -243,7 +253,7 @@
                <HBox.margin>
                    <Insets right="10.0" top="10.0"/>
                </HBox.margin>
-               <Image url="@fish_home.png"/>
+               <Image url="@../images/fish_home.png"/>
            </ImageView>
        </HBox>
    </top>

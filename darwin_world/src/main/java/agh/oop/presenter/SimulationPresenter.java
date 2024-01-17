@@ -4,7 +4,11 @@ package agh.oop.presenter;
 import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
+import agh.oop.model.objects.Animal;
+import agh.oop.presenter.generator.ImageGenerator;
 import agh.oop.simulation.Simulation;
+//import agh.oop.simulation.SimulationEngine;
+import agh.oop.simulation.statictics.AnimalStatistics;
 import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -18,7 +22,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 import java.util.*;
 
@@ -31,33 +34,81 @@ public class SimulationPresenter implements ChangeListener {
     public GridPane mapGrid;
     @FXML
     private Label infoLabel;
+    @FXML
+    private Label animalNumber;
+    @FXML
+    private Label plantNumber;
+    @FXML
+    private Label freeFields;
+    @FXML
+    private Label avgEnergy;
+    @FXML
+    private Label avgLifeLength;
+    @FXML
+    private Label avgChildrenNumber;
+    @FXML
+    private Label dominantGenotype;
+    @FXML
+    private Label dayOfDeath;
+    @FXML
+    private Label childrenNumber;
+    @FXML
+    private Label genotype;
+    @FXML
+    private Label energy;
+    @FXML
+    private Label activeGene;
+    @FXML
+    private Label plantEatenNumber;
+    @FXML
+    private Label lifeLength;
+    @FXML
+    private Label descendantsNumber;
     private int width;
     private int height;
     private List<Node> steppeImageList;
     private List<Node> specialAreaImageList;
     private Simulation simulationToRun;
     private Statistics statistics;
-    private List<Label> toBeCleared = new LinkedList<>();
+    private final List<Label> toBeCleared = new LinkedList<>();
+    private Animal spectatedAnimal;
+    private AnimalStatistics spectatedAnimalStatistics;
+
 
     public void setSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
         this.simulationToRun = simulationToRun;
         this.width = earth.getBounds().upperRight().getX() + 1;
         this.height = earth.getBounds().upperRight().getY() + 1;
 
-        var imageGenerator = new ImageGenerator(width, height, (double) 450 /max(width,height), (double) 450/max(width,height));
+        var imageGenerator = new ImageGenerator(width, height, (double) 450 / max(width, height), (double) 450 / max(width, height));
 
-        steppeImageList = imageGenerator.generateImageList("steppe.png", 0.85);
+        steppeImageList = imageGenerator.generateImageList("images/steppe.png", 0.85);
 
         switch (mapID) {
             case "p1":
-                specialAreaImageList = imageGenerator.generateImageList("jungle.png", 0.3);
+                specialAreaImageList = imageGenerator.generateImageList("images/jungle.png", 0.5);
                 break;
             case "p2":
-                specialAreaImageList = imageGenerator.generateImageList("poisonedArea.png", 0.3);
+                specialAreaImageList = imageGenerator.generateImageList("images/poisonedArea.png", 0.5);
                 break;
-            default: throw  new IllegalArgumentException("Invalid mapID");
+            default:
+                throw new IllegalArgumentException("Invalid mapID");
         }
         statistics = new Statistics(isSavingStats);
+    }
+
+    public Statistics getStatistics() {
+        return this.statistics;
+    }
+
+    private void setStatistics(){
+        animalNumber.setText(String.valueOf(statistics.getNumberOfAnimals()));
+        plantNumber.setText(String.valueOf(statistics.getNumberOfPlants()));
+        freeFields.setText(String.valueOf(statistics.getNumberOfNotOccupiedFields()));
+        avgEnergy.setText(String.format("%.2f", statistics.getAverageEnergy()));
+        avgLifeLength.setText(String.format("%.2f", statistics.getAverageLifeLength()));
+        avgChildrenNumber.setText(String.format("%.2f",statistics.getAverageNumberOfChildren()));
+        dominantGenotype.setText(statistics.getDominantGenotype().map(Object::toString).orElse("No dominant genotype"));
     }
 
     @Override
@@ -66,6 +117,7 @@ public class SimulationPresenter implements ChangeListener {
             drawGrid();
             drawDefaultBackground();
             infoLabel.setText(message);
+            setStatistics();
         });
     }
 
@@ -74,57 +126,54 @@ public class SimulationPresenter implements ChangeListener {
         Platform.runLater(() -> {
             drawMapElements(earth);
             infoLabel.setText(message);
+            setStatistics();
+            if(!Objects.isNull(spectatedAnimal)) spectateAnimal(spectatedAnimal);
         });
     }
 
     private boolean inSpecialArea(int i, int j) {
-        Vector2d position = new Vector2d(i,j);
+        Vector2d position = new Vector2d(i, j);
         Boundary borders = simulationToRun.getSpecialAreaBorders();
-        System.out.println(borders.lowerLeft() + " " + borders.upperRight());
         return position.follows(borders.lowerLeft()) && position.precedes(borders.upperRight());
     }
 
-    public void drawGrid(){
-        clearGrid(mapGrid);
-        double cellSize = (double) 500 /(max(width,height)+1);
+    public void drawGrid() {
+        double cellSize = (double) 500 / (max(width, height) + 1);
 
         mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
         mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
         Label axis = new Label("y\\x");
-        axis.setTextFill(Paint.valueOf("white"));
-        mapGrid.add(axis,0,0);//assume that left upper corner is (0,0)
+        axis.setTextFill(Paint.valueOf("black"));
+        mapGrid.add(axis, 0, 0);//assume that left upper corner is (0,0)
         GridPane.setHalignment(axis, HPos.CENTER);
 
-        for (int i=0;i<height;i++){
+        for (int i = 0; i < height; i++) {
             mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
             Label label = new Label(String.valueOf(i));
-            label.setTextFill(Paint.valueOf("white"));
-            mapGrid.add(label,0,i+1);
+            mapGrid.add(label, 0, i + 1);
             GridPane.setHalignment(label, HPos.CENTER);
         }
-        for (int i=0;i<width;i++){
+        for (int i = 0; i < width; i++) {
             mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
             var label = new Label(String.valueOf(i));
-            label.setTextFill(Paint.valueOf("white"));
-            mapGrid.add(label,i+1,0);
+            mapGrid.add(label, i + 1, 0);
             GridPane.setHalignment(label, HPos.CENTER);
         }
     }
 
-    public void drawDefaultBackground(){
+    public void drawDefaultBackground() {
         var steppeImageIterator = steppeImageList.iterator();
         var specialAreaImageIterator = specialAreaImageList.iterator();
 
-        for(int i=0; i<width; i++) {
-            for(int j=0; j<height; j++) {
-                if (inSpecialArea(i,j)) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (inSpecialArea(i, j)) {
                     var specialAreaImage = specialAreaImageIterator.next();
-                    mapGrid.add(specialAreaImage, i+1, j+1);
+                    mapGrid.add(specialAreaImage, i + 1, j + 1);
                     GridPane.setHalignment(specialAreaImage, HPos.CENTER);
-                }
-                else {
+                } else {
                     var steppeImage = steppeImageIterator.next();
-                    mapGrid.add(steppeImage, i+1, j+1);
+                    mapGrid.add(steppeImage, i + 1, j + 1);
                     GridPane.setHalignment(steppeImage, HPos.CENTER);
                 }
             }
@@ -135,7 +184,7 @@ public class SimulationPresenter implements ChangeListener {
         clearGrid(mapGrid);
         var plantsMap = earth.getPlants();
         var animalsMap = earth.getAnimals();
-        for(Vector2d position: plantsMap.keySet()){
+        for (Vector2d position : plantsMap.keySet()) {
             var plant = plantsMap.get(position);
             var plantImage = new Label("\u2022");
             plantImage.setFont(Font.font(30));
@@ -146,13 +195,13 @@ public class SimulationPresenter implements ChangeListener {
             GridPane.setHalignment(plantImage, HPos.CENTER);
         }
 
-        for(Vector2d position: animalsMap.keySet()){
-            if(!animalsMap.get(position).isEmpty()) {
-                int animalCount = animalsMap.get(position).size();
+        for (Vector2d position : animalsMap.keySet()) {
+            if (!animalsMap.get(position).isEmpty()) {
                 var firstAnimal = animalsMap.get(position).iterator().next();
                 var animalImage = new Label("\u25A0");
-
-
+                animalImage.setOnMouseClicked((mouseEvent) ->
+                    setSpectatedAnimal(firstAnimal)
+                );
                 animalImage.setTextFill(Paint.valueOf(firstAnimal.getAnimalColor()));
                 animalImage.setAlignment(Pos.CENTER);
                 toBeCleared.add(animalImage);
@@ -162,46 +211,101 @@ public class SimulationPresenter implements ChangeListener {
         }
     }
 
-    @FXML
-    private void onSimulationStartClicked() {
-        simulationToRun.registerListener(statistics);
-        simulationToRun.registerListener(this);
-        Thread engineThread = new Thread(simulationToRun);
-        engineThread.start();
+    private void setSpectatedAnimal(Animal animal){
+        spectatedAnimal = animal;
+        spectateAnimal(animal);
+    }
+
+    private void spectateAnimal(Animal animal) {
+        spectatedAnimalStatistics = simulationToRun.getAnimalStatistics(animal);
+        setAnimalStatistics();
+        if(!animal.isDead()) setSpecialAnimalLabel("blue", animal);
     }
 
     @FXML
-    private void onSimulationStopClicked() {
-        //simulationToRun.stop();
+    private void onClickStopSpectatingAnimal(){
+        spectatedAnimal = null;
+        childrenNumber.setText("");
+        energy.setText("");
+        plantEatenNumber.setText("");
+        descendantsNumber.setText("");
+        lifeLength.setText("");
+        dayOfDeath.setText("");
+        activeGene.setText("");
+        genotype.setText("");
+    }
+
+    private void setAnimalStatistics(){
+        var statisticsData = spectatedAnimalStatistics.getStatisticsData();
+        childrenNumber.setText(String.valueOf(statisticsData.childrenCount()));
+        energy.setText(String.valueOf(statisticsData.energy()));
+        plantEatenNumber.setText(String.valueOf(statisticsData.plantEatenCount()));
+        descendantsNumber.setText(String.valueOf(statisticsData.descendantsCount()));
+        lifeLength.setText(String.valueOf(statisticsData.lifeLength()));
+        dayOfDeath.setText(statisticsData.dayOfDeath());
+        if(dayOfDeath.getText().equals("Alive")) {
+            dayOfDeath.setTextFill(Paint.valueOf("green"));
+            activeGene.setText(String.valueOf(statisticsData.activeGene()));
+        }
+        else{
+            dayOfDeath.setTextFill(Paint.valueOf("red"));
+            activeGene.setText("");
+        }
+        genotype.setText(statisticsData.genotype().toString());
+    }
+
+    @FXML
+    private void onSimulationPauseClicked() {
+        var isSuspended = simulationToRun.isThreadSuspended();
+        if (isSuspended) {
+            System.out.println("Simulation is already paused!");
+        }
+        else {
+            simulationToRun.setThreadSuspended(true);
+        }
     }
 
     @FXML
     private void onSimulationResumeClicked() {
-//        simulationToRun.reset();
-//        statistics.reset();
-//        drawDefaultBackground();
-//        infoLabel.setText("Simulation reset");
+        var isSuspended = simulationToRun.isThreadSuspended();
+        if (!isSuspended) {
+            System.out.println("Simulation is already running!");
+        }
+        else {
+            simulationToRun.setThreadSuspended(false);
+        }
     }
 
     private void clearGrid(GridPane grid) {
+        var children = grid.getChildren();
         for (Label label : toBeCleared) {
-            grid.getChildren().remove(label);
+            children.remove(label);
         }
         toBeCleared.clear();
     }
 
-
-    public void handleGridClick(MouseEvent event) {
-        double mouseX = event.getSceneX();
-        double mouseY = event.getSceneY();
-        double cellWidth = (double) 500 /(width+1);
-        double cellHeight = (double) 500 /(height+1);
-        int column = (int) (mouseX/cellHeight);
-        int row = (int) (mouseY/cellWidth);
+    public void highlightDominantGenotype() {//now higlights while simulation is running
+        var dominantGenotype = statistics.getDominantGenotype();
+        if (dominantGenotype.isEmpty()) return;
+        var dominantGenotypeList = dominantGenotype.get();
         var animals = simulationToRun.getEarth().getAnimals();
-        System.out.println(mouseX + " " + mouseY);
-        System.out.println(row + " " + column);
-        System.out.println(animals.get(new Vector2d(row, column)));
+        var animalsKeys = animals.keySet();
+        for (Vector2d position : animalsKeys) {
+            for (var animal : animals.get(position)) {
+                if (animal.getGenome().getGeneList().equals(dominantGenotypeList)) {
+                    setSpecialAnimalLabel("blue", animal);
+                }
+            }
+        }
+    }
+
+    public void setSpecialAnimalLabel(String color, Animal animal){
+        var animalImage = new Label("\u25A0");
+        animalImage.setTextFill(Paint.valueOf(color));
+        animalImage.setAlignment(Pos.CENTER);
+        toBeCleared.add(animalImage);
+        mapGrid.add(animalImage, animal.getPosition().getX() + 1, animal.getPosition().getY() + 1);
+        GridPane.setHalignment(animalImage, HPos.CENTER);
     }
 }
 

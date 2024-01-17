@@ -4,10 +4,8 @@ import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
 import agh.oop.model.objects.inheritance.Mutation;
-import agh.oop.simulation.DataHolder;
-import agh.oop.simulation.day.AbstractSimulationDay;
+import agh.oop.simulation.data.SimulationData;
 import agh.oop.simulation.spawner.AbstractSpawner;
-import agh.oop.simulation.statictics.Statistics;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,7 +14,7 @@ public class DefaultSimulationDay extends AbstractSimulationDay {
 
     public DefaultSimulationDay(Earth earth, HashSet<Animal> animals,
                                 HashSet<Vector2d> notGrownFields,
-                                AbstractSpawner spawner, Mutation mutation, DataHolder simulationParameters) {
+                                AbstractSpawner spawner, Mutation mutation, SimulationData simulationParameters) {
         super(earth, animals, notGrownFields,
                 spawner, mutation, simulationParameters);
     }

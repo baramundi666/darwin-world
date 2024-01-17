@@ -33,14 +33,7 @@ class PlantTest {
         assertNotNull(plant.getId());
     }
 
-    @Test
-    void testGetImage() {
-        Plant nonPoisonousPlant = new Plant(new Vector2d(2, 3), 10, false);
-        Plant poisonousPlant = new Plant(new Vector2d(4, 5), 5, true);
 
-        assertEquals("plant.png", nonPoisonousPlant.getImage());
-        assertEquals("poisonousPlant.png", poisonousPlant.getImage());
-    }
 
     @Test
     void testGetEnergy() {
