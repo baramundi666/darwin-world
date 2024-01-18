@@ -8,7 +8,7 @@ Maciej Makowski
 
 Gałąź main modyfikowana tylko przez pull request
 
-## Instrukcja obsługi:
+### Instrukcja obsługi:
 - **HomePage**
     - ***New configuration*** - ręczne ustawienie nowej konfiguracji z mozliwością zapisu do pliku
     - ***Saved configurations*** - wczytanie z pliku zapisanej poprzednio konfiguracji
