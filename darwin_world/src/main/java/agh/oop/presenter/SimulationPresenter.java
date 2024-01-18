@@ -184,7 +184,7 @@ public class SimulationPresenter implements ChangeListener {
         for (Vector2d position : plantsMap.keySet()) {
             var plant = plantsMap.get(position);
             var plantImage = new Label("\u2022");
-            plantImage.setFont(Font.font(30));
+            plantImage.setFont(Font.font(28));
             plantImage.setTextFill(Paint.valueOf(plant.getPlantColor()));
             plantImage.setAlignment(Pos.CENTER);
             toBeCleared.add(plantImage);

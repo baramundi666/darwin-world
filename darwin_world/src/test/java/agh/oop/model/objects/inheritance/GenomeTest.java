@@ -54,11 +54,11 @@ class GenomeTest {
         //When
         var genome1 = new Genome(genList1, 3);
         var genome2 = new Genome(genList2, 7);
-        //var genomeMerged = genome1.merge(genome2, energy1, energy2);
+        var genomeMerged = genome1.merge(genome2, (double) energy1/(energy1+energy2));
 
         //Then
-//        boolean bool1 = Objects.equals(genomeMerged.getGeneList(), List.of(1, 5, 6));
-//        boolean bool2 = Objects.equals(genomeMerged.getGeneList(), List.of(5, 5, 7));
-//        assertTrue(bool1 || bool2);
+        boolean bool1 = Objects.equals(genomeMerged.getGeneList(), List.of(1, 5, 6));
+        boolean bool2 = Objects.equals(genomeMerged.getGeneList(), List.of(5, 5, 7));
+        assertTrue(bool1 || bool2);
     }
 }

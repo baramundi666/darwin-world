@@ -89,7 +89,7 @@ public class ConfigurationPage {
         }
     }
 
-        private String simulationParametersToString(SimulationData simulationParameters, String isSavingStats, int width, int height){
+    private String simulationParametersToString(SimulationData simulationParameters, String isSavingStats, int width, int height){
         return simulationParameters.simulationLength() + "\n" +
                 simulationParameters.reproduceEnergy() + "\n" +
                 simulationParameters.copulateEnergy() + "\n" +

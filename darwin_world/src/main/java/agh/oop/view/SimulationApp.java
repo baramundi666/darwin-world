@@ -3,7 +3,6 @@ package agh.oop.view;
 import agh.oop.model.map.Earth;
 import agh.oop.presenter.SimulationPresenter;
 import agh.oop.simulation.Simulation;
-import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -45,8 +44,6 @@ public class SimulationApp extends Application {
             BorderPane viewRoot = loader.load();
 
             SimulationPresenter presenter = loader.getController();
-            System.out.println(presenter);
-            // mowimy mu jaka symulacje wyswietlic
             presenter.setSimulation(simulationToRun,earth, mapID, isSavingStats);
 
             simulationToRun.registerListener(presenter.getStatistics());

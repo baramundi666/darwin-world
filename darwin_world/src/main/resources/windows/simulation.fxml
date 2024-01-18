@@ -167,14 +167,13 @@
                <Label text="Active gene: " textFill="#000000" />
                <Label fx:id="activeGene" text=" " />
            </HBox>
-         <HBox alignment="CENTER" prefHeight="31.0" prefWidth="161.0">
-            <children>
-               <Button onAction="#onClickStopSpectatingAnimal" mnemonicParsing="false" prefHeight="25.0" prefWidth="147.0" text="Stop spectating animal" />
-            </children>
-            <VBox.margin>
-               <Insets top="20.0" />
-            </VBox.margin>
-         </HBox>
+           <HBox alignment="CENTER" prefHeight="31.0" prefWidth="161.0">
+               <VBox.margin>
+                   <Insets top="20.0"/>
+               </VBox.margin>
+               <Button onAction="#onClickStopSpectatingAnimal" mnemonicParsing="false" prefHeight="25.0"
+                       prefWidth="147.0" text="Stop spectating animal"/>
+           </HBox>
        </VBox>
    </left>
 </BorderPane>
