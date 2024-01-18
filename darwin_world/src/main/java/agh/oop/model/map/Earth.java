@@ -92,7 +92,7 @@ public class Earth implements MapOptions {
 
     public void move(Animal animal){
         removeAnimal(animal, Optional.empty());
-        animal.move(this);//normal move or mirror move or change direction
+        animal.move(this);
         placeAnimal(animal);
     }
 

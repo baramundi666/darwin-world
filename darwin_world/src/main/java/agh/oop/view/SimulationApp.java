@@ -1,8 +1,6 @@
 package agh.oop.view;
 
 import agh.oop.model.map.Earth;
-import agh.oop.presenter.Configuration;
-import agh.oop.presenter.HomePresenter;
 import agh.oop.presenter.SimulationPresenter;
 import agh.oop.simulation.Simulation;
 import agh.oop.simulation.statictics.Statistics;
@@ -19,14 +17,14 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class SimulationApp extends Application {
 
-    private static final ExecutorService executor = newFixedThreadPool(8);
+    private static final ExecutorService executor = newFixedThreadPool(4);
 
-    private static HomePresenter homePage;
+    private static HomePage homePage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getClassLoader().getResource("home.fxml"));
+        loader.setLocation(getClass().getClassLoader().getResource("windows/home.fxml"));
         BorderPane viewRoot = loader.load();
         homePage = loader.getController();
         configureStage(primaryStage,viewRoot);
@@ -43,15 +41,16 @@ public class SimulationApp extends Application {
     public static void startSimulation(Simulation simulationToRun, Earth earth, String mapID, String isSavingStats) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SimulationApp.class.getClassLoader().getResource("simulation.fxml"));
+            loader.setLocation(SimulationApp.class.getClassLoader().getResource("windows/simulation.fxml"));
             BorderPane viewRoot = loader.load();
+
             SimulationPresenter presenter = loader.getController();
             System.out.println(presenter);
             // mowimy mu jaka symulacje wyswietlic
             presenter.setSimulation(simulationToRun,earth, mapID, isSavingStats);
+
             simulationToRun.registerListener(presenter.getStatistics());
             simulationToRun.registerListener(presenter);
-            // i tutaj ja wykonujemy
             var thread = new Thread(simulationToRun);
             executor.submit(thread);
 
@@ -66,9 +65,9 @@ public class SimulationApp extends Application {
     public static void newConfiguration() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SimulationApp.class.getClassLoader().getResource("configuration.fxml"));
+            loader.setLocation(SimulationApp.class.getClassLoader().getResource("windows/configuration.fxml"));
             BorderPane viewRoot = loader.load();
-            Configuration controller = loader.getController();
+            ConfigurationPage controller = loader.getController();
             controller.setHomePage(homePage);
             Stage primaryStage = new Stage();
             configureStage(primaryStage,viewRoot);

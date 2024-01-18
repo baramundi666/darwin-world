@@ -1,9 +1,8 @@
-package agh.oop.presenter;
+package agh.oop.view;
 
 import agh.oop.model.map.Earth;
-import agh.oop.simulation.DataHolder;
+import agh.oop.simulation.data.SimulationData;
 import agh.oop.simulation.Simulation;
-import agh.oop.view.SimulationApp;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -12,7 +11,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
-public class HomePresenter {
+public class HomePage {
     @FXML
     private ComboBox<String> savedConfigurationsBox;
 
@@ -20,12 +19,12 @@ public class HomePresenter {
     private String mapID;
     private String isSavingStats;
     private Earth earth;
-    private DataHolder simulationParameters;
+    private SimulationData simulationParameters;
     private boolean comboBoxSelected = true;
 
 
 
-    public void passOnParametersToHome(DataHolder parameters, String isSavingStats, int width, int height, String mapID) {
+    public void passOnParametersToHome(SimulationData parameters, String isSavingStats, int width, int height, String mapID) {
         this.simulationParameters = parameters;
         this.isSavingStats = isSavingStats;
         this.earth = new Earth(width, height);
@@ -93,7 +92,7 @@ public class HomePresenter {
         int width = Integer.parseInt(parameters.get(13));
         int height = Integer.parseInt(parameters.get(14));
 
-        DataHolder simulationParameters = new DataHolder(simulationLength, reproduceEnergy, copulateEnergy,
+        SimulationData simulationParameters = new SimulationData(simulationLength, reproduceEnergy, copulateEnergy,
                 newPlantNumber, plantEnergy, newAnimalNumber, genomeLength, initialEnergy,
                 mutationRange, mutationID, mapID);
 
@@ -104,7 +103,9 @@ public class HomePresenter {
     }
 
     private void setSimulationParametersFromConfiguration() {
-        this.simulationToRun = new Simulation(earth, simulationParameters);
+        var oldMapBounds = earth.getBounds();
+        var newEarth = new Earth(oldMapBounds.upperRight().getX()+1, oldMapBounds.upperRight().getY()+1);
+        this.simulationToRun = new Simulation(newEarth, simulationParameters);
     }
 
     public void onLaunchClicked() {

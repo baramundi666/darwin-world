@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="550.0" minWidth="700.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: purple; -fx-border-color: black;" xmlns:fx="http://javafx.com/fxml"  fx:controller="agh.oop.presenter.HomePresenter">
+<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="550.0" minWidth="700.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: purple; -fx-border-color: black;" xmlns:fx="http://javafx.com/fxml"  fx:controller="agh.oop.view.HomePage">
    <bottom>
       <HBox alignment="CENTER" prefHeight="25.0" prefWidth="397.0" BorderPane.alignment="TOP_CENTER">
          <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="400.0">
@@ -52,7 +52,7 @@
          <rotationAxis>
             <Point3D />
          </rotationAxis>
-         <Image url="@fish_home.png" />
+         <Image url="@../images/fish_home.png" />
       </ImageView>
    </center>
 </BorderPane>

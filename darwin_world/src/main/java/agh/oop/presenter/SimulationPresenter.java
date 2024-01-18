@@ -5,8 +5,8 @@ import agh.oop.model.map.Boundary;
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;
 import agh.oop.model.objects.Animal;
+import agh.oop.presenter.generator.ImageGenerator;
 import agh.oop.simulation.Simulation;
-//import agh.oop.simulation.SimulationEngine;
 import agh.oop.simulation.statictics.AnimalStatistics;
 import agh.oop.simulation.statictics.Statistics;
 import javafx.application.Platform;
@@ -15,7 +15,6 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -25,7 +24,6 @@ import javafx.scene.text.Font;
 import java.util.*;
 
 import static java.lang.Math.max;
-import static java.lang.Math.min;
 
 public class SimulationPresenter implements ChangeListener {
 
@@ -84,14 +82,14 @@ public class SimulationPresenter implements ChangeListener {
 
         var imageGenerator = new ImageGenerator(width, height, (double) 450 / max(width, height), (double) 450 / max(width, height));
 
-        steppeImageList = imageGenerator.generateImageList("steppe.png", 0.85);
+        steppeImageList = imageGenerator.generateImageList("images/steppe.png", 0.85);
 
         switch (mapID) {
             case "p1":
-                specialAreaImageList = imageGenerator.generateImageList("jungle.png", 0.5);
+                specialAreaImageList = imageGenerator.generateImageList("images/jungle.png", 0.5);
                 break;
             case "p2":
-                specialAreaImageList = imageGenerator.generateImageList("poisonedArea.png", 0.5);
+                specialAreaImageList = imageGenerator.generateImageList("images/poisonedArea.png", 0.5);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid mapID");
@@ -146,7 +144,7 @@ public class SimulationPresenter implements ChangeListener {
         mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
         Label axis = new Label("y\\x");
         axis.setTextFill(Paint.valueOf("black"));
-        mapGrid.add(axis, 0, 0);//assume that left upper corner is (0,0)
+        mapGrid.add(axis, 0, 0);
         GridPane.setHalignment(axis, HPos.CENTER);
 
         for (int i = 0; i < height; i++) {
@@ -202,9 +200,8 @@ public class SimulationPresenter implements ChangeListener {
 
         for (Vector2d position : animalsMap.keySet()) {
             if (!animalsMap.get(position).isEmpty()) {
-                int animalCount = animalsMap.get(position).size();
                 var firstAnimal = animalsMap.get(position).iterator().next();
-                var animalImage = new Label("\u25A0");
+                var animalImage = new Label("\u25FC");
                 animalImage.setOnMouseClicked((mouseEvent) ->
                     setSpectatedAnimal(firstAnimal)
                 );
@@ -225,7 +222,7 @@ public class SimulationPresenter implements ChangeListener {
     private void spectateAnimal(Animal animal) {
         spectatedAnimalStatistics = simulationToRun.getAnimalStatistics(animal);
         setAnimalStatistics();
-        if(!animal.isDead()) setSpecialAnimalLabel("purple", animal);
+        if(!animal.isDead()) setSpecialAnimalLabel("blue", animal);
     }
 
     @FXML
@@ -290,20 +287,7 @@ public class SimulationPresenter implements ChangeListener {
         toBeCleared.clear();
     }
 
-    public void handleGridClick(MouseEvent event) {
-        double mouseX = event.getSceneX();
-        double mouseY = event.getSceneY();
-        double cellWidth = (double) 500 /(width+1);
-        double cellHeight = (double) 500 /(height+1);
-        int column = (int) (mouseX/cellHeight);
-        int row = (int) (mouseY/cellWidth);
-        var animals = simulationToRun.getEarth().getAnimals();
-        System.out.println(mouseX + " " + mouseY);
-        System.out.println(row + " " + column);
-        System.out.println(animals.get(new Vector2d(row, column)));
-    }
-
-    public void highlightDominantGenotype() {//now higlights while simulation is running
+    public void highlightDominantGenotype() {
         var dominantGenotype = statistics.getDominantGenotype();
         if (dominantGenotype.isEmpty()) return;
         var dominantGenotypeList = dominantGenotype.get();
@@ -312,14 +296,14 @@ public class SimulationPresenter implements ChangeListener {
         for (Vector2d position : animalsKeys) {
             for (var animal : animals.get(position)) {
                 if (animal.getGenome().getGeneList().equals(dominantGenotypeList)) {
-                    setSpecialAnimalLabel("blue", animal);
+                    setSpecialAnimalLabel("purple", animal);
                 }
             }
         }
     }
 
     public void setSpecialAnimalLabel(String color, Animal animal){
-        var animalImage = new Label("\u25A0");
+        var animalImage = new Label("\u25FC");
         animalImage.setTextFill(Paint.valueOf(color));
         animalImage.setAlignment(Pos.CENTER);
         toBeCleared.add(animalImage);

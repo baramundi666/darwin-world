@@ -1,9 +1,6 @@
-package agh.oop.presenter;
+package agh.oop.view;
 
-import agh.oop.model.map.Earth;
-import agh.oop.simulation.DataHolder;
-import agh.oop.simulation.Simulation;
-import agh.oop.view.SimulationApp;
+import agh.oop.simulation.data.SimulationData;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -14,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 
-public class Configuration {
+public class ConfigurationPage {
 
 
     @FXML
@@ -55,14 +52,14 @@ public class Configuration {
     private String isSavingStats;
     private int width;
     private int height;
-    private HomePresenter homePage;
+    private HomePage homePage;
 
 
-    public void setHomePage(HomePresenter homePage) {
+    public void setHomePage(HomePage homePage) {
         this.homePage = homePage;
     }
 
-    public DataHolder getSimulationParameters(){
+    public SimulationData getSimulationParameters(){
         this.width = this.widthValue.getValue();
         this.height = this.heightValue.getValue();
         int simulationLength = this.simulationLength.getValue();
@@ -78,12 +75,12 @@ public class Configuration {
         var mutationRange = new int[]{mutationRangeMin.getValue(), mutationRangeMax.getValue()};
         this.isSavingStats = ((RadioButton) this.saveStats.getSelectedToggle()).getId();
 
-        return new DataHolder(simulationLength, reproduceEnergy, copulateEnergy,
+        return new SimulationData(simulationLength, reproduceEnergy, copulateEnergy,
                 newPlantNumber, plantEnergy, newAnimalNumber, genomeLength, initialEnergy,
                 mutationRange, mutationID, mapID);
     }
 
-    private String simulationParametersToString(DataHolder simulationParameters, String isSavingStats, int width, int height){
+    private String simulationParametersToString(SimulationData simulationParameters, String isSavingStats, int width, int height){
         return simulationParameters.simulationLength() + "\n" +
                 simulationParameters.reproduceEnergy() + "\n" +
                 simulationParameters.copulateEnergy() + "\n" +
@@ -101,14 +98,14 @@ public class Configuration {
     }
 
     public void useCurrentConfiguration() {
-        DataHolder simulationParameters = getSimulationParameters();
+        SimulationData simulationParameters = getSimulationParameters();
         homePage.passOnParametersToHome(simulationParameters,isSavingStats, width, height, mapID);
         Stage stage = (Stage) saveConfiguration.getScene().getWindow();
         stage.close();
     }
 
     public void saveConfigurationToFile() {
-        DataHolder simulationParameters = getSimulationParameters();
+        SimulationData simulationParameters = getSimulationParameters();
         String parameters = simulationParametersToString(simulationParameters, isSavingStats, width, height);
         String configurationName = this.configurationName.getText();
         writeToFile(parameters, configurationName);

@@ -1,17 +1,8 @@
-package agh.oop.presenter;
+package agh.oop.presenter.generator;
 
-import agh.oop.model.map.Vector2d;
-import agh.oop.model.objects.Animal;
-import agh.oop.model.objects.Plant;
-import agh.oop.model.objects.inheritance.Genome;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class ImageGenerator {
 

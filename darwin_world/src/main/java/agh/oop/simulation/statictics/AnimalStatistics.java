@@ -1,9 +1,7 @@
 package agh.oop.simulation.statictics;
 
 import agh.oop.model.objects.Animal;
-
-import java.util.List;
-import java.util.Optional;
+import agh.oop.simulation.data.StatisticsData;
 
 public class AnimalStatistics {
     private final StatisticsData statisticsData;

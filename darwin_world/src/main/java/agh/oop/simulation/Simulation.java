@@ -7,6 +7,7 @@ import agh.oop.model.objects.inheritance.Mutation;
 import agh.oop.model.objects.inheritance.StandardMutation;
 import agh.oop.model.objects.inheritance.SwapMutation;
 import agh.oop.presenter.ChangeListener;
+import agh.oop.simulation.data.SimulationData;
 import agh.oop.simulation.day.AbstractSimulationDay;
 import agh.oop.simulation.day.DefaultSimulationDay;
 import agh.oop.simulation.day.VariedSimulationDay;
@@ -28,12 +29,12 @@ public class Simulation implements Runnable{
     private AbstractSpawner spawner;
     private final HashSet<Animal> animals;
     private final List<ChangeListener> listeners = new LinkedList<>();
-    private final DataHolder simulationParameters;
+    private final SimulationData simulationParameters;
     private volatile boolean threadSuspended = false;
     private PlantEatenCountStatistics plantEatenCountStatistics;
     private DescendantsStatistics descendantsStatistics;
 
-    public Simulation(Earth earth, DataHolder simulationParameters){
+    public Simulation(Earth earth, SimulationData simulationParameters){
         this.earth = earth;
         this.simulationParameters = simulationParameters;
         this.animals = new HashSet<>();
@@ -77,7 +78,6 @@ public class Simulation implements Runnable{
             try {
                 simulationDay.simulateOneDay();
                 notifyListeners("Map " + earth.getId() + " has been changed! Day " + i);
-                //System.out.println(i);
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
