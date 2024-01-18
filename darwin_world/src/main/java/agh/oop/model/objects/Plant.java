@@ -31,16 +31,6 @@ public class Plant implements WorldElement {
         return position;
     }
 
-    @Override
-    public String getImage() {
-        if (isPoisonous) {
-            return "poisonousPlant.png";
-        }
-        else {
-            return "plant.png";
-        }
-    }
-
     public int getEnergy() {
         return isPoisonous ? -energy : energy;
     }
@@ -49,10 +39,10 @@ public class Plant implements WorldElement {
         return this.position.equals(position);
     }
 
-    @Override
-    public String toString() {
-        // to do (if isPoisonous...)
-        return "Plant:" + getId();
+
+    public String getPlantColor() {
+        if (isPoisonous) return "Purple";
+        else return "LightGreen";
     }
 
     @Override

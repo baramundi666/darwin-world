@@ -7,15 +7,16 @@ import agh.oop.model.objects.inheritance.Mutation;
 import agh.oop.model.objects.inheritance.StandardMutation;
 import agh.oop.model.objects.inheritance.SwapMutation;
 import agh.oop.presenter.ChangeListener;
+import agh.oop.simulation.data.SimulationData;
 import agh.oop.simulation.day.AbstractSimulationDay;
 import agh.oop.simulation.day.DefaultSimulationDay;
 import agh.oop.simulation.day.VariedSimulationDay;
 import agh.oop.simulation.spawner.AbstractSpawner;
 import agh.oop.simulation.spawner.DefaultPlantSpawner;
 import agh.oop.simulation.spawner.VariedPlantSpawner;
+import agh.oop.simulation.statictics.AnimalStatistics;
 import agh.oop.simulation.statictics.DescendantsStatistics;
 import agh.oop.simulation.statictics.PlantEatenCountStatistics;
-import agh.oop.simulation.statictics.Statistics;
 
 import java.util.*;
 
@@ -28,18 +29,36 @@ public class Simulation implements Runnable{
     private AbstractSpawner spawner;
     private final HashSet<Animal> animals;
     private final List<ChangeListener> listeners = new LinkedList<>();
-    private final DataHolder simulationParameters;
+    private final SimulationData simulationParameters;
+    private volatile boolean threadSuspended = false;
+    private PlantEatenCountStatistics plantEatenCountStatistics;
+    private DescendantsStatistics descendantsStatistics;
 
-
-    public Simulation(Earth earth, DataHolder simulationParameters){
+    public Simulation(Earth earth, SimulationData simulationParameters){
         this.earth = earth;
         this.simulationParameters = simulationParameters;
         this.animals = new HashSet<>();
         configureVariants();
     }
 
+    public synchronized boolean isThreadSuspended() {
+        return threadSuspended;
+    }
+
+    public void setThreadSuspended(boolean threadSuspended) {
+        this.threadSuspended = threadSuspended;
+    }
+
+    public Earth getEarth() {
+        return earth;
+    }
+
     public Boundary getSpecialAreaBorders(){
         return spawner.getSpecialAreaBorders();
+    }
+
+    public AnimalStatistics getAnimalStatistics(Animal animal){
+        return new AnimalStatistics(animal, plantEatenCountStatistics, descendantsStatistics);
     }
 
     @Override
@@ -47,20 +66,24 @@ public class Simulation implements Runnable{
         try {
             simulationInitialization.initialize();
             registerAnimalStatistics(animals);
-            notifyListeners("Map has been initialized! Day " + 0);
-            Thread.sleep(700);
+            notifyListeners("Map " + earth.getId() + " has been initialized! Day " + 0);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        for(int i=1;i<=simulationParameters.simulationLength();i++){
+        int i = 1;
+        while (i <= simulationParameters.simulationLength()) {
+            if (threadSuspended) continue;
             try {
                 simulationDay.simulateOneDay();
-                notifyListeners("Map has been changed! Day " + i);
+                notifyListeners("Map " + earth.getId() + " has been changed! Day " + i);
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+            i++;
         }
     }
 
@@ -103,14 +126,15 @@ public class Simulation implements Runnable{
 
     private void notifyListeners(String message) {
         for (ChangeListener listener : listeners) {
-            listener.mapChanged(earth, message);
+            if (message.endsWith("Day 0")) listener.mapInitialized(earth, message);
+            else listener.mapChanged(earth, message);
         }
     }
 
     private void registerAnimalStatistics(HashSet<Animal> animals){
-        DescendantsStatistics descendantsStatistics = new DescendantsStatistics(animals);
-        PlantEatenCountStatistics plantEatenCountStatistics = new PlantEatenCountStatistics(animals);
-        simulationDay.registerListener(descendantsStatistics);
-        simulationDay.registerListener(plantEatenCountStatistics);
+        descendantsStatistics = new DescendantsStatistics(animals);
+        plantEatenCountStatistics = new PlantEatenCountStatistics(animals);
+        simulationDay.registerStatisticsListener(descendantsStatistics);
+        simulationDay.registerStatisticsListener(plantEatenCountStatistics);
     }
 }

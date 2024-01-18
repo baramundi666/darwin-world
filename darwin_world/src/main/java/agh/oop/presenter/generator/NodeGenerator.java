@@ -1,4 +1,4 @@
-package agh.oop.presenter;
+package agh.oop.presenter.generator;
 
 import agh.oop.model.objects.WorldElement;
 import javafx.geometry.Pos;
@@ -26,8 +26,5 @@ public class NodeGenerator {
         imageView.setFitWidth(width);
         imageView.setFitHeight(height);
         node = imageView;
-        //node.setId(imageURL);
-        // to do - addImage takes argument imageURL to
-        // distinguish which children to remove during clearGrid
     }
 }

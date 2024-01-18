@@ -6,7 +6,7 @@ import agh.oop.model.objects.Plant;
 import java.util.*;
 
 public class DescendantsStatistics implements AnimalChangeListener {
-    private HashMap<Animal, HashSet<Animal>> descendants;
+    private final HashMap<Animal, HashSet<Animal>> descendants;
 
     public DescendantsStatistics(HashSet<Animal> animals){
         descendants = new HashMap<>();

@@ -2,6 +2,7 @@ package agh.oop.model.objects.inheritance;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Genome {
@@ -73,5 +74,28 @@ public class Genome {
     }
     public Genome mutate(Mutation mutation) {
         return new Genome(mutation.mutateGenome(this), genomeLength);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for(Integer gene: geneList){
+            sb.append(gene);
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (Objects.isNull(o) || getClass() != o.getClass()) return false;
+        Genome genome = (Genome) o;
+        return genomeLength == genome.genomeLength && Objects.equals(geneList, genome.geneList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(geneList, genomeLength);
     }
 }

@@ -16,156 +16,92 @@ import static org.junit.jupiter.api.Assertions.*;
 class EarthTest {
 
     @Test
-    public void testPlaceAnimal() {
-        //Given
-        var position1 = new Vector2d(2 , 1);
-        var position2 = new Vector2d(1 , 0);
-        var position3 = new Vector2d(3 , 1);
-        var genome = new Genome(List.of(1,2,5,4), 2);
-        var animal1 = new Animal(position1, 5, genome, 1);
-        var animal2 = new Animal(position1, 5, genome, 1);
-        var animal3 = new Animal(position2, 5, genome, 1);
-
-        //When
-        var map = new Earth(4,4);
-        map.placeAnimal(animal1);
-        map.placeAnimal(animal2);
-        map.placeAnimal(animal3);
-        var animalMap = map.getAnimals();
-
-        //Then
-        assertTrue(animalMap.get(position1).contains(animal1));
-        assertTrue(animalMap.get(position1).contains(animal2));
-        assertTrue(animalMap.get(position2).contains(animal3));
-        assertFalse(animalMap.containsKey(position3));
+    void placeAnimalInBounds() {
+        Earth earth = new Earth(10, 10);
+        List<Integer> geneList = List.of(1, 2, 3, 4, 5, 6, 7, 8);
+        Genome genome = new Genome(geneList, geneList.size());
+        Animal animal = new Animal(new Vector2d(5, 5),10,genome,10);
+        earth.placeAnimal(animal);
+        assertEquals(animal, earth.getAnimals().get(new Vector2d(5, 5)).iterator().next());
     }
 
     @Test
-    public void testPlacePlant() {
-        //Given
-        var position1 = new Vector2d(2 , 1);
-        var position2 = new Vector2d(3 , 2);
-        var position3 = new Vector2d(5 , 1);
-        var plant1 = new Plant(position1, 1, false);
-        var plant2 = new Plant(position1, 1, false);
-        var plant3 = new Plant(position2, 1, false);
-
-        //When
-        var map = new Earth(4,4);
-        map.placePlant(plant1);
-        map.placePlant(plant2);
-        map.placePlant(plant3);
-        var plantMap = map.getPlants();
-
-        //Then
-        assertEquals(plant2, plantMap.get(position1));
-        assertEquals(plant3, plantMap.get(position2));
-        assertFalse(plantMap.containsKey(position3));
+    void placeAnimalOutOfBounds() {
+        Earth earth = new Earth(10, 10);
+        List<Integer> geneList = List.of(1, 2, 3, 4, 5, 6, 7, 8);
+        Genome genome = new Genome(geneList, geneList.size());
+        Animal animal = new Animal(new Vector2d(10, 10),10,genome,10);
+        assertThrows(IllegalArgumentException.class, () -> earth.placeAnimal(animal));
     }
 
     @Test
-    public void testRemoveAnimal() {
-        //Given
-        var position1 = new Vector2d(2 , 1);
-        var position2 = new Vector2d(1 , 0);
-        var position3 = new Vector2d(3 , 1);
-        var genome = new Genome(List.of(1,2,5,4), 2);
-        var animal1 = new Animal(position1, 5, genome, 1);
-        var animal2 = new Animal(position1, 5, genome, 1);
-        var animal3 = new Animal(position2, 5, genome, 1);
-        var animal4 = new Animal(position2, 5, genome, 1);
-        var animal5= new Animal(position3, 5, genome, 1);
-
-        //When
-        var map = new Earth(4,4);
-        map.placeAnimal(animal1);
-        map.placeAnimal(animal2);
-        map.placeAnimal(animal3);
-        map.placeAnimal(animal4);
-        map.placeAnimal(animal5);
-        map.removeAnimal(animal1);
-        map.removeAnimal(animal2);
-        map.removeAnimal(animal4);
-        map.removeAnimal(animal5);
-        var animalMap = map.getAnimals();
-
-        //Then
-        assertFalse(animalMap.containsKey(position1));
-        assertTrue(animalMap.get(position2).contains(animal3));
-        assertFalse(animalMap.containsKey(position3));
+    void placePlantInBounds() {
+        Earth earth = new Earth(10, 10);
+        Plant plant = new Plant(new Vector2d(5, 5),3,false);
+        earth.placePlant(plant);
+        assertEquals(plant, earth.getPlants().get(new Vector2d(5, 5)));
     }
 
     @Test
-    public void testRemovePlant() {
-        //Given
-        var position1 = new Vector2d(2 , 1);
-        var position2 = new Vector2d(1 , 1);
-        var position3 = new Vector2d(1 , 0);
-        var plant1 = new Plant(position1, 1, false);
-        var plant2 = new Plant(position2, 1, false);
-        var plant3 = new Plant(position3, 1, false);
-
-        //When
-        var map = new Earth(4,4);
-        map.placePlant(plant1);
-        map.placePlant(plant2);
-        map.placePlant(plant3);
-        map.removePlant(plant2);
-        map.removePlant(plant3);
-        var plantMap = map.getPlants();
-
-        //Then
-        assertTrue(plantMap.containsKey(position1));
-        assertFalse(plantMap.containsKey(position2));
-        assertFalse(plantMap.containsKey(position3));
+    void placePlantOutOfBounds() {
+        Earth earth = new Earth(10, 10);
+        Plant plant = new Plant(new Vector2d(11, 11),3,false);
+        assertThrows(IllegalArgumentException.class, () -> earth.placePlant(plant));
     }
 
     @Test
-    public void testMove(){
-        //Given
-        var position1 = new Vector2d(2 , 1);
-        var position2 = new Vector2d(1 , 1);
-        var position3 = new Vector2d(1 , 0);
-        var genome = new Genome(List.of(1,2,5,4), 2);
-        var animal1 = new Animal(position1, 5, genome, 1);
-        var animal2 = new Animal(position2, 5, genome, 1);
-        var animal3 = new Animal(position3, 5, genome, 1);
-
-        //When
-        var map = new Earth(4,4);
-        map.placeAnimal(animal1);
-        map.placeAnimal(animal2);
-        map.placeAnimal(animal3);
-        map.move(animal1);
-        map.move(animal2);
-        map.move(animal3);
-        var newPosition1 = animal1.getPosition();
-        var newPosition2 = animal2.getPosition();
-        var newPosition3 = animal3.getPosition();
-        var animalMap = map.getAnimals();
-
-        //Then
-        assertTrue(animalMap.get(newPosition1).contains(animal1));
-        assertTrue(animalMap.get(newPosition2).contains(animal2));
-        assertTrue(animalMap.get(newPosition3).contains(animal3));
+    void removeAnimal() {
+        Earth earth = new Earth(10, 10);
+        List<Integer> geneList = List.of(1, 2, 3, 4, 5, 6, 7, 8);
+        Genome genome = new Genome(geneList, geneList.size());
+        Animal animal = new Animal(new Vector2d(5, 5),10,genome,10);
+        earth.placeAnimal(animal);
+        earth.removeAnimal(animal, Optional.empty());
+        assertTrue(earth.getAnimals().isEmpty());
     }
 
     @Test
-    public void testMover() {
-        //Given
-        var newPosition1 = new Vector2d(2 , 4);
-        var newPosition2 = new Vector2d(4 , 3);
-        var newPosition3 = new Vector2d(-1 , 2);
-        var newPosition4 = new Vector2d(2 , 3);
+    void removePlant() {
+        Earth earth = new Earth(10, 10);
+        Plant plant = new Plant(new Vector2d(5, 5),3,false);
+        earth.placePlant(plant);
+        earth.removePlant(plant);
+        assertTrue(earth.getPlants().isEmpty());
+    }
 
+    @Test
+    void moveAnimal() {
+        Earth earth = new Earth(10, 10);
+        List<Integer> geneList = List.of(1, 2, 3, 4, 5, 6, 7, 8);
+        Genome genome = new Genome(geneList, geneList.size());
+        Animal animal = new Animal(new Vector2d(5, 5),10,genome,10);
+        earth.placeAnimal(animal);
 
-        //When
-        var map = new Earth(4,4);
+        earth.move(animal);
 
-        //Then
-        assertEquals(Optional.empty(), map.mover(newPosition1));
-        assertEquals(Optional.of(new Vector2d(0, 3)), map.mover(newPosition2));
-        assertEquals(Optional.of(new Vector2d(3, 2)), map.mover(newPosition3));
-        assertEquals(Optional.of(newPosition4), map.mover(newPosition4));
+        assertFalse(earth.getAnimals().containsKey(new Vector2d(5, 5)));
+        assertTrue(earth.getAnimals().containsKey(animal.getPosition()));
+    }
+
+    @Test
+    void moverInBounds() {
+        Earth earth = new Earth(10, 10);
+        Optional<Vector2d> newPosition = earth.mover(new Vector2d(5, 5));
+        assertTrue(newPosition.isPresent());
+        assertEquals(new Vector2d(5, 5), newPosition.get());
+    }
+
+    @Test
+    void moverOutOfBounds() {
+        Earth earth = new Earth(10, 10);
+        Optional<Vector2d> newPosition = earth.mover(new Vector2d(11, 11));
+        assertTrue(newPosition.isEmpty());
+    }
+
+    @Test
+    void isInBounds() {
+        Earth earth = new Earth(10, 10);
+        assertTrue(earth.isInBounds(new Vector2d(5, 5)));
+        assertFalse(earth.isInBounds(new Vector2d(11, 11)));
     }
 }

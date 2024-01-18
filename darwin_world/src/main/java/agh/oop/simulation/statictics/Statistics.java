@@ -11,22 +11,50 @@ import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.*;
 
-public class Statistics implements ChangeListener {
+public class Statistics implements ChangeListener{
     private String isSavingStats;
     private int numberOfAnimals=0;
     private int numberOfPlants=0;
     private int numberOfNotOccupiedFields=0;
     private double averageEnergy=0;
     private Optional<List<Integer>> dominantGenotype=Optional.empty();
-    private double averageLifeLength=0;//for dead
-    private double averageNumberOfChildren=0;//for alive
+    private double averageLifeLength=0;
+    private double averageNumberOfChildren=0;
 
     public Statistics(String isSavingStats){
         this.isSavingStats = isSavingStats;
     }
 
 
-    public void mapChanged(Earth earth, String message) {
+    public int getNumberOfAnimals() {
+        return numberOfAnimals;
+    }
+
+    public int getNumberOfPlants() {
+        return numberOfPlants;
+    }
+
+    public int getNumberOfNotOccupiedFields() {
+        return numberOfNotOccupiedFields;
+    }
+
+    public double getAverageEnergy() {
+        return averageEnergy;
+    }
+
+    public Optional<List<Integer>> getDominantGenotype() {
+        return dominantGenotype;
+    }
+
+    public double getAverageLifeLength() {
+        return averageLifeLength;
+    }
+
+    public double getAverageNumberOfChildren() {
+        return averageNumberOfChildren;
+    }
+
+    private void setAndWriteStatistics(Earth earth, String message){
         numberOfAnimals = earth.getAliveAnimals().size();
         numberOfPlants = earth.getPlants().size();
         numberOfNotOccupiedFields = countNotOccupiedFields(earth);
@@ -34,17 +62,22 @@ public class Statistics implements ChangeListener {
         dominantGenotype = findDominantGenotype(earth);
         averageLifeLength = countAverageLifeLength(earth);
         averageNumberOfChildren = findAverageNumberOfChildren(earth);
-        if(Objects.equals(isSavingStats, "true")) writeToFile(earth, message);
+        if(Objects.equals(isSavingStats, "yes")) writeToFile(earth, message);
+    }
+
+    @Override
+    public void mapInitialized(Earth earth, String message) {
+        setAndWriteStatistics(earth, message);
+    }
+
+    @Override
+    public void mapChanged(Earth earth, String message) {
+        setAndWriteStatistics(earth, message);
     }
 
     public String dominantGenotypeToString(){
         if(dominantGenotype.isEmpty()) return "No animals";
-        StringBuilder sb = new StringBuilder();
-        for(Integer gene: dominantGenotype.get()){
-            sb.append(gene);
-            sb.append(" ");
-        }
-        return sb.toString();
+        return dominantGenotype.toString();
     }
 
     private int countNotOccupiedFields(Earth earth) {
@@ -90,7 +123,6 @@ public class Statistics implements ChangeListener {
         }
         return Optional.of(maxGenotype);
     }
-    //most popular genotypes???
     
     private double findAverageNumberOfChildren(Earth earth){
         HashSet<Animal> animals = earth.getAliveAnimals();
@@ -113,7 +145,7 @@ public class Statistics implements ChangeListener {
     }
 
     public synchronized void writeToFile(Earth earth, String message) {
-        Path path = Path.of("C:\\Users\\macie\\OneDrive\\Pulpit\\Studia\\YEAR 2\\obiektowe\\PO_PROJEKT_2023_KROL_MAKOWSKI\\darwin_world\\src\\main\\resources\\statistics\\" + "map_" + earth.getId() + ".csv");
+        Path path = Path.of("src\\main\\resources\\statistics\\" + "map_" + earth.getId() + ".csv");
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(path.toString(), true))) {
             writer.println(message);
@@ -128,6 +160,5 @@ public class Statistics implements ChangeListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
