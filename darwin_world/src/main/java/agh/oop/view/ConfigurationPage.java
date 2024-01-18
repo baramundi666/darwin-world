@@ -126,11 +126,12 @@ public class ConfigurationPage {
             SimulationData simulationParameters = getSimulationParameters();
             String parameters = simulationParametersToString(simulationParameters, isSavingStats, width, height);
             String configurationName = this.configurationName.getText();
+            if(configurationName.isEmpty()) throw new IllegalArgumentException("Configuration name cannot be empty");
             writeToFile(parameters, configurationName);
         } catch (IllegalArgumentException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setHeaderText("Invalid parameters");
+            alert.setHeaderText("Invalid parameters or configuration name");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }

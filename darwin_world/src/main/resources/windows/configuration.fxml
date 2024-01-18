@@ -6,7 +6,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="550.0" minWidth="700.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: purple; -fx-border-color: black;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="agh.oop.view.ConfigurationPage">
+<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="550.0" minWidth="700.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: purple; -fx-border-color: black;" xmlns:fx="http://javafx.com/fxml"  fx:controller="agh.oop.view.ConfigurationPage">
     <center>
        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
            <BorderPane.margin>

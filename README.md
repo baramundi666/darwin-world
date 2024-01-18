@@ -25,6 +25,3 @@ Gałąź main modyfikowana tylko przez pull request
 todo list:
 - active gene ui bug 
 - unsafe park bug 
-
-
-

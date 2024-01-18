@@ -5,6 +5,7 @@ import agh.oop.simulation.data.SimulationData;
 import agh.oop.simulation.Simulation;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class HomePage {
     private String isSavingStats;
     private Earth earth;
     private SimulationData simulationParameters;
-    private boolean comboBoxSelected = true;
+    private boolean comboBoxSelected = false;
 
 
 
@@ -39,8 +40,10 @@ public class HomePage {
     private Optional<List<String>> getSavedConfigurations(){
         Path path = Path.of("src\\main\\resources\\configurations");
         File folder = new File(path.toString());
+        if (!folder.exists()) {
+            throw new IllegalArgumentException("Folder configurations does not exist");
+        }
         File[] listOfFiles = folder.listFiles();
-
         if(listOfFiles == null){
             return Optional.empty();
         }
@@ -55,8 +58,15 @@ public class HomePage {
     }
 
     public void displaySavedConfigurations() {
-        Optional<List<String>> savedConfigurations = getSavedConfigurations();
-        savedConfigurations.ifPresent(strings -> savedConfigurationsBox.setItems(FXCollections.observableArrayList(strings)));
+        try {
+            Optional<List<String>> savedConfigurations = getSavedConfigurations();
+            savedConfigurations.ifPresent(strings -> savedConfigurationsBox.setItems(FXCollections.observableArrayList(strings)));
+        } catch (IllegalArgumentException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     private List<String> setSavedConfigurations() throws IOException {
@@ -70,56 +80,63 @@ public class HomePage {
                 simulationParameters.add(token);
             }
         }catch (IOException e){
-            throw new IOException();
+            throw new IOException("File not found");
         }
         return simulationParameters;
     }
 
     private void setSimulationParametersFromFile() throws IOException {
-        List<String> parameters = setSavedConfigurations();
-        int simulationLength = Integer.parseInt(parameters.get(0));
-        int reproduceEnergy = Integer.parseInt(parameters.get(1));
-        int copulateEnergy = Integer.parseInt(parameters.get(2));
-        int newPlantNumber = Integer.parseInt(parameters.get(3));
-        int plantEnergy = Integer.parseInt(parameters.get(4));
-        int newAnimalNumber = Integer.parseInt(parameters.get(5));
-        int genomeLength = Integer.parseInt(parameters.get(6));
-        int initialEnergy = Integer.parseInt(parameters.get(7));
-        int[] mutationRange = {Integer.parseInt(parameters.get(8)), Integer.parseInt(parameters.get(9))};
-        String mutationID = parameters.get(10);
-        String mapID = parameters.get(11);
-        String isSavingStats = parameters.get(12);
-        int width = Integer.parseInt(parameters.get(13));
-        int height = Integer.parseInt(parameters.get(14));
+        try {
+            List<String> parameters = setSavedConfigurations();
+            int simulationLength = Integer.parseInt(parameters.get(0));
+            int reproduceEnergy = Integer.parseInt(parameters.get(1));
+            int copulateEnergy = Integer.parseInt(parameters.get(2));
+            int newPlantNumber = Integer.parseInt(parameters.get(3));
+            int plantEnergy = Integer.parseInt(parameters.get(4));
+            int newAnimalNumber = Integer.parseInt(parameters.get(5));
+            int genomeLength = Integer.parseInt(parameters.get(6));
+            int initialEnergy = Integer.parseInt(parameters.get(7));
+            int[] mutationRange = {Integer.parseInt(parameters.get(8)), Integer.parseInt(parameters.get(9))};
+            String mutationID = parameters.get(10);
+            String mapID = parameters.get(11);
+            String isSavingStats = parameters.get(12);
+            int width = Integer.parseInt(parameters.get(13));
+            int height = Integer.parseInt(parameters.get(14));
 
-        SimulationData simulationParameters = new SimulationData(simulationLength, reproduceEnergy, copulateEnergy,
-                newPlantNumber, plantEnergy, newAnimalNumber, genomeLength, initialEnergy,
-                mutationRange, mutationID, mapID);
+            SimulationData simulationParameters = new SimulationData(simulationLength, reproduceEnergy, copulateEnergy,
+                    newPlantNumber, plantEnergy, newAnimalNumber, genomeLength, initialEnergy,
+                    mutationRange, mutationID, mapID);
 
-        this.earth = new Earth(width, height);
-        this.simulationToRun = new Simulation(earth,simulationParameters);
-        this.mapID = mapID;
-        this.isSavingStats = isSavingStats;
+            this.earth = new Earth(width, height);
+            this.simulationToRun = new Simulation(earth, simulationParameters);
+            this.mapID = mapID;
+            this.isSavingStats = isSavingStats;
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
     private void setSimulationParametersFromConfiguration() {
-        var oldMapBounds = earth.getBounds();
-        var newEarth = new Earth(oldMapBounds.upperRight().getX()+1, oldMapBounds.upperRight().getY()+1);
-        this.simulationToRun = new Simulation(newEarth, simulationParameters);
+        try{
+            var oldMapBounds = earth.getBounds();
+            var newEarth = new Earth(oldMapBounds.upperRight().getX()+1, oldMapBounds.upperRight().getY()+1);
+            this.simulationToRun = new Simulation(newEarth, simulationParameters);
+        } catch(NullPointerException e){
+            throw new IllegalArgumentException("No configuration selected");
+        }
     }
 
     public void onLaunchClicked() {
-        if (comboBoxSelected) {
-            try {
-                setSimulationParametersFromFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            if (comboBoxSelected) setSimulationParametersFromFile();
+            else setSimulationParametersFromConfiguration();
+            SimulationApp.startSimulation(simulationToRun, earth, mapID, isSavingStats);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
-        else {
-            setSimulationParametersFromConfiguration();
-        }
-        SimulationApp.startSimulation(simulationToRun, earth, mapID, isSavingStats);
     }
 
     @FXML
