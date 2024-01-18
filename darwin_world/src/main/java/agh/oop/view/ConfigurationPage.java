@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
+import java.util.Objects;
 
 public class ConfigurationPage {
 
@@ -41,11 +42,11 @@ public class ConfigurationPage {
     @FXML
     private ToggleGroup mapVariant;
     @FXML
+    private ToggleGroup saveStats;
+    @FXML
     private Button saveConfiguration;
     @FXML
     private Spinner<Integer> simulationLength;
-    @FXML
-    private ToggleGroup saveStats;
     @FXML
     private TextField configurationName;
     private String mapID;
@@ -59,28 +60,36 @@ public class ConfigurationPage {
         this.homePage = homePage;
     }
 
-    public SimulationData getSimulationParameters(){
-        this.width = this.widthValue.getValue();
-        this.height = this.heightValue.getValue();
-        int simulationLength = this.simulationLength.getValue();
-        int reproduceEnergy = this.reproduceEnergy.getValue();
-        int copulateEnergy = this.copulateEnergy.getValue();
-        int initialEnergy = this.initialEnergy.getValue();
-        int genomeLength = this.genomeLength.getValue();
-        int newAnimalNumber = this.newAnimalNumber.getValue();
-        int newPlantNumber = this.newPlantNumber.getValue();
-        int plantEnergy = this.plantEnergy.getValue();
-        var mutationID = ((RadioButton) this.mutationVariant.getSelectedToggle()).getId();
-        this.mapID = ((RadioButton) this.mapVariant.getSelectedToggle()).getId();
-        var mutationRange = new int[]{mutationRangeMin.getValue(), mutationRangeMax.getValue()};
-        this.isSavingStats = ((RadioButton) this.saveStats.getSelectedToggle()).getId();
+    public SimulationData getSimulationParameters() throws IllegalArgumentException {
+        try {
+            this.width = this.widthValue.getValue();
+            this.height = this.heightValue.getValue();
+            int simulationLength = this.simulationLength.getValue();
+            int reproduceEnergy = this.reproduceEnergy.getValue();
+            int copulateEnergy = this.copulateEnergy.getValue();
+            int initialEnergy = this.initialEnergy.getValue();
+            int genomeLength = this.genomeLength.getValue();
+            int newAnimalNumber = this.newAnimalNumber.getValue();
+            int newPlantNumber = this.newPlantNumber.getValue();
+            int plantEnergy = this.plantEnergy.getValue();
+            var mutationID = ((RadioButton) this.mutationVariant.getSelectedToggle()).getId();
+            this.mapID = ((RadioButton) this.mapVariant.getSelectedToggle()).getId();
+            var mutationRange = new int[]{mutationRangeMin.getValue(), mutationRangeMax.getValue()};
+            this.isSavingStats = ((RadioButton) this.saveStats.getSelectedToggle()).getId();
 
-        return new SimulationData(simulationLength, reproduceEnergy, copulateEnergy,
-                newPlantNumber, plantEnergy, newAnimalNumber, genomeLength, initialEnergy,
-                mutationRange, mutationID, mapID);
+            if (Objects.equals(mapID, "p2") && (width < (int) Math.ceil(Math.sqrt(width * height * 0.2)) || height < (int) Math.ceil(Math.sqrt(width * height * 0.2)))) {
+                throw new IllegalArgumentException("Map is too small for this variant");
+            }
+
+            return new SimulationData(simulationLength, reproduceEnergy, copulateEnergy,
+                    newPlantNumber, plantEnergy, newAnimalNumber, genomeLength, initialEnergy,
+                    mutationRange, mutationID, mapID);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 
-    private String simulationParametersToString(SimulationData simulationParameters, String isSavingStats, int width, int height){
+        private String simulationParametersToString(SimulationData simulationParameters, String isSavingStats, int width, int height){
         return simulationParameters.simulationLength() + "\n" +
                 simulationParameters.reproduceEnergy() + "\n" +
                 simulationParameters.copulateEnergy() + "\n" +
@@ -98,17 +107,33 @@ public class ConfigurationPage {
     }
 
     public void useCurrentConfiguration() {
-        SimulationData simulationParameters = getSimulationParameters();
-        homePage.passOnParametersToHome(simulationParameters,isSavingStats, width, height, mapID);
-        Stage stage = (Stage) saveConfiguration.getScene().getWindow();
-        stage.close();
+        try {
+            SimulationData simulationParameters = getSimulationParameters();
+            homePage.passOnParametersToHome(simulationParameters, isSavingStats, width, height, mapID);
+            Stage stage = (Stage) saveConfiguration.getScene().getWindow();
+            stage.close();
+        } catch (IllegalArgumentException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid parameters");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     public void saveConfigurationToFile() {
-        SimulationData simulationParameters = getSimulationParameters();
-        String parameters = simulationParametersToString(simulationParameters, isSavingStats, width, height);
-        String configurationName = this.configurationName.getText();
-        writeToFile(parameters, configurationName);
+        try {
+            SimulationData simulationParameters = getSimulationParameters();
+            String parameters = simulationParametersToString(simulationParameters, isSavingStats, width, height);
+            String configurationName = this.configurationName.getText();
+            writeToFile(parameters, configurationName);
+        } catch (IllegalArgumentException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid parameters");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     public synchronized void writeToFile(String parameters, String configurationName){

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="550.0" minWidth="700.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: purple; -fx-border-color: black;" xmlns:fx="http://javafx.com/fxml"  fx:controller="agh.oop.view.ConfigurationPage">
+<BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="550.0" minWidth="700.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: purple; -fx-border-color: black;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="agh.oop.view.ConfigurationPage">
     <center>
        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
            <BorderPane.margin>
@@ -145,59 +142,44 @@
                </VBox>
            </HBox>
            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-               <HBox alignment="CENTER">
+               <HBox alignment="TOP_CENTER">
                    <Label text="mutation variant: " textFill="WHITE" BorderPane.alignment="CENTER">
                   <HBox.margin>
                      <Insets right="5.0" />
                   </HBox.margin></Label>
                    <fx:define>
-                       <ToggleGroup fx:id="mutationVariant"/>
+                       <ToggleGroup fx:id="mutationVariant" />
                    </fx:define>
-                   <RadioButton fx:id="m1" selected="true" text="standard" toggleGroup="$mutationVariant" textFill="WHITE">
+                   <RadioButton fx:id="m1" selected="true" text="standard" textFill="WHITE" toggleGroup="$mutationVariant">
                        <HBox.margin>
                            <Insets right="5.0" />
                        </HBox.margin>
                    </RadioButton>
-                   <RadioButton fx:id="m2" text="swap" textFill="WHITE" toggleGroup="$mutationVariant"/>
-               </HBox>
-               <HBox alignment="CENTER">
-                   <Label text="map variant: " textFill="WHITE" BorderPane.alignment="CENTER" />
-                   <fx:define>
-                       <ToggleGroup fx:id="mapVariant"/>
-                   </fx:define>
-                   <RadioButton fx:id="p1" selected="true" text="jungle" toggleGroup="$mapVariant" textFill="WHITE">
-                      <HBox.margin>
-                        <Insets right="5.0" />
-                      </HBox.margin>
-                   </RadioButton>
-                   <RadioButton fx:id="p2" text="poisonous plants" textFill="WHITE" toggleGroup="$mapVariant"/>
-               </HBox>
-               <HBox alignment="CENTER">
-                   <Label text="Save statistics?" textFill="WHITE" BorderPane.alignment="CENTER">
-                  <HBox.margin>
-                     <Insets right="5.0" />
-                  </HBox.margin></Label>
-                   <fx:define>
-                       <ToggleGroup fx:id="saveStats"/>
-                   </fx:define>
-                   <RadioButton fx:id="true" selected="true" text="Yes" toggleGroup="$saveStats" textFill="WHITE">
-                      <HBox.margin>
-                        <Insets right="5.0" />
-                      </HBox.margin>
-                   </RadioButton>
-                   <RadioButton fx:id="false" text="No" textFill="WHITE" toggleGroup="$saveStats"/>
+                   <RadioButton fx:id="m2" text="swap" textFill="WHITE" toggleGroup="$mutationVariant" />
                <VBox.margin>
                   <Insets />
                </VBox.margin>
                </HBox>
+               <HBox alignment="TOP_CENTER">
+                   <Label text="map variant: " textFill="WHITE" BorderPane.alignment="CENTER" />
+                   <fx:define>
+                       <ToggleGroup fx:id="mapVariant" />
+                   </fx:define>
+                   <RadioButton fx:id="p1" selected="true" text="jungle" textFill="WHITE" toggleGroup="$mapVariant">
+                      <HBox.margin>
+                        <Insets right="5.0" />
+                      </HBox.margin>
+                   </RadioButton>
+                   <RadioButton fx:id="p2" text="poisonous plants" textFill="WHITE" toggleGroup="$mapVariant" />
+               </HBox>
             <VBox.margin>
-               <Insets top="10.0" />
+               <Insets />
             </VBox.margin>
            </VBox>
        </VBox>
    </center>
     <bottom>
-        <HBox prefWidth="800.0" BorderPane.alignment="TOP_CENTER">
+        <HBox prefHeight="95.0" prefWidth="798.0" BorderPane.alignment="TOP_CENTER">
             <VBox alignment="BOTTOM_LEFT" prefHeight="90.0" prefWidth="152.0">
                 <TextField fx:id="configurationName" promptText="Enter configuration name" />
                 <Button fx:id="saveConfiguration" onAction="#saveConfigurationToFile" prefHeight="25.0" prefWidth="200.0" text="Save your config to file">
@@ -219,41 +201,48 @@
                     <Insets bottom="10.0" left="10.0" />
                 </HBox.margin>
             </VBox>
-<!--            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="637.0">-->
-<!--                <HBox.margin>-->
-<!--                    <Insets right="10.0"/>-->
-<!--                </HBox.margin>-->
-<!--                <Button fx:id="launchSimulation" onAction="#launchSimulation" prefHeight="25.0" prefWidth="117.0"-->
-<!--                        text="Launch simulation">-->
-<!--                    <HBox.margin>-->
-<!--                        <Insets bottom="10.0" left="10.0"/>-->
-<!--                    </HBox.margin>-->
-<!--                </Button>-->
-<!--            </HBox>-->
+            <HBox alignment="CENTER" prefHeight="33.0" prefWidth="170.0">
+                <Label text="Save statistics? " textFill="WHITE" BorderPane.alignment="CENTER">
+                    <HBox.margin>
+                        <Insets right="5.0" />
+                    </HBox.margin>
+            </Label>
+                <fx:define>
+                    <ToggleGroup fx:id="saveStats" />
+                </fx:define>
+                <RadioButton fx:id="yes" selected="true" text="Yes" textFill="WHITE" toggleGroup="$saveStats">
+                    <HBox.margin>
+                        <Insets right="5.0" />
+                    </HBox.margin>
+                </RadioButton>
+                <RadioButton fx:id="no" text="No" textFill="WHITE" toggleGroup="$saveStats" />
+            <HBox.margin>
+               <Insets bottom="50.0" />
+            </HBox.margin>
+            </HBox>
         </HBox>
     </bottom>
    <top>
        <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
-                   <Insets left="10.0" top="10.0"/>
+                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
-               <Image url="@../images/fish_home.png"/>
+               <Image url="@../images/fish_home.png" />
            </ImageView>
-           <Label alignment="CENTER" prefHeight="50.0" prefWidth="800.0" text="New configuration "
-                  textAlignment="CENTER" textFill="#ffffff">
+           <Label alignment="CENTER" prefHeight="50.0" prefWidth="800.0" text="New configuration " textAlignment="CENTER" textFill="#ffffff">
                <font>
-                   <Font name="Gabriola" size="40.0"/>
+                   <Font name="Gabriola" size="40.0" />
                </font>
             <HBox.margin>
-                <Insets top="10.0"/>
+                <Insets top="10.0" />
             </HBox.margin>
            </Label>
            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
-                   <Insets right="10.0" top="10.0"/>
+                   <Insets right="10.0" top="10.0" />
                </HBox.margin>
-               <Image url="@../images/fish_home.png"/>
+               <Image url="@../images/fish_home.png" />
            </ImageView>
        </HBox>
    </top>

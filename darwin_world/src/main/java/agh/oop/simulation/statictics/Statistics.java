@@ -62,7 +62,7 @@ public class Statistics implements ChangeListener{
         dominantGenotype = findDominantGenotype(earth);
         averageLifeLength = countAverageLifeLength(earth);
         averageNumberOfChildren = findAverageNumberOfChildren(earth);
-        if(Objects.equals(isSavingStats, "true")) writeToFile(earth, message);
+        if(Objects.equals(isSavingStats, "yes")) writeToFile(earth, message);
     }
 
     @Override

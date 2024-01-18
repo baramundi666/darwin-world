@@ -87,29 +87,6 @@ public class Simulation implements Runnable{
         }
     }
 
-//    @Override
-//    public void run() {
-//        try {
-//            simulationInitialization.initialize();
-//            registerAnimalStatistics(animals);
-//            notifyListeners("Map has been initialized! Day " + 0);
-//            Thread.sleep(700);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        for (int i = 1; i <= simulationParameters.simulationLength(); i++) {
-//            try {
-//                simulationDay.simulateOneDay();
-//                notifyListeners("Map has been changed! Day " + i);
-//                Thread.sleep(250);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//
-//    }
-
     private void configureVariants() {
         switch(simulationParameters.mutationVariant()){
             case "m2":

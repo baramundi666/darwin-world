@@ -63,15 +63,12 @@ public class SimulationPresenter implements ChangeListener {
     private Label descendantsNumber;
     private int width;
     private int height;
-
-    private double realWidth;
-    private double realHeight;
     private List<Node> steppeImageList;
     private List<Node> specialAreaImageList;
     private Simulation simulationToRun;
     private Statistics statistics;
     private final List<Label> toBeCleared = new LinkedList<>();
-    private Animal spectatedAnimal;
+    private Optional<Animal> spectatedAnimal = Optional.empty();
     private AnimalStatistics spectatedAnimalStatistics;
 
 
@@ -127,7 +124,7 @@ public class SimulationPresenter implements ChangeListener {
             drawMapElements(earth);
             infoLabel.setText(message);
             setStatistics();
-            if(!Objects.isNull(spectatedAnimal)) spectateAnimal(spectatedAnimal);
+            spectatedAnimal.ifPresent(this::spectateAnimal);
         });
     }
 
@@ -159,9 +156,6 @@ public class SimulationPresenter implements ChangeListener {
             mapGrid.add(label, i + 1, 0);
             GridPane.setHalignment(label, HPos.CENTER);
         }
-        realHeight = mapGrid.getHeight();
-        realWidth = mapGrid.getWidth();
-        System.out.println(realWidth + ", "+ realHeight);
     }
 
     public void drawDefaultBackground() {
@@ -215,7 +209,7 @@ public class SimulationPresenter implements ChangeListener {
     }
 
     private void setSpectatedAnimal(Animal animal){
-        spectatedAnimal = animal;
+        spectatedAnimal = Optional.of(animal);
         spectateAnimal(animal);
     }
 
@@ -227,7 +221,7 @@ public class SimulationPresenter implements ChangeListener {
 
     @FXML
     private void onClickStopSpectatingAnimal(){
-        spectatedAnimal = null;
+        spectatedAnimal = Optional.empty();
         childrenNumber.setText("");
         energy.setText("");
         plantEatenNumber.setText("");
@@ -296,7 +290,7 @@ public class SimulationPresenter implements ChangeListener {
         for (Vector2d position : animalsKeys) {
             for (var animal : animals.get(position)) {
                 if (animal.getGenome().getGeneList().equals(dominantGenotypeList)) {
-                    setSpecialAnimalLabel("purple", animal);
+                    setSpecialAnimalLabel("yellow", animal);
                 }
             }
         }
