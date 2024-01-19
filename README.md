@@ -20,8 +20,3 @@ Gałąź main modyfikowana tylko przez pull request
     - ***Pause, Resume*** - zatrzymanie i wznowienie symulacji
     - Gdy symulacja zostanie zatrzymana, istnieje możliwość kliknięcia dowolnego zwierzęcia w celu śledzenia go - zostaje podświetlony na ***niebiesko***
     - Gdy symulacja zostanie zatrzymana, istnieje możliwość zaznaczenia wszystkich zwierząt z dominującym genotypem - zostają podświetlone na ***żółto***
-
-
-todo list:
-- active gene ui bug 
-- unsafe park bug 

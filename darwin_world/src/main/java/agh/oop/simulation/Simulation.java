@@ -14,9 +14,9 @@ import agh.oop.simulation.day.VariedSimulationDay;
 import agh.oop.simulation.spawner.AbstractSpawner;
 import agh.oop.simulation.spawner.DefaultPlantSpawner;
 import agh.oop.simulation.spawner.VariedPlantSpawner;
-import agh.oop.simulation.statictics.AnimalStatistics;
-import agh.oop.simulation.statictics.DescendantsStatistics;
-import agh.oop.simulation.statictics.PlantEatenCountStatistics;
+import agh.oop.simulation.statistics.AnimalStatistics;
+import agh.oop.simulation.statistics.DescendantsStatistics;
+import agh.oop.simulation.statistics.PlantEatenCountStatistics;
 
 import java.util.*;
 
@@ -25,7 +25,6 @@ public class Simulation implements Runnable{
     private SimulationInitializer simulationInitialization;
     private AbstractSimulationDay simulationDay;
     private final Earth earth;
-    private Mutation mutation;
     private AbstractSpawner spawner;
     private final HashSet<Animal> animals;
     private final List<ChangeListener> listeners = new LinkedList<>();
@@ -88,6 +87,7 @@ public class Simulation implements Runnable{
     }
 
     private void configureVariants() {
+        Mutation mutation;
         switch(simulationParameters.mutationVariant()){
             case "m2":
                 mutation = new SwapMutation(simulationParameters.mutationRange());

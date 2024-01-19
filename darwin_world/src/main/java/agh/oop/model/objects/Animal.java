@@ -42,8 +42,6 @@ public class Animal implements WorldElement {
         return new Vector2d(position.getX(), position.getY());
     }
 
-
-
     public MapDirection getDirection() {
         return direction;
     }
@@ -72,8 +70,8 @@ public class Animal implements WorldElement {
         return childrenCount;
     }
 
-    public Genome getGenome() {
-        return new Genome(genome.getGeneList(), genome.getGenomeLength());
+    public synchronized Genome getGenome() {
+        return genome;
     }
 
     public void setEnergy(int energy) {

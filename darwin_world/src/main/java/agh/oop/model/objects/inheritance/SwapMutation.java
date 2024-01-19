@@ -13,19 +13,17 @@ public class SwapMutation extends Mutation {
     }
     @Override
     public List<Integer> mutateGenome(Genome genome) {
+        if(mutationCount==0) return genome.getGeneList();
         int genomeLength = genome.getGenomeLength();
-        List<Integer> newGeneList = new ArrayList<>();
-        var range = new ArrayList<>(IntStream.rangeClosed(0, genomeLength-1)
-                .boxed().toList());
-        Collections.shuffle(range);
-        var indices = new ArrayList<>(range.subList(0, 2*mutationCount));
-        var indicesToSwap = new HashMap<Integer, Integer>();
-        for (int i=0; i<2*mutationCount; i++) {
-            indicesToSwap.put(indices.get(i), indices.get(2*mutationCount-1-i));
-        }
-        var preMutationGeneList = genome.getGeneList();
-        for(int i=0; i<genomeLength; i++) {
-            newGeneList.add(preMutationGeneList.get(indicesToSwap.getOrDefault(i, i)));
+        List<Integer> newGeneList = genome.getGeneList();
+
+        for(int i=0; i<mutationCount; i++) {
+            var firstRandomGeneIndex = (int) (Math.random() * genomeLength);
+            var secondRandomGeneIndex = (int) (Math.random() * (genomeLength - 1));
+            if (firstRandomGeneIndex <= secondRandomGeneIndex) secondRandomGeneIndex++;
+            int tmp = newGeneList.get(firstRandomGeneIndex);
+            newGeneList.set(firstRandomGeneIndex, newGeneList.get(secondRandomGeneIndex));
+            newGeneList.set(secondRandomGeneIndex, tmp);
         }
         return newGeneList;
     }

@@ -1,4 +1,4 @@
-package agh.oop.simulation.statictics;
+package agh.oop.simulation.statistics;
 
 import agh.oop.model.map.Earth;
 import agh.oop.model.map.Vector2d;

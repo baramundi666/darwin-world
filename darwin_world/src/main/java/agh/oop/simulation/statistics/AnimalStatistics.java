@@ -1,4 +1,4 @@
-package agh.oop.simulation.statictics;
+package agh.oop.simulation.statistics;
 
 import agh.oop.model.objects.Animal;
 import agh.oop.simulation.data.StatisticsData;

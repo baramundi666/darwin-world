@@ -7,7 +7,7 @@ import agh.oop.model.objects.Plant;
 import agh.oop.model.objects.inheritance.Mutation;
 import agh.oop.simulation.data.SimulationData;
 import agh.oop.simulation.spawner.AbstractSpawner;
-import agh.oop.simulation.statictics.AnimalChangeListener;
+import agh.oop.simulation.statistics.AnimalChangeListener;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,12 +40,12 @@ public abstract class AbstractSimulationDay {
     }
 
     public void simulateOneDay(){
-            removeDeadAnimals();
-            moveAnimals();
-            animalsEat();
-            reproduceAnimals();
-            spawner.spawnPlants();
-            day+=1;
+        removeDeadAnimals();
+        moveAnimals();
+        animalsEat();
+        reproduceAnimals();
+        spawner.spawnPlants();
+        day+=1;
     }
 
     protected abstract void moveAnimals();
