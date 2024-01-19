@@ -106,7 +106,7 @@
                    </Spinner>
                    <Spinner fx:id="genomeLength" editable="true">
                        <valueFactory>
-                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="30" min="5" />
+                           <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="10" max="30" min="1" />
                        </valueFactory>
                    </Spinner>
                    <Spinner fx:id="newAnimalNumber" editable="true">

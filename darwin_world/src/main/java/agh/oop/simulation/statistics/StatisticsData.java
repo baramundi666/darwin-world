@@ -1,4 +1,4 @@
-package agh.oop.simulation.statictics;
+package agh.oop.simulation.statistics;
 
 import java.util.List;
 

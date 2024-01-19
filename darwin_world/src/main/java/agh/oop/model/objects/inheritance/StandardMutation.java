@@ -14,20 +14,12 @@ public class StandardMutation extends Mutation {
     public List<Integer> mutateGenome(Genome genome){
         if(mutationCount==0) return genome.getGeneList();
         int genomeLength = genome.getGenomeLength();
-        List<Integer> newGeneList = new ArrayList<>();
-        var range = new ArrayList<>(IntStream.rangeClosed(0, genomeLength-1)
-                .boxed().toList());
-        Collections.shuffle(range);
-        HashSet<Integer> indices = new HashSet<>(range.subList(0, mutationCount));
-        var preMutationGeneList = genome.getGeneList();
-        for(int i=0; i<genomeLength; i++) {
-            if (indices.contains(i)) {
-                var randomGeneShift = 1 + (int) (Math.random() * 7);
-                newGeneList.add((preMutationGeneList.get(i)+randomGeneShift)%8);
-            }
-            else {
-                newGeneList.add(preMutationGeneList.get(i));
-            }
+        List<Integer> newGeneList = genome.getGeneList();
+
+        for(int i=0; i<mutationCount; i++) {
+            var randomGene = (int) (Math.random() * 8);
+            var randomGeneIndex = (int) (Math.random() * genomeLength);
+            newGeneList.set(randomGeneIndex, randomGene);
         }
         return newGeneList;
     }

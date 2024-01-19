@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SwapMutationTest {
 
     @Test
-    public void testMutateGenome1(){
+    public void testMutateGenome1(){//to fix
         //Given
         var preMutationGeneList = List.of(1,5,6,7,4,3,2);
         var genome = new Genome(preMutationGeneList, 7);
@@ -71,6 +71,9 @@ class SwapMutationTest {
                 modifiedGenesCount++;
             }
         }
+
+
+        System.out.println(modifiedGenesCount/2);
 
         //Then
         assertTrue(modifiedGenesCount/2==3 || modifiedGenesCount/2==4);
