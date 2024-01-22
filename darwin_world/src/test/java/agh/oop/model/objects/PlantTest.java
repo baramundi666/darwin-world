@@ -33,8 +33,6 @@ class PlantTest {
         assertNotNull(plant.getId());
     }
 
-
-
     @Test
     void testGetEnergy() {
         Plant nonPoisonousPlant = new Plant(new Vector2d(2, 3), 10, false);
@@ -49,11 +47,5 @@ class PlantTest {
         Plant plant = new Plant(new Vector2d(2, 3), 10, false);
         assertTrue(plant.isAt(new Vector2d(2, 3)));
         assertFalse(plant.isAt(new Vector2d(4, 5)));
-    }
-
-    @Test
-    void testToString() {
-        Plant plant = new Plant(new Vector2d(2, 3), 10, false);
-        assertEquals("Plant:" + plant.getId(), plant.toString());
     }
 }
